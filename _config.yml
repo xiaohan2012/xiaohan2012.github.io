@@ -15,20 +15,17 @@ tagline:
 # Information about author
 #
 author :
-  name : Yitao Yao
+  name : Han Xiao
   
 # Information for contacts
 #
 contact :
-  e-mail : mailto:simpleyyt@gmail.com
-  Github : https://github.com/Simpleyyt
-  WeiBo : http://www.weibo.com/u/1836017133
-  Google+ : https://plus.google.com/103860633659538888207?rel=author
+  e-mail : mailto:han.xiao@cs.helsinki.fi
   
 # Links showed on the footer
 #
 links :
-  Yitao's Blog : http://simpleyyt.github.io/
+  Han Xiao's Blog : http://xiaohan2012.github.io/
 
 # The search engine. Only support google custom search engine.
 #
