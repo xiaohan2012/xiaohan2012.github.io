@@ -4,7 +4,7 @@ title: About Me
 header: About Me
 group: navigation
 ---
- * **Name:** Yitao Yao
- * **Email:** [simpleyyt@gmail.com](mailto:simpleyyt@gmail.com)
- * **WeiBo:** [摇一摇SimpleLife](http://www.weibo.com/u/1836017133)
- * **Github:** [Simpleyyt](https://github.com/Simpleyyt)
+ * **Name:** Han Xiao(肖晗)
+ * **Email:** [han.xiao@cs.helsinki.com](mailto:han.xiao@cs.helsinki.com)
+ * **Github:** [xiaohan2012](https://github.com/xiaohan2012)
+ * **LinkedIn:** [Han Xiao](http://fi.linkedin.com/pub/han-xiao/40/9a8/749)
