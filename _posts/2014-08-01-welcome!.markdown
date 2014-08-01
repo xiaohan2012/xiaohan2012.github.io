@@ -1,0 +1,12 @@
+---
+layout: post
+title:  "Welcome!"
+date:   2014-08-01 16:01:41
+categories: misc
+tags: new-start courtesy
+---
+
+2014-08-01 is the birthday of this blog. Cheers!
+
+Fellow. Feel free to express any ideas! 
+
