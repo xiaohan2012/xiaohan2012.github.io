@@ -102,11 +102,11 @@ JB :
   # Set 'provider' to false to turn commenting off globally.
   #
   comments :
-    provider : duoshuo
+    provider : disqus
     duoshuo :
-      short_name : simpleyyt
+      short_name : xiaohan2012
     disqus :
-      short_name : simpleyyt
+      short_name : xiaohan2012
     livefyre :
       site_id : 123
     intensedebate :
