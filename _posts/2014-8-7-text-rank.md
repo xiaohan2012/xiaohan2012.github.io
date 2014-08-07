@@ -5,14 +5,13 @@ date:   2014-08-07 14:00:00
 categories: paper-reading
 tags: keyword-extraction sentence-extraction graph graph-algorithm page-rank
 ---
-=====================
-Introduction
-=====================
+
+##Introduction
+
 The blog introduces how to perform keyword/sentence extraction using graph algorithm similar to Page-rank.
 
-====================
-Key idea
-====================
+
+##Key idea
 
 We can see text as a graph where the vertices can be phrase, sentence, even single word. Just like the way human sees text as a network of interconnecting concepts.
 
@@ -24,15 +23,15 @@ If we define the unit to be phrases, the task is actually keyword extraction.
 
 This approach is proposed by [paper][paper]
 
-======================
-Advantage
-======================
+
+##Advantage
+
 1. unsupervised
 2. easy to implement
 
-======================
-Example
-======================
+
+##Example
+
 
 ###Keyword extraction
 Individual words are considered vertices and co-occurrence is used as relate one word to another.
@@ -42,9 +41,9 @@ Post processing: we can combine top ranked words into one, if they form phrase i
 ###Sentence extraction
 The degree to which two sentences are connected is the ratio of words that they share.
 
-=======================
-Problem & Improvement(for keyword extraction)
-====================
+
+##Problem & Improvement(for keyword extraction)
+
 
 ###Single-occurrence word issue:
 
