@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Tour of scala: learning note(One)
+title: "Tour of scala: learning note -- Part One"
 date:  2014-08-24 19:08:00
 categories: note
 tags: scala
