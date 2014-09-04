@@ -11,7 +11,7 @@ This is **NOT** a tutorial on Gibbs Sampling. But just a bunch of questions I ha
 
 ## My Questions
 
-1. How to model the full conditional probability, e.g., \\( P(X\_i | X\_1, \cdots, X\_{i-1}, , X\_{i+1}, \cdots, X\_{K} \\)?
+1. How to model the full conditional probability, e.g., \\( P(X\_i | X\_1, \cdots, X\_{i-1}, , X\_{i+1}, \cdots, X\_{K}) \\)?
 
   If we know the explicit form of \\( P(\bf{X}) \\), then we should know the full conditional probability.
 
@@ -31,7 +31,7 @@ This is **NOT** a tutorial on Gibbs Sampling. But just a bunch of questions I ha
 
   Because jumping probability distribution is defined by us, thus the sample point might jump into the extremely low probability region.
 
-  Back to this question, the intuition might be, because we are sampling *quite* approximately from \\(P(\boldmat{X})\\) using the full conditional probability, there are no such problem in Metropolis Sampling?
+  Back to this question, the intuition might be, because we are sampling *quite* approximately from \\(P(\bf{X})\\) using the full conditional probability, there are no such problem in Metropolis Sampling?
 
 
 3. Why is it called Heat Bath Algorithm also?
@@ -42,7 +42,7 @@ This is **NOT** a tutorial on Gibbs Sampling. But just a bunch of questions I ha
   
   This sampling is equivalent to:
   
-  Sampling (X_{i+1}, Y_{i+1}) by \\(X_{i+1} \sim P(X|Y_i)\\) and \\(Y_{i+1} \sim P(Y|X_{i+1})\\) approximates sampling \\((X,Y)\\) from \\(P(X,Y)`.
+  Sampling `(X\_{i+1}, Y\_{i+1})` by \\( X\_{i+1} \sim P(X|Y\_i) \\) and \\( Y\_{i+1} \sim P(Y|X\_{i+1}) \\) approximates sampling \\( (X,Y) \\) from \\( P(X,Y) \\).
 
   Intuitively, this *seems* to be right.
 
