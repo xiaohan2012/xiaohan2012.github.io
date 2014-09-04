@@ -1,3 +1,12 @@
+---
+layout: post
+title: "Studying Note: Gibbs Sampling"
+date:   2014-09-04 20:43:00
+categories: study-note
+tags: gibbs-sampling mcmc metropolis-sampling
+---
+
+
 This is **NOT** a tutorial on Gibbs Sampling. But just a bunch of questions I had when reading the tutorial [here](http://leonidzhukov.net/hse/2013/stochmod/papers/intro_to_mcmc_mackay.pdf).
 
 ## My Questions
