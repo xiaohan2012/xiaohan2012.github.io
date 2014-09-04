@@ -13,11 +13,11 @@ This is **NOT** a tutorial on Gibbs Sampling. But just a bunch of questions I ha
 
 1. How to model the full conditional probability, e.g., \\( P(X\_i | X\_1, \cdots, X\_{i-1}, , X\_{i+1}, \cdots, X\_{K} \\)?
 
-  If we know the explicit form of \\( P(\boldmath{X}) \\), then we should know the full conditional probability.
+  If we know the explicit form of \\( P(\bf{X}) \\), then we should know the full conditional probability.
 
-  **Question**: is the \\( P(\boldmath{X}) \\) always known? Or even it is know, is it the case that the full conditional probability is known?
+  **Question**: is the \\( P(\bf{X}) \\) always known? Or even it is know, is it the case that the full conditional probability is known?
 
-2. And why sampling from \\( P(\boldmath{X}) \\) is harder than sampling each variable in turn?
+2. And why sampling from \\( P(\bf{X}) \\) is harder than sampling each variable in turn?
 
   One dimensional data should be simpler to sample from because of the dimension. Think of the sampling process as sample from a list of bars with different lengths. If there are many dimensions, the landscape will be too large.
 
