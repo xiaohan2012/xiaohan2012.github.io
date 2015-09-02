@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Useful resources from Kaggler Meetup Helsinki"
-date:   2015-09-02 23:00:00
+date:   2015-09-01 23:00:00
 categories: resources
 tags: resources
 ---
