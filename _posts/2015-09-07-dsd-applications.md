@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Dense Subgraph Discovery: motivation"
+title:  "Dense Subgraph Discovery: Applications"
 date:   2015-09-07 10:04:15
 categories: paper
 tags: graph dense-subgraph-discovery
@@ -115,3 +115,14 @@ Compressed graphs(through virtual node) are faster for graph mining tasks, which
 ### Some distributed graph mining library
 
 - Kang, U., Tsourakakis, C. E., and Faloutsos, C. (2009). Pegasus: A peta-scale graph mining system implementation and observations. In Data Mining, 2009. ICDM'09. Ninth IEEE International Conference on, pages 229{238. IEEE.}
+
+## Next
+
+As in the tutorial:
+
+- Density measures
+- Algorithms for static graphs
+- Algorithms for dnyamic graphs
+
+
+Streamming algorithsm perhaps?
