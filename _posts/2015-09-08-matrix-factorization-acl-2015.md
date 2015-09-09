@@ -1,3 +1,12 @@
+---
+layout: post
+title:  "ACL 2015 tutorial summary: Matrix/Tensor Factorization for NLP"
+date:   2015-09-09 14:12:19
+categories: tutorial
+tags: matrix-factorization knowledge-base-completion relation-learning
+---
+
+
 # Matrix and Tensor Factorization Methods for Natural Language Processing
 
 [Tutorial link](http://acl2015.org/tutorials-t5.html)
