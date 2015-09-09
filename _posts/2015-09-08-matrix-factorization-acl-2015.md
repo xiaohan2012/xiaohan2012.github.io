@@ -221,7 +221,7 @@ Collective tensor factorization?
 # What I have learned
 
 - What is matrix completion lower-rank factorization. Connection with rank, redundancy and the inherit nature of guessing missing values.
-- PLDA/LDA/word2vec/GloVe uses MF either explicitly/implicitly
+- PLDA/LDA/word2vec/GloVe uses MF either explicitly/implicitly(**more to read**)
 - sign rank is another type of loss function(**more to read**)
 - SVD is a special case of LRF
 - How LRF/NMF can be solved using SGD and ALS
