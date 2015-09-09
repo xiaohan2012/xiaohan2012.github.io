@@ -23,7 +23,7 @@ inner/outter product, Hadamard product(element-wise), element-wise p-norm(Froben
 
 Example applications: guessing missing value in survey data, or estimate distance in sensor node network in which each node has limited range of distance sensing
 
-**Low-Rank Factorization**: \\( Y \approx UV^T \\), \\( Y \in \mathcal{R}^{N \times M}, Y \in \mathcal{R}^{N \times L}, Y \in \mathcal{R}^{M \times L}\\)
+**Low-Rank Factorization**: \\( Y \approx UV^T \\), \\( Y \in \mathcal{R}^{N \times M}, U \in \mathcal{R}^{N \times L}, V \in \mathcal{R}^{M \times L}\\)
 
 Assumption: \\( rank(Y) = L \ll M,N \\). In other words, \\( Y \\) contains **redundancy** and **noise**. We hope to reconstruct \\( Y \\) using less data based on redundancy.
 
@@ -32,8 +32,14 @@ Assumption: \\( rank(Y) = L \ll M,N \\). In other words, \\( Y \\) contains **re
 
 ### Three ways to factorize
 
-**SVD**: \\( Y = UDV^T\\), \\( \\)
+1. **Singular Value Decomposition**
+   \\( Y = UDV^T\\), \\( Y \in \mathcal{R}^{N \times M}, U \in \mathcal{R}^{N \times N}, D \in \mathcal{R} ^ {N \times M}, V \in \mathcal{R}^{M \times M}\\), \\( D \\) is diagonal
+   We truncate \\( D \\) to achieve low-rank approximation
 
+2. **Stochastic Gradient Descent** and **Alternating Least Squares*: minimize $$ \left\| \mathbf{Y} - \mathbf{U} \mathbf{V^T} \right\|_F^2 $$.
+   CGD slower and counter-intuitive to parallelize compared to Alternating Least Squares, fixing one matrix, treat the other as Least Square problem, which is convex and has closed-form solution.
+   The following regularization leads to better readability, compactness and retrieval: $$ \left\| \mathbf{Y} - \mathbf{U} \mathbf{V^T} \right\|_F^2 $$
+3. 
 ##
 
 ## NMF
