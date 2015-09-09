@@ -1,5 +1,33 @@
 # Matrix and Tensor Factorization Methods for Natural Language Processing
 
+[Tutorial link](http://acl2015.org/tutorials-t5.html)
+
+## Basics
+
+### Linear algebra
+
+inner/outter product, Hadamard product(element-wise), element-wise p-norm(Frobenius norm = 2-norm)
+
+### Matrix completion via Low-Rank Factorization
+
+**Matrix completion**: recovery of a matrix
+
+Example applications: guessing missing value in survey data, or estimate distance in sensor node network in which each node has limited range of distance sensing
+
+**Low-Rank Factorization**: \\( Y \approx UV^T \\)
+
+Assumption: \\( rank(Y) = L << M,N \\). In other words, \\( Y \\) contains **redundancy** and **noise**. We hope to reconstruct \\( Y \\) using less data based on redundancy.
+
+**Why use it**:
+
+- less data, less complexity
+- the complexity can be controled via the rank parameter \\( L \\)
+
+
+##
+
+## NMF
+
 
 ## Related papers
 
