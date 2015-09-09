@@ -23,15 +23,16 @@ inner/outter product, Hadamard product(element-wise), element-wise p-norm(Froben
 
 Example applications: guessing missing value in survey data, or estimate distance in sensor node network in which each node has limited range of distance sensing
 
-**Low-Rank Factorization**: \\( Y \approx UV^T \\)
+**Low-Rank Factorization**: \\( Y \approx UV^T \\), \\( Y \in \matcal{R}^{N \times M}, Y \in \matcal{R}^{N \times L}, Y \in \matcal{R}^{M \times L}\\)
 
-Assumption: \\( rank(Y) = L << M,N \\). In other words, \\( Y \\) contains **redundancy** and **noise**. We hope to reconstruct \\( Y \\) using less data based on redundancy.
+Assumption: \\( rank(Y) = L \ll M,N \\). In other words, \\( Y \\) contains **redundancy** and **noise**. We hope to reconstruct \\( Y \\) using less data based on redundancy.
 
-**Why use it**:
+**Why use it?**
 
-- less data, less complexity
-- the complexity can be controled via the rank parameter \\( L \\)
 
+### Three ways to factorize
+
+**SVD**: \\( Y = UDV^T\\), \\( \\)
 
 ##
 
