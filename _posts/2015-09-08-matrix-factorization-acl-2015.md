@@ -11,9 +11,9 @@ tags: matrix-factorization knowledge-base-completion relation-learning
 
 [Tutorial link](http://acl2015.org/tutorials-t5.html)
 
-## Basics
+# Matrix Factorization
 
-### Linear algebra
+## Basics
 
 inner/outter product, Hadamard product(element-wise), element-wise p-norm(Frobenius norm = 2-norm)
 
@@ -30,27 +30,123 @@ Assumption: \\( rank(Y) = L \ll M,N \\). In other words, \\( Y \\) contains **re
 **Why use it?**
 
 
-### Three ways to factorize
+## Three ways to factorize
 
 1. **Singular Value Decomposition**
    \\( Y = UDV^T\\), \\( Y \in \mathcal{R}^{N \times M}, U \in \mathcal{R}^{N \times N}, D \in \mathcal{R} ^ {N \times M}, V \in \mathcal{R}^{M \times M}\\), \\( D \\) is diagonal
+   
    We truncate \\( D \\) to achieve low-rank approximation
 
-2. **Stochastic Gradient Descent** and **Alternating Least Squares*: minimize $$ \left\| \mathbf{Y} - \mathbf{U} \mathbf{V^T} \right\|_F^2 $$.
-   CGD slower and counter-intuitive to parallelize compared to Alternating Least Squares, fixing one matrix, treat the other as Least Square problem, which is convex and has closed-form solution.
-   The following regularization leads to better readability, compactness and retrieval: $$ \left\| \mathbf{Y} - \mathbf{U} \mathbf{V^T} \right\|_F^2 $$
-3. 
-##
+2. **Stochastic Gradient Descent** and **Alternating Least Squares**:
+   Minimize $$ \left\| \mathbf{Y} - \mathbf{U} \mathbf{V^T} \right\|_F^2 $$.
+   
+   SGD slower and counter-intuitive to parallelize compared to Alternating Least Squares, which fixes one parameter matrix, converting the problem to Least Square, which is convex and has closed-form solution.
+   
+   The following regularization leads to better readability, compactness and retrieval: $$ \left\| \mathbf{Y} - \mathbf{U} \mathbf{V^T} \right\|_F^2 + \lambda_1 \left\| U \right\|_1 + \lambda_2 \left\| U \right\|_F^2$$
+   
+   L1 norm induces sparsity on the user feedback(movie analogy) while L2 norm avoid over-fitting on the item feature vectors
+   
+   *word2vec* and *GloVe* also implicitly/explicitly used matrix factorization. See related paper section.
+   
+3. **Non-negative Matrix Factorization**
+   Adding constraint \\( U \gt 0\\) and  \\( V \gt 0 \\). Example: topic model, images pixels
+   
+   Optimization: Multiplicative update rules(2001) or constrained Alternating Least Squares(2008).
+   
+   Connection with PLSA and LDA. \\( Y \\) is the document-term matrix and \\( L \\) is the number of topics in this case. \\( Y_ij \\ = \sum\limit_k^L p(k|d_i) p(d_ij|k) \\)
 
-## NMF
+
+## Misc for matrix factorization
+
+### Logisitc loss
+
+Instead of squared loss, sign rank is prposed. See paper section.
+
+### Relation extraction using matrix factorization
+
+Uses also negative data(sampled from unobserved cells).
+
+See *Riedel, 2013*.
+
+### Inclusion of Prior
+
+Even logic is used. See *Rocktäschel 2015*
+
+# Tensor Factorization
+
+## Basics
+
+Example: entity-relation-eneity tensor. 3D
+
+Tensor-vector product, tensor-matrix product. outer product of three vectors: rank-1 tensor. **What's the rank for tensor?**
+
+## Tucker decomposition
+
+\\( \mathcal{T} = \mathcal{G} \times \mathbf{A} \times \mathbf{B} \times \mathbf{C} \\)
 
 
-## Related papers
+**Why this strange form?**
+
+- \\( \mathcal{T} \in \mathbb{R}^{p \times r \times q } \\)
+- \\( G\\): core tensor. \\( \mathbb{R}^{N_1 \times N_2 \times N_3 }\\)
+- \\( \mathbf{A} \in \mathbb{R}^{N_1 \times p } \mathbf{B} \in \mathbb{R}^{N_2 \times r } \mathbf{C} \in \mathbb{R}^{N_3 \times q }\\): loading matrices
+
+- **Tucker 3**: nothing is keped fixed
+- **Tucker 2**: 1 loading matrix is keped fixed. For example, \\( \mathcal{T} = \mathcal{G} \times \mathbf{A} \times \mathbf{B} \times \mathit{I} \\)
+- **Tucker 1**: 2 loading matrix is keped fixed, \\( \mathcal{T} = \mathcal{G} \times \mathit{I} \times \mathit{I} \times \mathbf{C}  \\)
+
+### Related papers
+
+Old: CANDECOMP and PARAFAC
+New: RESCAL(Nickel, 2012)
+Applied for semantic compositionality: Van de , 2013
+
+Also related to neural network, Nickel, 2015
+
+## Collective matrix decomposition
+
+See the references
+
+
+## Discriminative factorial models
+
+- **Factorization machine**: Rendle (2010). SVM + MF -> model interaction bewteen variables. **HOW?** 
+- **Reduced rank regression**: the coefficient is factorized. **Why doing so?**
+- **Multi-task learning**: label embedding. **What? Why? How?**
+- **Structured prediction**: learn feature templates(laborsome to produce) from data using MF.
+  Non-convex optimization using variant of Passive-Aggressive(Crammer, 2006). Or (Lei, 2014)
+  Applied on SRL and parsing
+
+# Convexification
+
+
+If non-convex problems can be converted to convex, then we have theoretical guarantees and a bunch of mature tools.
+
+But **how to do the transformation?**: add convex penalty(what? and how?) sum of trace norm
+
+Application: spectral learning in NLP(combined with trace norm). polynomial learning of HMM, Grammar and NMF
+
+
+# Related papers
 
 ### Overview
 
 - Kolda, Tamara G., and Brett W. Bader. "[Tensor decompositions and applications.](http://epubs.siam.org/doi/pdf/10.1137/07070111X)" SIAM review 51.3 (2009): 455-500.
 
+
+### Word Embedding and Matrix factorization
+
+- Pennington, Jeffrey, Richard Socher, and Christopher D. Manning. "[Glove: Global vectors for word representation.](http://llcao.net/cu-deeplearning15/presentation/nn-pres.pdf)" Proceedings of the Empiricial Methods in Natural Language Processing (EMNLP 2014) 12 (2014): 1532-1543.
+
+### PLSA/LDA and NMF
+
+- Gaussier, Eric, and Cyril Goutte. "[Relation between PLSA and NMF and implications.](http://dl.acm.org/citation.cfm?id=1076148)" Proceedings of the 28th annual international ACM SIGIR conference on Research and development in information retrieval. ACM, 2005.
+- Arora, Sanjeev, Rong Ge, and Ankur Moitra. "[Learning topic models--going beyond SVD.](http://arxiv.org/abs/1204.1956)" Foundations of Computer Science (FOCS), 2012 IEEE 53rd Annual Symposium on. IEEE, 2012.
+
+
+### Sign rank
+
+- Bouchard, Guillaume, Sameer Singh, and Théo Trouillon. "[On approximate reasoning capabilities of low-rank vector spaces.](http://sameersingh.org/files/papers/logicmf-krr15.pdf)" AAAI Spring Syposium on Knowledge Representation and Reasoning (KRR): Integrating Symbolic and Neural Approaches (2015).
 
 ### Injecting prior / domain knowledge
 
@@ -122,5 +218,4 @@ Collective tensor factorization?
 [Useful Google search](https://www.google.com/#q=convex+penalty+sum+of+trace+norms)
 
 
-
-
+# What I have learned
