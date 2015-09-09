@@ -95,7 +95,7 @@ Tensor-vector product, tensor-matrix product. outer product of three vectors: ra
 - **Tucker 2**: 1 loading matrix is keped fixed. For example, \\( \mathcal{T} = \mathcal{G} \times \mathbf{A} \times \mathbf{B} \times \mathit{I} \\)
 - **Tucker 1**: 2 loading matrix is keped fixed, \\( \mathcal{T} = \mathcal{G} \times \mathit{I} \times \mathit{I} \times \mathbf{C}  \\)
 
-### Related papers
+### Papers
 
 Old: CANDECOMP and PARAFAC
 New: RESCAL(Nickel, 2012)
@@ -195,7 +195,7 @@ Collective tensor factorization?
 - Steffen Rendle (2010): [Factorization Machines](http://www.ismll.uni-hildesheim.de/pub/pdfs/Rendle2010FM.pdf), in Proceedings of the 10th IEEE International Conference on Data Mining (ICDM 2010), Sydney, Australia.
 
 
-### Reduce rank regression
+### Reduced rank regression
 
 - Alan Julian Izenman, Reduced-rank regression for the multivariate linear model, 1975
 
@@ -219,3 +219,15 @@ Collective tensor factorization?
 
 
 # What I have learned
+
+- What is matrix completion lower-rank factorization. Connection with rank, redundancy and the inherit nature of guessing missing values.
+- PLDA/LDA/word2vec/GloVe uses MF either explicitly/implicitly
+- sign rank is another type of loss function(**more to read**)
+- SVD is a special case of LRF
+- How LRF/NMF can be solved using SGD and ALS
+- MF can be used for relation extraction. Logic and background knowledge can be incorporated(**more be read**)
+- Tensor and Tucker decomposition
+- Tensor factorization on relation learning and semantic compositionality(**more to read**)
+- New subject: (Bayesian)collective matrix decomposition and intuition on its usefulness: sharing parameters among factors(**more be read**)
+- MF can be used in predictive/discrinative models: factorization machine, multi-task learning, reduced rank regression, structured prediction for NLP(**more be read**)
+- New subject: convexification (**more be read**)
