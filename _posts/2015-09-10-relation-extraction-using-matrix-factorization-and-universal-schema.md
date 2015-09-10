@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Relation"
+title:  "Relation Extraction with Matrix Factorization and Universal Schemas"
 date:   2015-09-10 17:33:13
 categories: paper
 tags: relation-extraction matrix-factorization bayesian-personalized-ranking
