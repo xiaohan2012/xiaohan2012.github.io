@@ -36,7 +36,7 @@ For \\(A\\)  which appears at both sides of $$A R_k A^T$$, we can fix one side o
 
 ## What I learned
 
-- There are multiple ways to factorize 3D tensor. In this paper(`RESCAL`) \\(A R_k A^T)\\. In `DEDICOM` \\(A D_k R D_k A^T \\), where \\(R\\) is global across relations(more restrictive)
+- There are multiple ways to factorize 3D tensor. In this paper(`RESCAL`) \\(A R_k A^T\\). In `DEDICOM` \\(A D_k R D_k A^T \\), where \\(R\\) is global across relations(more restrictive)
 - ALS as parameter estimation method for the tensor factorization problem.
 - Collective classification where prediction is made (for one relation) collaborative using other data(from other relations). See the experiment part
 - Entity resolution by using the entity embedding as representation
