@@ -15,13 +15,13 @@ tags: tensor-factorization  relation-learning RESCAL
 
 An efficient algorithm for relation learning based on entity-relation-entity tensor factorization.
 
-Given 3D tensor \\(\mathcal{X}\\) with binary value, where \\(X_{ijk}\\) denotes whether there exists a fact that involves `(i-th entity, k-th relation, j-th entity)`, find the low-rank factorization \\(A\\) and \\(R_k\\) such that
+Given 3D tensor \\(\mathcal{X}\\) with binary value, where \\(\mathcal{X}_{ijk}\\) denotes whether there exists a fact that involves `(i-th entity, k-th relation, j-th entity)`, find the low-rank factorization \\(A\\) and \\(R_k\\) such that
 
 $$\mathcal{X}_k \approx A R_k A^T$$, where \\(\mathcal{X}_k\\) is the slice for the kth relation.
 
 Training objective:
 
-$$f(A, R) = \frac{1}{2}\left\| \mathcal{X}_k - A R_k A^T \right\|^2_F +  \frac{1}{2} \lambda (\left\| A \right\|^2_F + \sum\limit_k\left\| R_k \right\|^2_F )$$
+$$f(A, R) = \frac{1}{2}\left\| \mathcal{X}_k - A R_k A^T \right\|^2_F +  \frac{1}{2} \lambda (\left\| A \right\|^2_F + \sum_k\left\| R_k \right\|^2_F )$$
 
 which is squared error + L2 regularization.
 
@@ -36,7 +36,7 @@ For \\(A\\)  which appears at both sides of $$A R_k A^T$$, we can fix one side o
 
 ## What I learned
 
-- There are multiple ways to factorize 3D tensor. In this paper(`RESCAL`) \\(A R_k A^T)\\. In `DEDICOM` \\(A D_k R D_k A^T)\\, where \\(R\\) is global across relations(more restrictive)
+- There are multiple ways to factorize 3D tensor. In this paper(`RESCAL`) \\(A R_k A^T)\\. In `DEDICOM` \\(A D_k R D_k A^T \\), where \\(R\\) is global across relations(more restrictive)
 - ALS as parameter estimation method for the tensor factorization problem.
 - Collective classification where prediction is made (for one relation) collaborative using other data(from other relations). See the experiment part
 - Entity resolution by using the entity embedding as representation
