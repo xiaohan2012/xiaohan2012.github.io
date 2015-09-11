@@ -2,7 +2,7 @@
 layout: post
 title:  "Relational Learning via Collective Matrix Factorization"
 date:   2015-09-11 14:58:23
-categories: tutorial
+categories: paper
 tags: matrix-factorization  relation-learning collective-matrix-factorization 
 ---
 
