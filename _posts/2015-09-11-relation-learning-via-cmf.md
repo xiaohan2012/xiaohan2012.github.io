@@ -28,10 +28,16 @@ The method can be generalized to arbitary relational schemas.
 - The existence of Bregman Divergence as a general way for loss function in MF
 - Weights can be used to rescale the loss function(large/small matrix, cope with missing values)
 
-
 ## Important/not-yet-understood topics
 
 - How to interprese Newton optimization method? When can it be used? Why is it useful?
 - How Newton method compared with gradient descent? More learning on convex optimization.
 - The 'updating-each-row' argument in Section 4.1
 - How stochastic optimization works?
+
+## Questions / extensions
+
+- Can rank-based learning applied here? for example Personalized Bayesian Ranking?
+  [Multi-Relational Matrix Factorization using Bayesian Personalized Ranking for Social Network Data](http://www.ismll.uni-hildesheim.de/pub/pdfs/artus_lucas_wsdm2012.pdf)
+- Hybird of collective tensor and matrix factorization
+  [Non-negative Multiple Tensor Factorization](http://ttic.uchicago.edu/~ryotat/papers/TakTomIshKimSaw13.pdf)
