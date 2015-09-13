@@ -136,7 +136,7 @@ Application: spectral learning in NLP(combined with trace norm). polynomial lear
 
 ### Word Embedding and Matrix factorization
 
-- Pennington, Jeffrey, Richard Socher, and Christopher D. Manning. "[Glove: Global vectors for word representation.](http://llcao.net/cu-deeplearning15/presentation/nn-pres.pdf)" Proceedings of the Empiricial Methods in Natural Language Processing (EMNLP 2014) 12 (2014): 1532-1543.
+- Pennington, Jeffrey, Richard Socher, and Christopher D. Manning. "[Glove: Global vectors for word representation.](http://www-nlp.stanford.edu/pubs/glove.pdf)" Proceedings of the Empiricial Methods in Natural Language Processing (EMNLP 2014) 12 (2014): 1532-1543.
 
 ### PLSA/LDA and NMF
 
