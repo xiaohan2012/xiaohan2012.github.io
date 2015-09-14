@@ -33,9 +33,9 @@ where \\(\theta \in \mathcal{R}^L \\) is the parameter to be estimated.
 
 Problem with the vector space method:
 
-Feature number \\(L\\) is usually large. Feature selection is often used. Manual way is laborsome while automatic way might get rid of useful features(as some feature lack clear linguistic meaning such as word embedding)
+Feature number \\(L\\) is usually large. Feature selection is often used. However, manual way is laborsome while automatic way might get rid of useful features(as some feature lack clear linguistic meaning such as word embedding)
 
-** Improvement **:
+**Improvement**:
 
 Basic idea:
 
@@ -50,7 +50,7 @@ Basic idea:
 
 Now they propose a different way to compute \\(s(h \rightarrow m)\\).
 
-Given head, modifier and the arc, we first extract three feature vectors, \\(\phi_{h}, \phi_{m}, \phi_{h \rightarrow m}\\) respectively.
+Given head, modifier and the arc, we first extract three feature vectors, \\( \phi_{h}, \phi_{m}, \phi_{h \rightarrow m} \\) respectively.
 
 Kronecker product is applied on them:
 
