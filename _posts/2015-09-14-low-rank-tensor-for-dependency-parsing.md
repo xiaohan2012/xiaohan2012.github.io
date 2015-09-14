@@ -48,11 +48,9 @@ Basic idea:
 
 ### Model
 
-Now they propose a different way to compute \\(s(h \rightarrow m)\\). \\( \phi_{h}, \phi_{m}, \phi_{h \rightarrow m} \\)
+Now they propose a different way to compute \\(s(h \rightarrow m)\\). 
 
-\\( \phi_{h}, \phi_{m}, \phi_{h \rightarrow m} \\)
-
-Given head, modifier and the arc, we first extract three feature vectors, \\( \phi_{h}, \phi_{m}, \phi_{h \rightarrow m} \\) respectively.
+Given head, modifier and the arc, we first extract three feature vectors, $$ \phi_{h}, \phi_{m}, \phi_{h \rightarrow m} $$ respectively.
 
 Kronecker product is applied on them:
 
