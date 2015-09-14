@@ -48,13 +48,15 @@ Basic idea:
 
 ### Model
 
-Now they propose a different way to compute \\(s(h \rightarrow m)\\).
+Now they propose a different way to compute \\(s(h \rightarrow m)\\). \\( \phi_{h}, \phi_{m}, \phi_{h \rightarrow m} \\)
+
+\\( \phi_{h}, \phi_{m}, \phi_{h \rightarrow m} \\)
 
 Given head, modifier and the arc, we first extract three feature vectors, \\( \phi_{h}, \phi_{m}, \phi_{h \rightarrow m} \\) respectively.
 
 Kronecker product is applied on them:
 
-$$ (\phi_{h} \otimes \phi_{m} \otimes \phi_{h \rightarrow m})_{i,j,k} = \phi_{h, i} \phi_{m,j} \phi_{h \rightarrow m, k} $$
+$$ (\phi_{h} \otimes \phi_{m} \otimes \phi_{h \rightarrow m})_{i,j,k} = \phi_{h, i} \phi_{m, j} \phi_{h \rightarrow m, k} $$
 
 which aims at combine those features.
 
