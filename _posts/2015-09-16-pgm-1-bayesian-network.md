@@ -22,7 +22,7 @@ tags: pgm bayesian-network
 - causual reasoning(cause observed), evidential reasoning(evidence observed) and intercausaul reasoining(or explaining away, one cause of one effect can influence the other cause of the same effect)
 - \\( \mathcal{I}_l(\mathcal{G})\\): local independencies encoded by \\( \mathcal{G} \\): variable \\(X\\) independent of non-descendants given parants of \\(X\\)
 - I-map: \\(\mathcal{G} \\) is an I-map for \\(P\\) if \\( \mathcal{I}_l(\mathcal{G}) \subseteq \mathcal{I}(P)\\). There might be independencies not reflected in \\(\mathcal{G}\\)
-- Factorization: \\( P \\) factorizes according to \\(\mathcal{G}\\) if \\( P \\) can be expressed as $$ \prod\limits_{i} P(X_i \vert Pa_{X_i}^{\mathcal{G}}) $$
+- Factorization: \\( P \\) factorizes according to \\(\mathcal{G}\\) if \\( P \\) can be expressed as $$ \prod\limits_{i} P(X_i \mid Pa_{X_i}^{\mathcal{G}}) $$
 - I-map and factorization are equivalent(**?**): a strong correlation between graph strcture and independence assertions
 - Knowledge engineering: picking variables, picking structures, picking probabilities
 
