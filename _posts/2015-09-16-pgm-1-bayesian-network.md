@@ -29,9 +29,9 @@ tags: pgm bayesian-network
 ## Independencies in Graphs
 
 - v-strcuture(\\( X \rightarrow Z \leftarrow Y\\)), active trial
-- D-separation: \\(\text{d-sep}_\mathcal{G}(\mathbf{X}; \mathbf{Y} | \mathbf{Z})\\) if no actial trials between any nodes in \\(\mathbf{X}\\) and \\(\mathbf{Y}\\) given \\(\mathbf{Z}\\)
+- D-separation: \\(\text{d-sep}_\mathcal{G}(\mathbf{X}; \mathbf{Y} \mid \mathbf{Z})\\) if no actial trials between any nodes in \\(\mathbf{X}\\) and \\(\mathbf{Y}\\) given \\(\mathbf{Z}\\)
 - Global Markov independencies: \\( \mathcal{I}(\mathcal{G})\\) independencies indicated by D-separation.
-- soundness of d-separation: if \\( X \text{and} Y\\) are d-separated given \\(Z \\), then they are conditionally independent given \\( Z \\). Equivalently, ( \\( \mathcal{I}(\mathcal{G}) \subseteq \mathcal{I}(P) \\))
+- soundness of d-separation: if \\( X \\) and \\( Y\\) are d-separated given \\(Z \\), then they are conditionally independent given \\( Z \\). Equivalently, ( \\( \mathcal{I}(\mathcal{G}) \subseteq \mathcal{I}(P) \\))
 - completeness of d-seperation: d-separation detects *all* possible independencies( \\( \mathcal{I}(P) \subseteq \mathcal{I}(\mathcal{G})\\)). **Does not hold**
 - However, for almost all \\( P\\) that factorizes over \\( g\\), ( \\( \mathcal{I}(P) = \mathcal{I}(\mathcal{G})\\)). d-separation can lead to independency however, it's not the other reason. The actual values in CPD can indicate independency as well. 
 - A linear time algorithm(via BFS) that detects the reachable node from \\( X\\) given \\(Z\\) via actial trials.
