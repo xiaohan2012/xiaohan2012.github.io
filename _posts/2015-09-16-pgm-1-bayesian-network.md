@@ -38,6 +38,13 @@ tags: pgm bayesian-network
 - I-equivalence: \\( \mathcal{K}_1\\) and \\( \mathcal{K}_2\\) are I-equivalent if \\( \mathcal{I}(\mathcal{K}_1) = \mathcal{I}(\mathcal{K}_2)\\)
 - If same skeleton and same v-structures, then I-equivalent(sufficient but not necessary) and more theorems on that.
 
+## From Distributions to Graphs
+
+- Fundamental question: how to construct the \\(\mathcal{G}\\) that reflects the \\( \mathcal{I}(\mathcal{P})\\)?
+- minimal I-map: the I-map of \\( P \\) such that removal of any edge will make it not an I-map. this is an approximation to \\( \mathcal{I}(\mathcal{G})\\)
+- For the algorithm that finds minimal I-map: different variable ordering may produce different result. Even for the same ordering, this result may not be unique
+- Perfect I-map: graph \\( \mathcal{K} \\) such that \\( \mathcal{I}(\mathcal{K}) = \mathcal{I}(\mathcal{P})\\)
+- Two good examples that reflects the type of independencies that BN **fails to capture**: 1, independencies that are inferred from specific problems, 2, the *misconception* example
 
 # Questions
 
