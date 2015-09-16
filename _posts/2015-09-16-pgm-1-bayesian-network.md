@@ -20,20 +20,20 @@ tags: pgm bayesian-network
 - Bayesian network: structure + conditional probability distrbution(CPD)
 - The `Student` Bayesian network which is representative(4 types of typical \\(X, Y, Z\\) relation)
 - causual reasoning(cause observed), evidential reasoning(evidence observed) and intercausaul reasoining(or explaining away, one cause of one effect can influence the other cause of the same effect)
-- \\( \mathcal{I}_l(\mathcal{g})\\): local independencies encoded by \\( \mathcal{g} \\): variable \\(X\\) independent of non-descendants given parants of \\(X\\)
-- I-map: \\(\mathcal{g} \\) is an I-map for \\(P\\) if \\( \mathcal{I}_l(\mathcal{g}) \subseteq \mathcal{I}(P)\\). There might be independencies not reflected in \\(\mathcal{g}\\)
-- Factorization: \\( P \\) factorizes according to \\(\mathcal{g}\\) if \\( P \\) can be expressed as \\( \prod\limits_{i} P(X_i | Pa_{X_i}^\mathcal{g}) \\)
+- \\( \mathcal{I}_l(\mathcal{G})\\): local independencies encoded by \\( \mathcal{G} \\): variable \\(X\\) independent of non-descendants given parants of \\(X\\)
+- I-map: \\(\mathcal{G} \\) is an I-map for \\(P\\) if \\( \mathcal{I}_l(\mathcal{G}) \subseteq \mathcal{I}(P)\\). There might be independencies not reflected in \\(\mathcal{G}\\)
+- Factorization: \\( P \\) factorizes according to \\(\mathcal{G}\\) if \\( P \\) can be expressed as $$ \prod\limits_{i} P(X_i | Pa_{X_i}^\mathcal{G}) $$
 - I-map and factorization are equivalent(**?**): a strong correlation between graph strcture and independence assertions
 - Knowledge engineering: picking variables, picking structures, picking probabilities
 
 ## Independencies in Graphs
 
 - v-strcuture(\\( X \rightarrow Z \leftarrow Y\\)), active trial
-- D-separation: \\(\text{d-sep}_\mathcal{g}(\mathbf{X}; \mathbf{Y} | \mathbf{Z})\\) if no actial trials between any nodes in \\(\mathbf{X}\\) and \\(\mathbf{Y}\\) given \\(\mathbf{Z}\\)
-- Global Markov independencies: \\( \mathcal{I}(\mathcal{g})\\) independencies indicated by D-separation.
-- soundness of d-separation: if \\( X \text{and} Y\\) are d-separated given \\(Z \\), then they are conditionally independent given \\( Z \\). Equivalently, ( \\( \mathcal{I}(\mathcal{g}) \subsetseq \mathcal{I}(P) \\))
-- completeness of d-seperation: d-separation detects *all* possible independencies( \\( \mathcal{I}(P) \subsetseq \mathcal{I}(\mathcal{g})\\)). **Does not hold**
-- However, for almost all \\( P\\) that factorizes over \\( g\\), ( \\( \mathcal{I}(P) = \mathcal{I}(\mathcal{g})\\)). d-separation can lead to independency however, it's not the other reason. The actual values in CPD can indicate independency as well. 
+- D-separation: \\(\text{d-sep}_\mathcal{G}(\mathbf{X}; \mathbf{Y} | \mathbf{Z})\\) if no actial trials between any nodes in \\(\mathbf{X}\\) and \\(\mathbf{Y}\\) given \\(\mathbf{Z}\\)
+- Global Markov independencies: \\( \mathcal{I}(\mathcal{G})\\) independencies indicated by D-separation.
+- soundness of d-separation: if \\( X \text{and} Y\\) are d-separated given \\(Z \\), then they are conditionally independent given \\( Z \\). Equivalently, ( \\( \mathcal{I}(\mathcal{G}) \subseteq \mathcal{I}(P) \\))
+- completeness of d-seperation: d-separation detects *all* possible independencies( \\( \mathcal{I}(P) \subseteq \mathcal{I}(\mathcal{G})\\)). **Does not hold**
+- However, for almost all \\( P\\) that factorizes over \\( g\\), ( \\( \mathcal{I}(P) = \mathcal{I}(\mathcal{G})\\)). d-separation can lead to independency however, it's not the other reason. The actual values in CPD can indicate independency as well. 
 - A linear time algorithm(via BFS) that detects the reachable node from \\( X\\) given \\(Z\\) via actial trials.
 - I-equivalence: \\( \mathcal{K}_1\\) and \\( \mathcal{K}_2\\) are I-equivalent if \\( \mathcal{I}(\mathcal{K}_1) = \mathcal{I}(\mathcal{K}_2)\\)
 - If same skeleton and same v-structures, then I-equivalent(sufficient but not necessary) and more theorems on that.
