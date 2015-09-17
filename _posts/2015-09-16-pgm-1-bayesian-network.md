@@ -53,7 +53,7 @@ tags: pgm bayesian-network
 - Purpose of using pgm: transform a computation(margin/posterior proba) which can be exponential into something polynomial. For example, HMM
 - Goal of BN: for \\( P \\) to be represented in a *factorized* way and represent *a set of conditional independence assumptions* about \\( P \\)
 - Why do we say *independence* instead of *dependence*? Because *independence* s a safer assumption(**is that absolutely safe?**). For example \\( A \rightarrow B\\) does not guarantee \\(A \\) is independent of \\(B\\)(we can craft some numbers to make them dependent)
-- Prove that the independence assumption by \\(P\\) is consistent with \\(\mathcal{U}(\mathcal{G})\\)
+- Prove that the independence assumption by \\(P\\) is consistent with \\(\mathcal{I}(\mathcal{G})\\)
 - I-map: connects graph with distribution
 - Alternative definition of D-separation: separated in the *moralized ancestral* graph. Being *moral* means being connected(or married). Ancestral graph is the graph where the variables-in-question's  descendants are removed
 - Graph can be an representation for probability distribution. As a result, in order for \\(\mathcal{G}\\) to be useful, the independence properties from it should also hold for \\(P\\).
