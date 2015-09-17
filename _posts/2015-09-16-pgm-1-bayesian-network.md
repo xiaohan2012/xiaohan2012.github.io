@@ -6,7 +6,7 @@ categories: course
 tags: pgm bayesian-network
 ---
 
-# Learned
+# Learned from book
 
 ## Exploiting Independence Properties
 
@@ -46,7 +46,24 @@ tags: pgm bayesian-network
 - Perfect I-map: graph \\( \mathcal{K} \\) such that \\( \mathcal{I}(\mathcal{K}) = \mathcal{I}(\mathcal{P})\\)
 - Two good examples that reflects the type of independencies that BN **fails to capture**: 1, independencies that are inferred from specific problems, 2, the *misconception* example
 
+# Learned from video
+
+- If you gain something(parametrization), you lose something(dependency). It's conversely true. representation cost vs representation power or expressiveness vs #parameters
+- *Dishonest casino* example: evaluation(how likely is the sequence), decoding(what are the dices used for each toss), learning(how often does the casino player changes the dice and how loaded is the dice)
+- Purpose of using pgm: transform a computation(margin/posterior proba) which can be exponential into something polynomial. For example, HMM
+- Goal of BN: for \\( P \\) to be represented in a *factorized* way and represent *a set of conditional independence assumptions* about \\( P \\)
+- Why do we say *independence* instead of *dependence*? Because *independence* s a safer assumption(**is that absolutely safe?**). For example \\( A \rightarrow B\\) does not guarantee \\(A \\) is independent of \\(B\\)(we can craft some numbers to make them dependent)
+- Prove that the independence assumption by \\(P\\) is consistent with \\(\mathcal{U}(\mathcal{G})\\)
+- I-map: connects graph with distribution
+- Alternative definition of D-separation: separated in the *moralized ancestral* graph. Being *moral* means being connected(or married). Ancestral graph is the graph where the variables-in-question's  descendants are removed
+- Graph can be an representation for probability distribution. As a result, in order for \\(\mathcal{G}\\) to be useful, the independence properties from it should also hold for \\(P\\).
+- Refresher: I-map and factorization are equivalent
+- D-separation guarantees soundness and almost "completeness"(exceptions are zero-measure distribution)
+
 # Questions
 
 - Why are factorization, i-map, d-separation and i-equivalence useful?
+  Factorization and i-map are used to connect graph structure to conditional independence assumptions back and forth.
+  D-separation: defines the criteria when \\(X\\) and \\(Y\\) are conditionally independent given \\(Z\\)
+
 
