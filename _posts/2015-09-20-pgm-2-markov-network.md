@@ -69,3 +69,28 @@ Too many details here. The conclusion is:
 - Coupled linear-chain CRF: joint inference on two chains(POS and NER)
 
 
+# Learned from course video
+
+- Example of `sky or water?`: need context information to infer. Introduction to the Ising model and UGM.
+- Local Markov independencies: useful for Gibbs sampling, which requires such knowledge
+- max clique and sub clique parametrization: two different ways for parametrization. They capture the same conditional independencies while max-clique can capture probability distribution that sub-clique cannot catch(for example *explicitly* capture the multi-way interaction) but the representation cost(parameter space size) is bigger. Again, compactness vs expressive power.
+- potential function: more flexible/general than probability function. They can be probability function but not necessarily. They measure the compatibility. (Originates from atomic physics where we assign a number to various spin configurations of two atoms) We only have indirect measures sometimes.
+- The way BN and MN normalizes is quite different, which results in their different capabilities: **local normalization** in BN, of which variables are independent of other variables, is not very good in some cases. For example, long range dependency in natural language where we like **global normalization** is not possible in BN. Seems to be related to the *label bias problem* discussed in some CRF paper.
+- Computing the partition function is one of the biggest problem in PGM.
+- Directed and undirected graphical model both have their both representation power(v-structure cannot be captured by UGM while the diamond structure cannot be captured by DGM) and they both cannot capture all probability distributions
+
+
+Model examples:
+
+- Boltzmann distribution in physics refers to log-linear model in statistics
+- Boltzmann Machine defined on **fully-connected** graph with **pairwise** edges on nodes with **binary** values: \\( P(\mathbf{X}) = \frac{1}{Z}\exp [\sum\limits_{i,j}\theta_{i,j}x_ix_j + \sum\limits_i \alpha_i x_i + C] = \frac{1}{Z} \exp{(\mathbf{X} - \mu)^T \Theta (\mathbf{X} - \mu) }\\)
+- Ising model: sparse version of Boltzmann machine
+- Potts model: multi-state Ising model
+- Restricted Boltzmann Machine: hidden variables are introduced(breaking the homogeneous property of nodes)
+- RBM properties: hidden variables **conditionally independent** given observation variables(**decoupling**).
+- RBM for text modeling: define conditional probability for \\( P(h|x)\\) and \\( P(x|h)\\) of your preference and you 
+
+
+
+Soundness/completeness, those theorem between \\( \mathcal{G}\\) and \\(P\\) are not talked in detail. This might indicate I don't need to pay too much attention on those topics.
+
