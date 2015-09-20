@@ -83,12 +83,12 @@ Too many details here. The conclusion is:
 Model examples:
 
 - Boltzmann distribution in physics refers to log-linear model in statistics
-- Boltzmann Machine defined on **fully-connected** graph with **pairwise** edges on nodes with **binary** values: \\( P(\mathbf{X}) = \frac{1}{Z}\exp [\sum\limits_{i,j}\theta_{i,j}x_ix_j + \sum\limits_i \alpha_i x_i + C] = \frac{1}{Z} \exp{(\mathbf{X} - \mu)^T \Theta (\mathbf{X} - \mu) }\\)
+- Boltzmann Machine defined on **fully-connected** graph with **pairwise** edges on nodes with **binary** values: $$ P(\mathbf{X}) = \frac{1}{Z}\exp{[\sum\limits_{i,j}\theta_{i,j} x_i x_j + \sum\limits_i \alpha_i x_i + C]} = \frac{1}{Z} \exp{(\mathbf{X} - \mu)^T \Theta (\mathbf{X} - \mu) } $$
 - Ising model: sparse version of Boltzmann machine
 - Potts model: multi-state Ising model
 - Restricted Boltzmann Machine: hidden variables are introduced(breaking the homogeneous property of nodes)
 - RBM properties: hidden variables **conditionally independent** given observation variables(**decoupling**).
-- RBM for text modeling: define conditional probability for \\( P(h|x)\\) and \\( P(x|h)\\) of your preference and you 
+- RBM for text modeling: define conditional probability for \\( P(h \vert x)\\) and \\( P(x \vert h)\\) of your preference and you 
 
 
 
