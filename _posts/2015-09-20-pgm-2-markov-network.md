@@ -37,7 +37,7 @@ For CV:
 
 Too many details here. The conclusion is:
 
-- pairwise/local(Markov blanket)/global indepenency assumptions of \\( \mathcal{H}\\) that \\( P \\ factorizes on are equivalennt if \\( P \\) is positive
+- pairwise/local(Markov blanket)/global indepenency assumptions of \\( \mathcal{H}\\) that \\( P \\) factorizes on are equivalennt if \\( P \\) is positive
 
 ## Parametrization Revisited
 
@@ -62,9 +62,9 @@ Too many details here. The conclusion is:
 
 ## Partially Directed Models
 
-- Conditional Random Fields: models \\(P(Y \vert X)\\) instead of \\(P(Y, X))\\, \\(Y\\) target variables, \\(X\\) observed variables. Different parition function.
+- Conditional Random Fields: models \\(P(Y \vert X)\\) instead of \\(P(Y, X) \\), \\(Y\\) target variables, \\(X\\) observed variables. Different parition function.
 - Benefit of conditioning on \\(X\\): avoid modeling \\(X\\), which can be quite complex and the possibility to incorporate rich set of features
-- The three different linear-chain graphical models: 1, fully undirected(CRF), 2, partially undirected and 3, fully directed(HMM). 1 and 2 differs in the feature function's scope on \\(X\\) and 2 and 3 differs in the way they normalize to probability and independency assumptions made
+- The three different linear-chain graphical models: 1, fully undirected(CRF), 2, partially undirected and 3, fully directed(HMM). 1 and 2 differs in the feature function's scope on \\(X\\) and 2 and 3 differs in the way they normalize(local and global) to probability and independency assumptions they make
 - Skip-chain CRF: one observation node can have multiple parents and long-range label dependency
 - Coupled linear-chain CRF: joint inference on two chains(POS and NER)
 
