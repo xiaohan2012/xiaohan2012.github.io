@@ -112,4 +112,7 @@ Finding the best elimination ordering is NP-hard.
 
 Example that illustrates the importance of elimination order: star and tree model
 
-With graphical model, we can easily figure out a good variable elimination order. One benefit of graphical model.
+Benefit of graphical model:
+
+- figure out the capacity/complexity of a certain elimination order
+- easily figure out a good variable elimination order
