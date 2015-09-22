@@ -42,11 +42,11 @@ $$
 \begin{eqnarray*}
 P(e)
 & = &
-\sum\limits_{a,b,c,d} P(a) P(b \vert a) P(c \vert b) P(d \vert c) P(e \vert d)
+\sum\limits_{a,b,c,d} P(a) P(b \vert a) P(c \vert b) P(d \vert c) P(e \vert d) \\
 & = &
-\sum\limits_{b,c,d} P(c \vert b) P(d \vert c) P(e \vert d) \sum\limits_{a} P(a) P(b \vert a)
+\sum\limits_{b,c,d} P(c \vert b) P(d \vert c) P(e \vert d) \sum\limits_{a} P(a) P(b \vert a) \\
 & = &
-\sum\limits_{b,c,d} P(d \vert c) P(e \vert d) \sum\limits_{b} m(b) P(c \vert b)
+\sum\limits_{b,c,d} P(d \vert c) P(e \vert d) \sum\limits_{b} m(b) P(c \vert b) 
 \end{eqnarray*}
 $$ 
 
