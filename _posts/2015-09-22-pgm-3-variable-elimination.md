@@ -6,7 +6,7 @@ categories: course
 tags: pgm variable-elimination exact-inference
 ---
 
-## Introduction
+## Background
 
 Two typical tasks of graphical model:
 
@@ -18,6 +18,8 @@ We talk about inference here. Several types of inference tasks:
 - likelihood: \\(P(e)\\), just marginalization the remaining uninterested variables
 - conditional probability: \\(P(X \vert e)\\), which equals to \\( \frac{P(X, e)}{P(e)}\\)
 - most probable assignment or maximum a posterior: \\(argmax_{y \in \mathcal{Y}} P(y \vert e)\\), Usually, the unnormalized quantity is considered. Can be used for classification/prediction and explanation
+
+In this section, exact inference method called *variable elimination* is discussed.
 
 ## Complexity in general
 
