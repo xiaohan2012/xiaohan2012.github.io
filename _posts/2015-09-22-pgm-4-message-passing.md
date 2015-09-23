@@ -3,7 +3,7 @@ layout: post
 title: "PGM course: Message Passing"
 date: 2015-09-22 16:20:46
 categories: course
-tags: pgm inference message-passing
+tags: pgm inference exact-inference message-passing belief-propagation junction-tree-algorithm
 ---
 
 ## Introduction
