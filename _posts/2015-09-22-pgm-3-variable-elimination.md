@@ -122,4 +122,4 @@ Benefit of graphical model:
 
 Exact inference can be intractable. For example Ising model:
 
-Inference can lead to clique of size \\(n)\\, the row/column number, which can be quite large(e.g, image)(try to eliminate variables in the Ising model)
+Inference can lead to clique of size \\(n\\), the row/column number, which can be quite large(e.g, image)(try to eliminate variables in the Ising model)
