@@ -35,7 +35,7 @@ A unique path between any pair of node ensures the correctness of our algorithm.
 
 Definition of *message*:
 
-$$ m_{ji}(x_i) = \sum\limits_{x_j} \phi(x_i)\phi(x_i, x_j) \prod\limits_{k \in N(j) \setminus i} m_{kj}(x_j) $$
+$$ m_{ji}(x_i) = \phi(x_i) \sum\limits_{x_j} \phi(x_i, x_j) \prod\limits_{k \in N(j) \setminus i} m_{kj}(x_j) $$
 
 Interpretation of message: a belief from \\(x_j\\) to \\(x_i\\)
 
