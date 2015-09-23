@@ -108,34 +108,21 @@ Moralize directed graph -> undirected graph
 
 ### why triangulation?
 
-It can be shown that: if we want local operations, we must triangulate.
-
-Clique tree: a undirected tree of cliques.
-
-Separator factor: a factor between two original factors whose variables are the intersection between those of the two connecting factors.
-
-With separator factor: \\(P(X) = \frac{\prod_C \psi_C(\mathbf{X}_C)}{\prod_S \phi_S(\mathbf{X}_S)}\\), \\(C\\) is the clique and \\(S\\) is the separated
-
-Local consistency property.
-
-Two update(forward/backward) ensures this. Several methods to update: Hugin update, Shafer-Shenoy update.
-
-
-Guarantee of consistency: junction / running interaction / triangulation property
-
-When two factors share some node, there should be an edge connecting them.
-
-
-Triangulation: make it into a chordal graph.
+It can be shown that: if we want local consistency, we must triangulate.
 
 If no triangulation for example the Misconception example, we will disobey the running intersection property, thus inconsistency.
 
-How can we add edges for triangulation without changing the conditional independence assumption?
+Local consistency property: see slides.
+
+Guarantee of consistency: running interaction property, which is, when two factors share some node, there should be an edge connecting them.
+
+**Q**: how can we add edges for triangulation without changing the conditional independence assumption?
 
 We can manipulate the factors without changing the conditional independence. For example \\(\phi(X_1, X_2, X_3)\\) can equal to \\(\phi(X_1, X_2) \phi(X_2, X_3)\\). In this way, independence between \\(X_1, X_3\\) is ensured.
 
-
 How to triangulate? Different triangulation can produce complexity on inference.
+
+Several methods to update: Hugin update, Shafer-Shenoy update.
 
 ### Summary
 
@@ -147,5 +134,7 @@ Workflow of junction tree algorithm:
 2. triangulate(NP-hard, but heuristic exists)
 3. build clique tree(using maximum-spanning tree algorithm. **why using this algorithm?**)
 4. BP
+
+First three steps ensure a junction tree with running intersection property, where local consistency guarantees.
 
 Works for exact inference on general graph. Complexity depends on maximum clique.
