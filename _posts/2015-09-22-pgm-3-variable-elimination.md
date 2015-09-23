@@ -116,3 +116,10 @@ Benefit of graphical model:
 
 - figure out the capacity/complexity of a certain elimination order
 - easily figure out a good variable elimination order
+
+
+## Intractable exact inference
+
+Exact inference can be intractable. For example Ising model:
+
+Inference can lead to clique of size \\(n)\\, the row/column number, which can be quite large(e.g, image)(try to eliminate variables in the Ising model)
