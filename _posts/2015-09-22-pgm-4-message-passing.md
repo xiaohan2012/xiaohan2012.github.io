@@ -6,6 +6,13 @@ categories: course
 tags: pgm inference message-passing
 ---
 
+## Introducton
+
+The lecture is organized by the following motivation:
+
+1. variable elimination is inefficient for multiple queries --> message passing(belief propagation) which can cache *messages* and recombine them later for different queries
+2. message passing is consistent on trees while not for non-tree. However, tree-like graph can be converted to *Factor Tree* in order to produce consistent result
+3. Junction tree algorithm as a general exact inference algorithm for any graph structure.
 
 Ising model: inference can lead to clique of size \\(n)\\, the row/column number, which can be quite large(e.g, image)(try to eliminate variables in the Ising model)
 
