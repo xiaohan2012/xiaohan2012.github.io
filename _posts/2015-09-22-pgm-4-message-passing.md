@@ -92,21 +92,23 @@ computing maximum a posterior(MAP)
 
 replace *sum* with *max* and extra bookmark keeping.
 
-## Inference on general GM
+## Inference on general GM -- Junction(clique) tree algorithm
 
 Junction tree algorithm: obselete and complicated but illustrates the principles behind exact and approximate inference.
 
+**Q**: why obselete?
 
 Moralize directed graph -> undirected graph
 
 The following is about why we **triangulate**
+
+It can be shown that: if we want local operations, we must triangulate.
 
 Clique tree: a undirected tree of cliques.
 
 Separator factor: a factor between two original factors whose variables are the intersection between those of the two connecting factors.
 
 With separator factor: \\(P(X) = \frac{\prod_C \psi_C(\mathbf{X}_C)}{\prod_S \phi_S(\mathbf{X}_S)}\\), \\(C\\) is the clique and \\(S\\) is the separatro
-
 
 Local consistency property.
 
@@ -131,11 +133,11 @@ Junction tree is not equivalent to the graphical model. It's just a device to sp
 
 How to triangulate? Different triangulation can produce complexity on inference.
 
-Summary of junction tree:
+Workflow of junction tree algorithm:
 
 1. moralize the graph
 2. triangulate(NP-hard, but heuristic exists)
 3. build clique tree(using maximum-spanning tree algorithm. **why?**)
 4. BP
 
-Complexity depends on maximum clique.
+Works for exact inference on general graph. Complexity depends on maximum clique.
