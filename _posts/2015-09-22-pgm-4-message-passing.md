@@ -138,3 +138,21 @@ Workflow of junction tree algorithm:
 First three steps ensure a junction tree with running intersection property, where local consistency guarantees.
 
 Works for exact inference on general graph. Complexity depends on maximum clique.
+
+## Example: forward algorithm for HMM
+
+Define:
+
+$$ \alpha_t^k = P(Y_t = k, \mathbf{X}) $$
+
+which can be seen as the message of \\( Y_{t} \\).
+
+Then:
+
+$$ \alpha_t^k = P(X_t \vert Y_t = k) \sum\limits_i P(Y_t=k \vert Y_{t-1}=i) \alpha_{t-1}^i $$
+
+Last:
+
+$$ P(\mathbf{X}) = \sum\limits_i \alpha_T^i $$
+
+Viterbi decoding can be done via MAP inference, replacing \\(\sum\\) with \\( \max\\) and keep the back pointers.
