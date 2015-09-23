@@ -21,8 +21,6 @@ Elimination = message passing on *clique trees*, where each clique is the result
 
 One run of variable elimination only answer **one** query. When we have **multiple** queries(say, an online inference system), *messages* maybe reused.
 
-Which to pre-compute?
-
 ## Message passing on tree
 
 Three types of trees:
