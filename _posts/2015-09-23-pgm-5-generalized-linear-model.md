@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Graphical Model: "
+title: "Graphical Model: Exponential Family and Generalized Linear Models"
 date: 2015-09-23 20:38:32
 categories: course
-tags: pgm learning
+tags: pgm exponential-family glim newton-raphson mle
 ---
 
 ## Exponential family
@@ -11,7 +11,7 @@ tags: pgm learning
 ### Why do we study it?
 
 - it's a generic form for many ML models
-- if we can a generic parameter estimation method for this generic form, we can aplly it to all its instance models
+- if we can a generic parameter estimation method for this generic form, we can apply it to all its instance models
 
 ### Definition
 
@@ -27,7 +27,7 @@ h(x)\exp\{\eta^T T(x) - A(\eta)\}
 \end{eqnarray*}
 $$
 
-is an exponential family distirbution with natuyral parameter \\(\eta\\)
+is an exponential family distribution with natural parameter \\(\eta\\)
 
 - \\(T(x)\\): sufficient statistics
 - \\(h(x)\\): for anything that is not interacting with the natural parameters(for example in Multivariate Gaussian)
@@ -35,8 +35,8 @@ is an exponential family distirbution with natuyral parameter \\(\eta\\)
 
 ### Example
 
-- Fundamental models: Bernoulli, multinomial, Gaussian, Possion, gamma,
-- More complex ones: Ising model(MRF), RBM, CRF
+- Fundamental models: Bernoulli, multinomial, Gaussian, Poisson, gamma,
+- More complex ones: Ising model(MRS), RBM, CRF
 
 Benefit of CRF:
 
@@ -45,21 +45,21 @@ Benefit of CRF:
 
 More examples:
 
-- Multivariate Guassian: moment parameters, \\(\sigma\\) and \\(\mu\\)
+- Multivariate Gaussian: moment parameters, \\(\sigma\\) and \\(\mu\\)
 - Multinomial distribution: \\(\prod\limits_i^K \pi_i^{x_i} = \exp [\sum\limits_i x_i \ln \phi_i] \\)
 
 ### Properties
 
 - **Moment generating property**: \\(\frac{dA}{d\eta} = E[T(x)] = \mu \\) and \\( \frac{d^2A}{d\eta^2} = Var[T(x)] > 0 \\)
-- **one-to-one correspondense between \\(\mu\\) and \\(\eta\\)**: convexity of \\(A(\eta)\\)  => invertibily of \\(\frac{dA}{d\eta} = E[T(x)] = \mu \\) => \\(\eta = \Psi(\mu)\\)
-- **moment matching**: set \\(\frac{\partial \mathcal{l}}{\partial \eta} = 0\\) leads to \\(\mu_{MLE} = \frac{1}{N}\sum\limits_n T(X_n) \\) => \\( \eta_{MLE} = \Psi(\mu_{MLE})\\)
+- **one-to-one correspondence between \\(\mu\\) and \\(\eta\\)**: convexity of \\(A(\eta)\\)  => invertibily of \\(\frac{dA}{d\eta} = E[T(x)] = \mu \\) => \\(\eta = \Psi(\mu)\\)
+- **moment matching**: set \\(\frac{\partial \mathcal{l}}{\partial \eta} = 0\\) leads to $$ \mu_{MLE} = \frac{1}{N} \sum\limits_n T(X_n) $$ => \\( \eta_{MLE} = \Psi(\mu_{MLE}) \\)
 
 Moment estimation leads to parameter estimation
 
 
-- **Q**: how is the inverse function, \\(\Psi\\) defined?
 - **Q**: why do we need such moments?
    Moment is easily defined for exponential family and once we know the moment as well as the inverse function(from moment to parameter), we can get the parameter value quite easily
+- **Q**: how is the inverse function, \\(\Psi\\) defined?
 
 ### Sufficiency
 
@@ -97,7 +97,7 @@ It is a general form for regression and classification models.
 
 ![GLIMs framework](/assets/images/pgm/glims-framework.png)
 
-- \\(Y \sim exponentialFamily\\)
+- \\(Y \sim exponential-Family\\)
 - \\(\eta = \Psi(\mu = f(\xi = \theta^T X))\\)
 
 GLIMs is a specific form of exponential family.
@@ -121,7 +121,7 @@ We can improve the input by transforming \\(X\\), for example, adding non-linear
 - **Q**: what's the connection between exponential family and GLIM?
   In GLIM, the interaction between parameter and input is **linear**, however for exponential family, there is not such constraint.
 
-## MLE for Canonical GLM 
+## MLE for Canonical GLIM 
 
 Derivative of log-likelihood leads to:
 
@@ -150,14 +150,14 @@ General form of Hessian \\( H\\) for GLIMs:
 
 $$ H = \frac{d^2 \mathbf{l}}{d\theta\theta} = -X^T W X $$
 
-Newton Raphson method for GLIMs is called Iteratively Reweighted Least Squares(IRLS), as it takes the form:
+Newton Raphson method for GLIMs is called Iteratively Reweighting Least Squares(IRLS), as it takes the form:
 
 $$ \theta_{new} = (X^TW_{old}X)^{-1}X^TW_{old}z_{old}$$, where $$ z_{old} = X \theta_{old} + W_{old}^{-1}(y-u_{old})$$
 
 
 which is similar to Least Square case, where \\( \theta^* = (X^TX)^{-1}X^Ty\\).
 
-In IRLS, we iteratively reweight objective function using \\(W\\) and solve \\( \theta^{t+1} = argmin\limits_\theta (z - X\theta)^T W (z - X\theta) \\).
+In IRLS, we iteratively reweight objective function using \\(W\\) and solve \\( \theta^{new} = argmin\limits_{\theta} (z - X\theta_{old})^T W (z - X\theta_{old}) \\).
 
 This method is generic for any exponential family distribution, the difference is \\(W\\).
 
