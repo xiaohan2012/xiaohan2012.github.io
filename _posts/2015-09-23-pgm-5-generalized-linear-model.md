@@ -11,7 +11,7 @@ tags: pgm exponential-family glim newton-raphson mle
 ### Why do we study it?
 
 - it's a generic form for many ML models
-- if we can a generic parameter estimation method for this generic form, we can apply it to all its instance models
+- if we can apply generic parameter estimation method for this generic form, we can apply it to all its instance models
 
 ### Definition
 
@@ -21,7 +21,7 @@ $$
 \begin{eqnarray*}
 p(x \vert \eta)
 &=&
-h(x)\exp\{\eta^T T(x) - A(\eta)\}
+h(x)\exp\{\eta^T T(x) - A(\eta)\} \\
 &=&
 \frac{1}{Z(x)}h(x)\exp\{\eta^T T(x)\} \\
 \end{eqnarray*}
@@ -52,7 +52,7 @@ More examples:
 
 - **Moment generating property**: \\(\frac{dA}{d\eta} = E[T(x)] = \mu \\) and \\( \frac{d^2A}{d\eta^2} = Var[T(x)] > 0 \\)
 - **one-to-one correspondence between \\(\mu\\) and \\(\eta\\)**: convexity of \\(A(\eta)\\)  => invertibily of \\(\frac{dA}{d\eta} = E[T(x)] = \mu \\) => \\(\eta = \Psi(\mu)\\)
-- **moment matching**: set \\(\frac{\partial \mathcal{l}}{\partial \eta} = 0\\) leads to $$ \mu_{MLE} = \frac{1}{N} \sum\limits_n T(X_n) $$ => \\( \eta_{MLE} = \Psi(\mu_{MLE}) \\)
+- **moment matching**: set \\(\frac{\partial \mathcal{l}}{\partial \eta} = 0\\) leads to $$ \mu_{MLE} = \frac{1}{N} \sum\limits_n T(X_n) $$ => $$ \eta_{MLE} = \Psi(\mu_{MLE}) $$
 
 Moment estimation leads to parameter estimation
 
@@ -157,7 +157,7 @@ $$ \theta_{new} = (X^TW_{old}X)^{-1}X^TW_{old}z_{old}$$, where $$ z_{old} = X \t
 
 which is similar to Least Square case, where \\( \theta^* = (X^TX)^{-1}X^Ty\\).
 
-In IRLS, we iteratively reweight objective function using \\(W\\) and solve \\( \theta^{new} = argmin\limits_{\theta} (z - X\theta_{old})^T W (z - X\theta_{old}) \\).
+In IRLS, we iteratively reweight objective function using \\(W\\) and solve $$ \theta^{new} = argmin\limits_{\theta} (z - X\theta_{old})^T W (z - X\theta_{old}) $$.
 
 This method is generic for any exponential family distribution, the difference is \\(W\\).
 
