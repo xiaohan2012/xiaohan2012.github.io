@@ -157,7 +157,7 @@ $$ \theta_{new} = (X^TW_{old}X)^{-1}X^TW_{old}z_{old}$$, where $$ z_{old} = X \t
 
 which is similar to Least Square case, where \\( \theta^* = (X^TX)^{-1}X^Ty\\).
 
-In IRLS, we iteratively reweight objective function using \\(W\\) and solve $$ \theta^{new} = argmin\limits_{\theta} (z - X\theta_{old})^T W (z - X\theta_{old}) $$.
+In IRLS, we iteratively reweight objective function using \\(W\\) and solve $$ \theta^{new} = argmin_{\theta} (z - X\theta_{old})^T W (z - X\theta_{old}) $$.
 
 This method is generic for any exponential family distribution, the difference is \\(W\\).
 
