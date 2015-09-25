@@ -2,13 +2,13 @@
 layout: post
 title: "Graphical Model: Learning in Fully Observed Bayesian Networks "
 date: 2015-09-25 10:25:05
-categories: cat
-tags: kw
+categories: course
+tags: pgm bayesian-network parameter-estimation mle bayesian-estimation structure-learning
 ---
 
 ## Structural learning
 
-An interesting problem but not many statistically optimal solutions by far. Optimal means maximizing some objective funciton such as log-likelihood.
+An interesting problem but not many statistically optimal solutions by far. Optimal means maximizing some objective function such as log-likelihood.
 
 For \\(n\\)nodes, there are \\(O(2^{n^2})\\) possible graphs, while \\(n!\\) trees.
 
@@ -48,7 +48,7 @@ $$
 Given the edge weights(MI) between each pair of nodes, we want to find the set of edges that:
 
 1. form a tree
-2. maximumize the sum
+2. maximize the sum
 
 This reduces to maximum spanning tree problem. You can solve it using [Kruskal's Algorithm](http://mathworld.wolfram.com/KruskalsAlgorithm.html) for example.
 
@@ -74,14 +74,14 @@ Estimation principles:
 
 - MLE
 - Bayesian estimation
-- Maximmal conditional likelihood(part of the graph)
+- Maximal conditional likelihood(part of the graph)
 - Maximal margin(origin from SVM)
 - Maximum entropy
 
 
-The log likelihood can be decomposed into a set of smaller CPDs, each parametrized by local paramater, \\(\theta_i\\). Density estimation for the GM can be done independently for each node. As the CPD is actually multinomial, which is an instance of exponential family distribution. We can get the MLE for natural parameter via moment matching.
+The log likelihood can be decomposed into a set of smaller CPDs, each parametrized by local parameter, \\(\theta_i\\). Density estimation for the GM can be done independently for each node. As the CPD is actually multinomial, which is an instance of exponential family distribution. We can get the MLE for natural parameter via moment matching.
 
-### Discrete example: mutlinomial distribution
+### Discrete example: multinomial distribution
 
 #### MLE
 
@@ -111,9 +111,9 @@ $$ P(\theta \vert \mathbf{X}) \propto  \prod\limits_k \theta_{k}^{n_k + \alpha_k
 
 Posterior mean estimation $$ \theta_k = E_{p(\theta \vert \mathbf{X})} (\theta_k) = \frac{n_k + \alpha_k}{N + \sum \alpha_k} $$
 
-Sequantial Bayesian update is equivalent to batch update.
+Sequential Bayesian update is equivalent to batch update.
 
-Beside manually setting \\(\alpha\\) anothre way is through Empirical Bayes, where
+Beside manually setting \\(\alpha\\) another way is through Empirical Bayes, where
 
 $$ \alpha_{MLE} = argmax_{\alpha} p(D | \alpha) = \int p(D \vert \theta) p(\theta \vert \alpha) d \theta$$
 
@@ -122,7 +122,7 @@ $$ \alpha_{MLE} = argmax_{\alpha} p(D | \alpha) = \int p(D \vert \theta) p(\thet
 Compared to Dirichlet, it's more flexible because of co-variance structure, but non-conjugate for multinomial distribution.
 
 ![dirichlet-3d](/assets/images/pgm/dirichlet-3d.png)
-![logisitc-normal-3d](/assets/images/pgm/logistic-normal-3d.png)
+![logistic-normal-3d](/assets/images/pgm/logistic-normal-3d.png)
 
 Used in [Correlated Topic Modeling](https://www.cs.princeton.edu/~blei/papers/BleiLafferty2006.pdf)
 
@@ -153,14 +153,14 @@ An illustration:
 
 ![illustration for learning for BN](/assets/images/pgm/parameter-estimation-for-BN-illustration.png)
 
-Moreover, if the smaller BNs belongs to exponential famility, MLE amounts to moment matching.
+Moreover, if the smaller BNs belongs to exponential family, MLE amounts to moment matching.
 
 ### Defining prior for graphical model
 
 This is not arbitrary. Guidelines are:
 
 - Global Parameter Independence: if we want local estimation for efficiency, we cannot couple the priors of different nodes. Instead, the priors should be separated by nodes. For example, \\( p(\Theta \vert G)=\prod\limits_i p(\theta_i \vert G)\\)
-- Local Parameter Independence: parameters for a single node under different *configuraiton/conditions* shouldn't be coupled. For example,\\(p(\theta_i) = \prod\limits_j p(\theta_{x_i \vert \pi_i(x)_j} \vert G)\\)
+- Local Parameter Independence: parameters for a single node under different *configuration/conditions* shouldn't be coupled. For example,\\(p(\theta_i) = \prod\limits_j p(\theta_{x_i \vert \pi_i(x)_j} \vert G)\\)
 
 Some safe priors satisfying the requirements:
 
