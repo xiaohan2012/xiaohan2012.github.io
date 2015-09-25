@@ -131,7 +131,7 @@ Used in [Correlated Topic Modeling](https://www.cs.princeton.edu/~blei/papers/Bl
 
 #### MLE
 
-[!mle-multivariate-gaussian][/assets/images/pgm/mle-multivariate-gaussian.png]
+![mle-multivariate-gaussian][/assets/images/pgm/mle-multivariate-gaussian.png]
 
 Recall moment matching(from sufficient statistics to natural parameter), the sufficient statistics here are \\(\sum x_n\\) and \\(\sum x_n x_n^T\\)
 
@@ -139,7 +139,7 @@ Recall moment matching(from sufficient statistics to natural parameter), the suf
 
 Unknown \\(\mu\\) and \\(\sigma\\), the resulting posterior is parametrized by:
 
-[!mle-multivariate-gaussian][/assets/images/pgm/bayesian-estimation-result-for-multivariat-gaussian.png]
+![mle-multivariate-gaussian][/assets/images/pgm/bayesian-estimation-result-for-multivariat-gaussian.png]
 
 See the details in *Bayesian Data Analysis* book.
 
