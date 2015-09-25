@@ -113,7 +113,7 @@ Posterior mean estimation $$ \theta_k = E_{p(\theta \vert \mathbf{X})} (\theta_k
 
 Sequantial Bayesian update is equivalent to batch update.
 
-Beside manually setting \\(\alpha\\,) anothre way is through Empirical Bayes, where
+Beside manually setting \\(\alpha\\) anothre way is through Empirical Bayes, where
 
 $$ \alpha_{MLE} = argmax_{\alpha} p(D | \alpha) = \int p(D \vert \theta) p(\theta \vert \alpha) d \theta$$
 
