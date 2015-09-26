@@ -1,15 +1,15 @@
 ---
 layout: post
-title: "Graphical Model: Learning in Fully Observed Bayesian Networks"
-date: 2015-09-25 22:44:30
+title: "Graphical Model: Learning in Fully Observed Markov Networks"
+date: 2015-09-26 23:53:46
 categories: course
-tags: kw
+tags: pgm markov-network structure-learning parameter-estimation
 ---
 
 ## Structural Learning
 
 
-Precison matrix and covariance matrix: different implication.
+Precision matrix and covariance matrix: different implication.
 
 
 C matrix: captures marginal dependence and independence
@@ -17,7 +17,7 @@ Q matrix: captures conditional dependence and independence
 
 - **Q**: Why this conclusion?
 - **Q**: Why precision matrix more meaningful than covariance matrix?
-  Because many seemingly unrelated factors can be correlated(even butterfly and hurricacne) thus there is the densely connected graph under the C matrix implication. Howver under Q matrix, we only consider conditional independence, thus a more sparsely connected graph. Easiler to interpret and compute.
+  Because many seemingly unrelated factors can be correlated(even butterfly and hurricane) thus there is the densely connected graph under the C matrix implication. However under Q matrix, we only consider conditional independence, thus a more sparsely connected graph. Easiler to interpret and compute.
 
 For example, some contrast between covariance matrix and precision matrix:
 
