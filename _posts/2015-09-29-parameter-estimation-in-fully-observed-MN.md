@@ -112,7 +112,9 @@ IPF from the information theoretic view(I-projection).
 
 ![](/assets/images/pgm/ipf_convergence_proof.png)
 
-The above proof relies on \\(Z^{(t)}=Z^{(t+1)}\\).
+The above proof relies on \\(Z^{(t)}=Z^{(t+1)}\\). **Why?**
+
+As we can verify that each step sets the gradient to zerp. Thus \\(\mathcal{l}\\) increases at each iteration. As \\(\mathcal{l}\\) is convex(**why?**), we can show it converges to global optimum.
 
 ### Feature-based clique potentials(Generalized Iterative Scaling)
 
