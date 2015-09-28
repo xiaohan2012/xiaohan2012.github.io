@@ -35,8 +35,8 @@ It's a hot topic on estimation of the precision matrix for high-dimensional data
 *Graph Regression* works as follows:
 
 1. Use Lasso to selected neighbors for each node
-   For each \\(x_i\\), treat it as the output of the linear regression on the rest of variables \\(\mathbf{x}_{-i}\\), or \\(x_i \sim \mathcal{N}(\mathbf{q}_{i} \mathbf{x}_{-i}, \sigma^2)\\). By adding a Lasso regularizer, we can obtain a sparse \\(\mathbf{q}_{i}\\) and only the non-zero ones are selected as the neighbors.
-   The \\(\mathbf{q}_i\\) might be wrong, but using the below theorem,  the neighbors are correct.
+   For each $$x_i$$, treat it as the output of the linear regression on the rest of variables $$\mathbf{x}_{-i}$$, or $$$x_i \sim \mathcal{N}(\mathbf{q}_{i} \mathbf{x}_{-i}, \sigma^2)$$. By adding a Lasso regularizer, we can obtain a sparse \\(\mathbf{q}_{i}\\) and only the non-zero ones are selected as the neighbors.
+   The $$\mathbf{q}_i$$ might be wrong, but using the below theorem,  the neighbors are correct.
 2. Estimate \\(Q\\) by constraining the nonzero entries in \\(Q\\) to correspond to the selected neighbors of each node. In this way, the problem reduces to parameter estimation given known graph structure(discussed next)
 
 Lasso gives sparse parameter estimation, which is attractive because we would like a sparsely connected graph.
@@ -104,7 +104,7 @@ Fixed point iteration can help:
 
 ![](/assets/images/pgm/ipf_fixed_point_iteration.PNG)
 
-Calculating \\(p^{t}(\mathbf{x}_c)\\) is actually an inference problem. What makes learning in MN different to that in BN is the the inference problem nested in the learning problem.
+Calculating \\(p^{(t)}(\mathbf{x}_c)\\) is actually an inference problem. What makes learning in MN different to that in BN is the the inference problem nested in the learning problem.
 
 IPF from the information theoretic view(I-projection).
 
