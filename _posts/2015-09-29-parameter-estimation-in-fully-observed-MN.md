@@ -16,8 +16,10 @@ Precision matrix(Q matrix) and covariance matrix(C matrix): different implicatio
 - Q matrix: captures conditional dependence and independence
 
 - **Q**: Why this conclusion?
+  When \\(q_{ij}=0\\), we have
+  ![](/assets/images/pgm/q_matrix_conditional_independence.png)
 - **Q**: Why precision matrix more meaningful than covariance matrix?
-  Because many seemingly unrelated factors can be correlated(even butterfly and hurricane) thus there is the densely connected graph under the C matrix implication. However under Q matrix, we only consider conditional independence, thus a more sparsely connected graph. Easier to interpret and compute.
+  Because many seemingly unrelated factors can be correlated(even butterfly and hurricane) thus there is the densely connected graph under then C matrix implication. However under Q matrix, we only consider conditional independence, thus a more sparsely connected graph. Easier to interpret and compute.
 
 For example, some contrast between covariance matrix and precision matrix:
 
@@ -75,7 +77,7 @@ Roadmap:
 
 ![](/assets/images/pgm/estimation-method-table-for-ugm.png)
 
-### In-decomposable UGM
+### Decomposable UGM
 
 For triangulated graph and potentials defined on maximal cliques(**why this?**):
 
@@ -102,11 +104,15 @@ Fixed point iteration can help:
 
 ![](/assets/images/pgm/ipf_fixed_point_iteration.PNG)
 
-Calculating \\(p^{t}(\mathbf{x}_c)) is actually an inference problem. What makes learning in MN different to that in BN is the the inference problem nested in the learning problem.
+Calculating \\(p^{t}(\mathbf{x}_c)\\) is actually an inference problem. What makes learning in MN different to that in BN is the the inference problem nested in the learning problem.
 
 IPF from the information theoretic view(I-projection).
 
-[Coordinate ascent](https://en.wikipedia.org/wiki/Coordinate_descent) algorithm? Convergence proof?
+**Q**: [Coordinate ascent](https://en.wikipedia.org/wiki/Coordinate_descent) algorithm? Convergence proof?
+
+![](/assets/images/pgm/ipf_convergence_proof.png)
+
+The above proof relies on \\(Z^{(t)}=Z^{(t+1)}\\).
 
 ### Feature-based clique potentials(Generalized Iterative Scaling)
 
@@ -121,6 +127,4 @@ The result is:
 The \\(\sum\limits_x \tilde{p}(x)f_i(x)\\) is actually the sum of \\(f_i\\) in training dataset. If \\(f_i\\) is binary, it's essentially counting.
 
 
-GIS is more general than IPF as the tabular potential function is a special case of feature based potential function.
-
-
+GIS is more general than IPF as the tabular potential function is a special case of feature based potential function. However, inference needs to be done for \\(\sum\limits_x p^{(t)}(x)f_i(x)\\).
