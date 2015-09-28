@@ -28,7 +28,7 @@ For example, some contrast between covariance matrix and precision matrix:
 If \\(n\\) is sufficiently large compared to \\(p\\), which means the covariance matrix is well-conditioned, then it's easy to get \\(Q\\).
 
 
-However, if \\(p >> n\\), data sample size much smaller than data dimension. Covariance matrix is *ill-conditioned*, thus not invertible(**why?**)
+However, if \\(p \gg n\\), data sample size much smaller than data dimension. Covariance matrix is *ill-conditioned*, thus not invertible(**why?**)
 
 It's a hot topic on estimation of the precision matrix for high-dimensional data from limited amount of samples. One way is called *Graph Regression*.
 
