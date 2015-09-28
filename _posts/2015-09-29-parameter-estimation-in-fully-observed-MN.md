@@ -17,7 +17,7 @@ Q matrix: captures conditional dependence and independence
 
 - **Q**: Why this conclusion?
 - **Q**: Why precision matrix more meaningful than covariance matrix?
-  Because many seemingly unrelated factors can be correlated(even butterfly and hurricane) thus there is the densely connected graph under the C matrix implication. However under Q matrix, we only consider conditional independence, thus a more sparsely connected graph. Easiler to interpret and compute.
+  Because many seemingly unrelated factors can be correlated(even butterfly and hurricane) thus there is the densely connected graph under the C matrix implication. However under Q matrix, we only consider conditional independence, thus a more sparsely connected graph. Easier to interpret and compute.
 
 For example, some contrast between covariance matrix and precision matrix:
 
@@ -75,7 +75,7 @@ Roadmap:
 
 ![](/assets/images/pgm/estimation-method-table-for-ugm.png)
 
-### Indecomposable UGM
+### In-decomposable UGM
 
 For triangulated graph and potentials defined on maximal cliques(**why this?**):
 
@@ -112,7 +112,7 @@ IPF from the information theoretic view(I-projection).
 
 Motivation for feature-based one: fewer parameters while using the same graphical model.
 
-Basic ideas in learning: instead of directly taking the derivative(because computing \\(\log Z \\) term is expensive), lower bound is derived using the maximum value of log(tagent line) and Jensen's inequility for \\(\exp\\)
+Basic ideas in learning: instead of directly taking the derivative(because computing \\(\log Z \\) term is expensive), lower bound is derived using the maximum value of log(tagent line) and Jensen's inequality for \\(\exp\\)
 
 The result is:
 
