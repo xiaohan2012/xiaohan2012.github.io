@@ -9,11 +9,11 @@ tags: pgm markov-network structure-learning parameter-estimation
 ## Structural Learning
 
 
-Precision matrix and covariance matrix: different implication.
+Precision matrix(Q matrix) and covariance matrix(C matrix): different implication.
 
 
-C matrix: captures marginal dependence and independence
-Q matrix: captures conditional dependence and independence
+- C matrix: captures marginal dependence and independence
+- Q matrix: captures conditional dependence and independence
 
 - **Q**: Why this conclusion?
 - **Q**: Why precision matrix more meaningful than covariance matrix?
