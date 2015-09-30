@@ -158,3 +158,8 @@ $$ P(\mathbf{X}) = \sum\limits_i \alpha_T^i $$
 Viterbi decoding can be done via MAP inference, replacing \\(\sum\\) with \\( \max\\) and keep the back pointers.
 
 **Q**: How to view this procedure in terms of junction tree algorithm?
+
+
+## Disclaimer
+
+Some portions of the content are directly taken from the [slides](http://www.cs.cmu.edu/~epxing/Class/10708-14/lectures/lecture5-BP.pdf) of CMU Probabilistic Graphical Model, 2014 by Eric Xing

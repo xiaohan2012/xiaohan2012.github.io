@@ -94,3 +94,8 @@ Model examples:
 
 Soundness/completeness, those theorem between \\( \mathcal{G}\\) and \\(P\\) are not talked in detail. This might indicate I don't need to pay too much attention on those topics.
 
+
+## Disclaimer
+
+Some portions of the content are directly taken from the [slides](http://www.cs.cmu.edu/~epxing/Class/10708-14/lectures/lecture3-MRFrepresentation.pdf) of CMU Probabilistic Graphical Model, 2014 by Eric Xing
+

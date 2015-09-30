@@ -176,3 +176,7 @@ The take-home stuff is: **generic** MLE for exponential family and GLIMs using I
 1. Exponential family and MLE amounts to moment matching
 2. GLIMs, its canonical version and MLE on it using IRLS 
 
+
+## Disclaimer
+
+Some portions of the content are directly taken from the [slides](http://www.cs.cmu.edu/~epxing/Class/10708-14/lectures/lecture6-GLIM.pdf) of CMU Probabilistic Graphical Model, 2014 by Eric Xing

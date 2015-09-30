@@ -176,3 +176,7 @@ Example: the transition and emission probability in HMM. Instead of using one se
 1. Structural learning: ChowLiu algorithm guarantees optimality for directed tree.
 2. Learning in fully observable BN is easy and it can be decomposed into local estimation problems, which usually belongs to exponential family
 
+
+## Disclaimer
+
+Some portions of the content are directly taken from the [slides](http://www.cs.cmu.edu/~epxing/Class/10708-14/lectures/lecture7-LearningObs.pdf) of CMU Probabilistic Graphical Model, 2014 by Eric Xing

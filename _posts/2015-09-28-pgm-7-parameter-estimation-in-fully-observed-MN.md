@@ -130,3 +130,8 @@ The \\(\sum\limits_x \tilde{p}(x)f_i(x)\\) is actually the sum of \\(f_i\\) in t
 
 
 GIS is more general than IPF as the tabular potential function is a special case of feature based potential function. However, inference needs to be done for \\(\sum\limits_x p^{(t)}(x)f_i(x)\\).
+
+
+## Disclaimer
+
+Some portions of the content are directly taken from the [slides](http://www.cs.cmu.edu/~epxing/Class/10708-14/lectures/lecture8-LearningObsMRF.pdf) of CMU Probabilistic Graphical Model, 2014 by Eric Xing

@@ -67,3 +67,6 @@ tags: pgm bayesian-network
   D-separation: defines the criteria when \\(X\\) and \\(Y\\) are conditionally independent given \\(Z\\)
 
 
+## Disclaimer
+
+Some portions of the content are directly taken from the [slides](http://www.cs.cmu.edu/~epxing/Class/10708-14/lectures/lecture2-BNrepresentation.pdf) of CMU Probabilistic Graphical Model, 2014 by Eric Xing
