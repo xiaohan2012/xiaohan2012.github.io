@@ -46,7 +46,7 @@ Following is one related paper:
 - ePeriodicity: Mining Event Periodicity from Incomplete Observations
 - [ICDM 2014 Tutorial Node and graph similarity: Theory and Applications](http://web.eecs.umich.edu/~dkoutra/tut/icdm14.html#outline)
 - [Query-Based Outlier Detection in Heterogeneous Information Networks](http://hanj.cs.illinois.edu/pdf/edbt15_jkuck.pdf)
-- [Outlier Detection for Temporal Data: A Survey](http://research.microsoft.com/pubs/217054/gupta14_tkde.pdf)
+- [Outlier Detection for Temporal Data: A Survey(Section 6)](http://research.microsoft.com/pubs/217054/gupta14_tkde.pdf)
 - [Anomaly Detection in Dynamic Networks: A Survey](http://cs.ucsb.edu/~victor/pub/ucsb/mae/references/ranshous-anomaly-detection-in-networks-survey-2014.pdf)
 - [Mining Query-Based Subnetwork Outliers in Heterogeneous Information Networks](http://hanj.cs.illinois.edu/pdf/icdm14_hzhuang.pdf)
 - [Community Change Detection in Dynamic Networks in Noisy Environment](http://www.www2015.it/documents/proceedings/companion/p793.pdf)
@@ -57,10 +57,10 @@ Following is one related paper:
 
 - [Entity Role Discovery in Hierarchical Topical Communities](http://hanj.cs.illinois.edu/pdf/mds13_mdanilevsky.pdf)
 
-
 ## Topic evoluion
 
 - [TextFlow: Towards Better Understanding of Evolving Topics in Text](http://research.microsoft.com/en-us/um/people/weiweicu/images/flow.pdf)
+  1, Topic merging/splitting; 2, visualizaiton
 - [Detecting topic evolution in scientific literature: how can citations help?](http://dl.acm.org/citation.cfm?id=1646076)
 - [Topic evolution and social interactions: how authors effect research](http://dl.acm.org/citation.cfm?id=1183653)
 
@@ -120,7 +120,45 @@ Following is one related paper:
 
 - [ICDM 2015](http://icdm2015.stonybrook.edu/program/schedules)
 
-## Other interesin topics:
+# Interesing topics:
+
+
+## Topic evolution
+
+[TextFlow: Towards Better Understanding of Evolving Topics in Text](http://research.microsoft.com/en-us/um/people/weiweicu/images/flow.pdf):
+
+1. captures the merging and splitting of topics(the image in the paper is quite cool):
+2. captures important events
+3. cool visualization
+
+Extensions:
+
+- Can we incorporate network structure to contrain the topics, just like [Detecting topic evolution in scientific literature: how can citations help?](http://dl.acm.org/citation.cfm?id=1646076)
+- Can we capture the evolving topics for user/community/group?
+
+[Topic evolution and social interactions: how authors effect research](http://dl.acm.org/citation.cfm?id=1183653):
+
+1. models how topics are transitioned though Markov transition matrix
+
+Maybe the "topic transition" can be applied.
+
+## Outlier/anomaly detection
+
+What does it mean by outlier/anomaly for email applications?
+
+- A new contact that haven't contacted you before
+- Community outlier(some guy from a totally different area in terms of a specific research group)
+- Spam
+- Totally unrelated email to the current topic?
+- Some specific structure? Like a event(paper deadline, party discussion)?
+
+See the anomaly categorization in [Anomaly Detection in Dynamic Networks: A Survey](http://cs.ucsb.edu/~victor/pub/ucsb/mae/references/ranshous-anomaly-detection-in-networks-survey-2014.pdf)
+
+
+
+## Others
 
 - Labeling relationship between two email users. For example, the relationship between A and B can be captured by "machine learning" and "thesis"
-- 
+- Email grouping: can we group the incoming/unread emails so that similar ones(course registraion by student) are together and the user can process them all together?
+
+
