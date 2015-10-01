@@ -1,9 +1,9 @@
 ---
 layout: post
-title: ""
-date: 2015-10-01 11:06:59
-categories: cat
-tags: kw
+title: "Useful paper on email mining"
+date: 2015-10-01 16:25:46
+categories: resource
+tags: thesis graph-mining topic-mining
 ---
 
 ## Network structure
