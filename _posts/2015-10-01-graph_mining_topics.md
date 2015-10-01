@@ -40,34 +40,6 @@ Following is one related paper:
 
 - Large-Scale Community Detection on YouTube for Topic Discovery and Exploration
 
-It combines global and local community detection algorithms into a multi-stage clustering procedure.
-
-What's the graph?
-
-- vertex: Youtube video
-- edge: captures the similarity by measure of co-watch
-
-Community detection for graph: clustering. Global approach: scability, Local approach: coverage.
-
-Global approach:
-
-- minimum-cut maximum-flow theorem, identifying and removing minimum cut
-- betweenness cenrality
-- spectral graph theory
-
-Local approach:
-
-- start with seed vertices and grow to find dense subgraphs(complexity independent of graph size)
-
-Overlapping and non-overlapping community
-
-Quality metric(**what are they?**):
-
-- density
-- conductance
-- coherence
-- coverage
-
 ## Topic/event/anomaly detection
 
 - *Emerging Topic Detection on Twitter based on Temporal and Social Terms Evaluation*: only terms are extracted. We can extract summaries/phrases
@@ -107,6 +79,10 @@ Quality metric(**what are they?**):
 - *Combining link and content for community detection*: a discriminative approach: probabilistic approach
 - Detecting Overlapping Communities from Local Spectral Subspaces
 - [Recipient suggestion for electronic messages using local social network data](http://ceur-ws.org/Vol-1308/paper6.pdf)
+
+### Nested community detection
+
+- [Uncovering Hierarchical and Overlapping Communities with a Local-First Approach](http://dl.acm.org/citation.cfm?id=2629511)
 
 ## Interesting papers from ICDM
 
