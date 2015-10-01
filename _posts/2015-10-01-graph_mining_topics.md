@@ -119,3 +119,8 @@ Following is one related paper:
 ## Tutorials
 
 - [ICDM 2015](http://icdm2015.stonybrook.edu/program/schedules)
+
+## Other interesin topics:
+
+- Labeling relationship between two email users. For example, the relationship between A and B can be captured by "machine learning" and "thesis"
+- 
