@@ -89,12 +89,7 @@ Following is one related paper:
 - *Extracting Key Terms From Noisy and Multi-theme Documents*: one graph per document
   Can we take into account more documents in the graph so that keywords is not soled defined by the document itself but also other documents?
 - Automatic Construction and Ranking of Topical Keyphrases on Collections of Short Documents(not so related)
-- [Constructing Topical Hierarchies in Heterogeneous Information Networks](http://hanj.cs.illinois.edu/pdf/icdm13_cwang.pdf)
-  Utilizes both **linked** entity network and **type** information to construct topical **hierarchies**
-  Contains references to:
-  1. topical hierarchy construction
-  2. topic mining in hetero network
-  3. incorporating type information
+- Automatic Construction and Ranking of Topical Keyphrases on Collections of Short Documents
 
 
 ## Community detection in general
@@ -117,23 +112,36 @@ Following is one related paper:
    Problem: cascading size/time/process prediction
    Related to email: how long/popular will this topic lasts?
    Related topic: survival model(), influence modeling(selecting influential person to start a big cascade)
-- Mining Multi-Aspect Reflection of News Events in Twitter: Discovery, Linking and Presentation
-- Finding Time-Critical Responses for Information Seeking in Social Media
-- A Feature-Enhanced Ranking-Based Classifier for Multimodal Data and Heterogeneous Information Networks
+- Mining Multi-Aspect Reflection of News Events in Twitter: Discovery, Linking and Presentation(paper not available)
+- Suhas Ranganath, Suhang Wang, Xia Hu, Jiliang Tang and Huan Liu [Finding Time-Critical Responses for Information Seeking in Social Media](http://www.public.asu.edu/~swang187/publications/ICDM_2015.pdf), ICDM 2015
+  Problem: rank responders for a question to provide timely and relevant answer
+  Seems that no network structural information is used
+- Scott Deeann Chen, Ying-Yu Chen, Jiawei Han, and Pierre Moulin [A Feature-Enhanced Ranking-Based Classifier for Multimodal Data and Heterogeneous Information Networks](http://hanj.cs.illinois.edu/pdf/icdm13_schen.pdf), ICDM 2013
+  Rank and classify at the same time on heterogenous network by propagating class information via edges
+  Very interesting ideas in general
 
-### Spatio-temporal mining
+# Spatio-temporal mining
 
-- Rare Category Detection on Time-Evolving Graphs
+- Jingrui He, Yan Liu andRichard Lawrence [Rare Category Detection on Time-Evolving Graphs](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.188.6366&rep=rep1&type=pdf), ICDM 2008
+  Problem: identify examples of rare classes in unlabeled dataset(fraud detection, network intrusion detection)
+  Extension: detect spam in forum/email network
+  
 
 ### Network mining
 
 - Learning Predictive Substructures with Regularization for Network Data
-- Hierachies in directed networks
-- Mining Evolving Network Processes
+- Misael Mongiovi, [Mining Evolving Network Processes](http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6729538&tag=1), ICDM 2013
+  Problem: mining smoothly evolving process(e.g, traffic jam, information foragin). Given a struturally static graph and time-varying edge weights, find snapshots of subgraphs that are smoothly evolving
+  
 
 ### Text mining
 
-- Constructing Topical Hierarchies in Heterogeneous Information Networks
+- Chi Wang, Marina Danilevsky, Jialu Liu, Nihit Desai, Heng Ji, Jiawei Han [Constructing Topical Hierarchies in Heterogeneous Information Networks](http://nlp.cs.rpi.edu/paper/icdm13.pdf), ICDM 2013
+  Utilizes both **linked** entity network and **type** information to construct topical **hierarchies**
+  Contains references to:
+  1. topical hierarchy construction
+  2. topic mining in hetero network
+  3. incorporating type information
 - Incorporating World Knowledge to Document Clustering via Heterogeneous Information Networks
 - Topic Periodicity Discovery from Text Data
 
@@ -204,3 +212,4 @@ If time added, becomes dynamic network:
 
 1. event detection(structural change)
 2. topic evolution
+
