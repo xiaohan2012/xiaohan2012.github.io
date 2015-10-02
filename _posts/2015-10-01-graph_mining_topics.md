@@ -110,16 +110,16 @@ Following is one related paper:
 ### Mining social network
 
 - Linyun Yu, Peng Cui, Fei Wang, Chaoming Song, and Shiqiang Yang, "[From Micro to Macro: Uncovering and Predicting Information Cascading Process with Behavioral Dynamics](http://arxiv.org/pdf/1505.07193v1.pdf)", ICDM, 2015.
-  - Problem: cascading size/time/process prediction
+  - Problem: cascade size/time/process prediction
   - Related to email: how long/popular will this topic lasts?
   - Related topic: survival model(), influence modeling(selecting influential person to start a big cascade)
-- Mining Multi-Aspect Reflection of News Events in Twitter: Discovery, Linking and Presentation(paper not available)
 - Suhas Ranganath, Suhang Wang, Xia Hu, Jiliang Tang and Huan Liu [Finding Time-Critical Responses for Information Seeking in Social Media](http://www.public.asu.edu/~swang187/publications/ICDM_2015.pdf), ICDM 2015
   - Problem: rank responders for a question to provide timely and relevant answer
   - Seems that no network structural information is used
 - Scott Deeann Chen, Ying-Yu Chen, Jiawei Han, and Pierre Moulin [A Feature-Enhanced Ranking-Based Classifier for Multimodal Data and Heterogeneous Information Networks](http://hanj.cs.illinois.edu/pdf/icdm13_schen.pdf), ICDM 2013
   - Rank and classify at the same time on heterogenous network by propagating class information via edges
   - Very interesting ideas in general
+- Mining Multi-Aspect Reflection of News Events in Twitter: Discovery, Linking and Presentation  
 
 ### Spatio-temporal mining
 
@@ -173,6 +173,7 @@ Extensions:
 - Can we incorporate network structure to constrain the topics, just like [Detecting topic evolution in scientific literature: how can citations help?](http://dl.acm.org/citation.cfm?id=1646076)
 - Can we capture the evolving topics for user/community/group?
 - Can we devise a visualization method for topic evolution taking group structure into account?
+- Can we add hierarchy to both/either topic or group structure?
 
 [Topic evolution and social interactions: how authors effect research](http://dl.acm.org/citation.cfm?id=1183653):
 
@@ -181,6 +182,8 @@ Extensions:
 Maybe the "topic transition" can be applied.
 
 ## Outlier/anomaly/event detection
+
+### Definition of outlier?
 
 What does it mean by outlier/anomaly for email applications?
 
@@ -194,10 +197,29 @@ See the anomaly categorization in [Anomaly Detection in Dynamic Networks: A Surv
 
 - Can we design a way to detect the hierachicy of events? For example, the start of an new "project-start" event often contains a set of smaller "task" event. Can we capture that using the graph structure? Or more genreally, can we capture the interaction between events? For example, the start of project A is closed related to the start of project B.
 
-## Others
+### Some ideas
 
-- Labeling relationship between two email users. For example, the relationship between A and B can be captured by "machine learning" and "thesis"
-- Email grouping: can we group the incoming/unread emails so that similar ones(course registraion by student) are together and for time saving purpose, the user can process them all together?
+From the tutorial [Event detection in dynamic graphs](http://www3.cs.stonybrook.edu/~leman/wsdm13/WSDM13-Tutorial%20-%20PartII.pdf), they seem to capture the graph similarity shift in terms of similarity.
+
+Can we leverage more on the content side? For example:
+
+- [Parameter Free Bursty Events Detection in Text Streams](https://www.cis.uab.edu/zhang/Spam-mining-papers/Parameter.Free.Bursty.Events.Detection.in.Text.Streams.pdf)
+
+## Responder recommentation
+
+Based on Suhas Ranganath, Suhang Wang, Xia Hu, Jiliang Tang and Huan Liu [Finding Time-Critical Responses for Information Seeking in Social Media](http://www.public.asu.edu/~swang187/publications/ICDM_2015.pdf), ICDM 2015.
+
+This paper does not use graph information
+
+## Email grouping
+
+Can we group the incoming/unread emails so that similar ones(course registraion by student) are together and for time saving purpose, the user can process them all together?
+
+A little like network compression problem
+
+## Labeling edges/relationships
+
+Labeling relationship between two email users. For example, the relationship between A and B can be captured by "machine learning" and "thesis"
 
 
 # Summary
