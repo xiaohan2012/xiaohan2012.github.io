@@ -120,7 +120,7 @@ Following is one related paper:
   Rank and classify at the same time on heterogenous network by propagating class information via edges
   Very interesting ideas in general
 
-# Spatio-temporal mining
+### Spatio-temporal mining
 
 - Jingrui He, Yan Liu andRichard Lawrence [Rare Category Detection on Time-Evolving Graphs](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.188.6366&rep=rep1&type=pdf), ICDM 2008
   Problem: identify examples of rare classes in unlabeled dataset(fraud detection, network intrusion detection)
@@ -142,22 +142,22 @@ Following is one related paper:
   1. topical hierarchy construction
   2. topic mining in hetero network
   3. incorporating type information
-- Incorporating World Knowledge to Document Clustering via Heterogeneous Information Networks
+- Chenguang Wang, Yangqiu Song, Ahmed El-Kishky, Dan Roth, Ming Zhang, Jiawei Han, [Incorporating World Knowledge to Document Clustering via Heterogeneous Information Networks](http://dl.acm.org/citation.cfm?id=2783374), KDD 2015
+  A general framework for machine learning under supervision from world knowledge
 - Topic Periodicity Discovery from Text Data
-
+  
 
 ## Random stuff
 
-- [Mining Collective Intelligence in Diverse Groups](http://hanj.cs.illinois.edu/pdf/www13_gqi.pdf)
-- [Unsupervised Link Selection in Networks](http://hanj.cs.illinois.edu/pdf/aistat13_qgu2.pdf)
+- Guo-Jun Qi, Charu C. Aggarwal, Jiawei Han, Thomas Huang[Mining Collective Intelligence in Diverse Groups](http://hanj.cs.illinois.edu/pdf/www13_gqi.pdf), WWW 2013
+  Goal: aggregate collective observations to infer the true values(e.g, annotation in Amazon Turk)
+  Not modeled as a graph problem. But somewhat interesting
+- [Unsupervised Link Selection in Networks](http://hanj.cs.illinois.edu/pdf/aistat13_qgu2.pdf), JMLR 2013
+  Usercase: eliminating unreliable edges(for example, spam, deceptive "following/like")
+  Can be used for spam detection, graph compression.  
 
-
-## Tutorials
-
-- [ICDM 2015](http://icdm2015.stonybrook.edu/program/schedules)
 
 # Possible topics
-
 
 ## Topic evolution
 
@@ -200,7 +200,7 @@ See the anomaly categorization in [Anomaly Detection in Dynamic Networks: A Surv
 - Email grouping: can we group the incoming/unread emails so that similar ones(course registraion by student) are together and for time saving purpose, the user can process them all together?
 
 
-## Summary
+# Summary
 
 Communication/social network:
 
@@ -213,3 +213,8 @@ If time added, becomes dynamic network:
 1. event detection(structural change)
 2. topic evolution
 
+
+# Paper sources
+
+- Google scholar
+- [ICDM 2015](http://icdm2015.stonybrook.edu/program/schedules)
