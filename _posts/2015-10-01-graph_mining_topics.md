@@ -144,18 +144,18 @@ Following is one related paper:
     2. topic mining in hetero network
     3. incorporating type information
 - Chenguang Wang, Yangqiu Song, Ahmed El-Kishky, Dan Roth, Ming Zhang, Jiawei Han, [Incorporating World Knowledge to Document Clustering via Heterogeneous Information Networks](http://dl.acm.org/citation.cfm?id=2783374), KDD 2015
-  A general framework for machine learning under supervision from world knowledge
+  - A general framework for machine learning under supervision from world knowledge
 - Topic Periodicity Discovery from Text Data
   
 
 ## Random stuff
 
 - Guo-Jun Qi, Charu C. Aggarwal, Jiawei Han, Thomas Huang[Mining Collective Intelligence in Diverse Groups](http://hanj.cs.illinois.edu/pdf/www13_gqi.pdf), WWW 2013
-  Goal: aggregate collective observations to infer the true values(e.g, annotation in Amazon Turk)
-  Not modeled as a graph problem. But somewhat interesting
+  - Goal: aggregate collective observations to infer the true values(e.g, annotation in Amazon Turk)
+  - Not modeled as a graph problem. But somewhat interesting
 - [Unsupervised Link Selection in Networks](http://hanj.cs.illinois.edu/pdf/aistat13_qgu2.pdf), JMLR 2013
-  Usercase: eliminating unreliable edges(for example, spam, deceptive "following/like")
-  Can be used for spam detection, graph compression.  
+  - Usercase: eliminating unreliable edges(for example, spam, deceptive "following/like")
+  - Can be used for spam detection, graph compression.
 
 
 # Possible topics
@@ -193,7 +193,6 @@ What does it mean by outlier/anomaly for email applications?
 See the anomaly categorization in [Anomaly Detection in Dynamic Networks: A Survey](http://cs.ucsb.edu/~victor/pub/ucsb/mae/references/ranshous-anomaly-detection-in-networks-survey-2014.pdf)
 
 - Can we design a way to detect the hierachicy of events? For example, the start of an new "project-start" event often contains a set of smaller "task" event. Can we capture that using the graph structure? Or more genreally, can we capture the interaction between events? For example, the start of project A is closed related to the start of project B.
-- 
 
 ## Others
 
