@@ -24,6 +24,12 @@ Various types of nodes/edges maybe added to enrich the network:
 2. Two user might be connected if they are in the same group
 3. Two emails might share some important keywords, for example, "Deadline for KDD" and such keywords can be a different type of node
 
+### Other similar networks
+
+- Forum/Q&A network: user sends post and received replies. Just like email network
+- Cellphone message network
+
+
 ## Community labeling(both static and dynamic)
 
 Simplest idea on **static** graph:
@@ -32,7 +38,7 @@ Simplest idea on **static** graph:
 2. Get BoW representation for each community, so we have a matrix(row: community, column: terms)
 3. Selecting the important terms by either:
    - reweighing the matrix using TdIdf
-   - topic mining on the entire corpus(possibly adding some network structure constraint)
+   - topic mining on the entire corpus(possibly adding some network structure constraint, e.g, Mei, Qiaozhu, et al. "[Topic modeling with network regularization.](http://dl.acm.org/citation.cfm?id=1367512)" Proceedings of the 17th international conference on World Wide Web. ACM, 2008.)
 
 How to extend to **dynamic** graph? What do we want?
 
@@ -44,6 +50,9 @@ Following is one related paper:
 
 - *Emerging Topic Detection on Twitter based on Temporal and Social Terms Evaluation*: only terms are extracted. We can extract summaries/phrases
 - ePeriodicity: Mining Event Periodicity from Incomplete Observations
+
+### Outlier detection
+
 - [ICDM 2014 Tutorial Node and graph similarity: Theory and Applications](http://web.eecs.umich.edu/~dkoutra/tut/icdm14.html#outline)
 - [Query-Based Outlier Detection in Heterogeneous Information Networks](http://hanj.cs.illinois.edu/pdf/edbt15_jkuck.pdf)
 - [Outlier Detection for Temporal Data: A Survey(Section 6)](http://research.microsoft.com/pubs/217054/gupta14_tkde.pdf)
@@ -51,11 +60,21 @@ Following is one related paper:
 - [Mining Query-Based Subnetwork Outliers in Heterogeneous Information Networks](http://hanj.cs.illinois.edu/pdf/icdm14_hzhuang.pdf)
 - [Community Change Detection in Dynamic Networks in Noisy Environment](http://www.www2015.it/documents/proceedings/companion/p793.pdf)
 - Local Learning for Mining Outlier Subgraphs from Network Datasets
-- [Event detection in dynamic graphs](http://www3.cs.stonybrook.edu/~leman/wsdm13/WSDM13-Tutorial%20-%20PartII.pdf)
+
+### Event detection
+
+- [Event detection in dynamic graphs](http://www3.cs.stonybrook.edu/~leman/wsdm13/WSDM13-Tutorial%20-%20PartII.pdf): contains **a lot of references**
+- [Detecting change points in the large-scale structure of evolving networks](http://arxiv.org/abs/1403.0989): with some experiment on email dataset: Enron
+- [Link-based event detection in email communication networks](http://dl.acm.org/citation.cfm?id=1529618)
 
 ## Role detection
 
-- [Entity Role Discovery in Hierarchical Topical Communities](http://hanj.cs.illinois.edu/pdf/mds13_mdanilevsky.pdf)
+- Danilevsky, Marina, et al. "[Entity role discovery in hierarchical topical communities](http://hanj.cs.illinois.edu/pdf/mds13_mdanilevsky.pdf)" Proceedings of ACM SIGKDD International Conference on Knowledge Discovery and Data Mining. 2013.
+  1. constructed a hierarchy of topical communities from network data. in other words, communities are labeled
+  2. infered roles of the entities
+  Related work:
+  1. Hierarchical community detection
+  2. Role discovery
 
 ## Topic evoluion
 
@@ -69,8 +88,13 @@ Following is one related paper:
 
 - *Extracting Key Terms From Noisy and Multi-theme Documents*: one graph per document
   Can we take into account more documents in the graph so that keywords is not soled defined by the document itself but also other documents?
-- Automatic Construction and Ranking of Topical Keyphrases on Collections of Short Documents
+- Automatic Construction and Ranking of Topical Keyphrases on Collections of Short Documents(not so related)
 - [Constructing Topical Hierarchies in Heterogeneous Information Networks](http://hanj.cs.illinois.edu/pdf/icdm13_cwang.pdf)
+  Utilizes both **linked** entity network and **type** information to construct topical **hierarchies**
+  Contains references to:
+  1. topical hierarchy construction
+  2. topic mining in hetero network
+  3. incorporating type information
 
 
 ## Community detection in general
@@ -82,13 +106,17 @@ Following is one related paper:
 
 ### Nested community detection
 
-- [Uncovering Hierarchical and Overlapping Communities with a Local-First Approach](http://dl.acm.org/citation.cfm?id=2629511)
-
+- [Uncoveirng Hierarchical and Overlapping Communities with a Local-First Approach](http://dl.acm.org/citation.cfm?id=2629511)
+  Related to the paper in role detection.
+  
 ## Interesting papers from ICDM
 
 ### Mining social network
 
-- From Micro to Macro: Uncovering and Predicting Information Cascading Process with Behavioral Dynamics
+-  Linyun Yu, Peng Cui, Fei Wang, Chaoming Song, and Shiqiang Yang, "[From Micro to Macro: Uncovering and Predicting Information Cascading Process with Behavioral Dynamics](http://arxiv.org/pdf/1505.07193v1.pdf)", ICDM, 2015
+   Problem: cascading size/time/process prediction
+   Related to email: how long/popular will this topic lasts?
+   Related topic: survival model(), influence modeling(selecting influential person to start a big cascade)
 - Mining Multi-Aspect Reflection of News Events in Twitter: Discovery, Linking and Presentation
 - Finding Time-Critical Responses for Information Seeking in Social Media
 - A Feature-Enhanced Ranking-Based Classifier for Multimodal Data and Heterogeneous Information Networks
@@ -120,7 +148,7 @@ Following is one related paper:
 
 - [ICDM 2015](http://icdm2015.stonybrook.edu/program/schedules)
 
-# Interesing topics:
+# Possible topics
 
 
 ## Topic evolution
@@ -133,8 +161,9 @@ Following is one related paper:
 
 Extensions:
 
-- Can we incorporate network structure to contrain the topics, just like [Detecting topic evolution in scientific literature: how can citations help?](http://dl.acm.org/citation.cfm?id=1646076)
+- Can we incorporate network structure to constrain the topics, just like [Detecting topic evolution in scientific literature: how can citations help?](http://dl.acm.org/citation.cfm?id=1646076)
 - Can we capture the evolving topics for user/community/group?
+- Can we devise a visualization method for topic evolution taking group structure into account?
 
 [Topic evolution and social interactions: how authors effect research](http://dl.acm.org/citation.cfm?id=1183653):
 
@@ -142,7 +171,7 @@ Extensions:
 
 Maybe the "topic transition" can be applied.
 
-## Outlier/anomaly detection
+## Outlier/anomaly/event detection
 
 What does it mean by outlier/anomaly for email applications?
 
@@ -154,11 +183,24 @@ What does it mean by outlier/anomaly for email applications?
 
 See the anomaly categorization in [Anomaly Detection in Dynamic Networks: A Survey](http://cs.ucsb.edu/~victor/pub/ucsb/mae/references/ranshous-anomaly-detection-in-networks-survey-2014.pdf)
 
-
+- Can we design a way to detect the hierachicy of events? For example, the start of an new "project-start" event often contains a set of smaller "task" event. Can we capture that using the graph structure? Or more genreally, can we capture the interaction between events? For example, the start of project A is closed related to the start of project B.
+- 
 
 ## Others
 
 - Labeling relationship between two email users. For example, the relationship between A and B can be captured by "machine learning" and "thesis"
-- Email grouping: can we group the incoming/unread emails so that similar ones(course registraion by student) are together and the user can process them all together?
+- Email grouping: can we group the incoming/unread emails so that similar ones(course registraion by student) are together and for time saving purpose, the user can process them all together?
 
 
+## Summary
+
+Communication/social network:
+
+- community detection(addition: hierarchy)
+- community labeling / topic mining(different variants: with/without network structure)
+- role discovery
+
+If time added, becomes dynamic network:
+
+1. event detection(structural change)
+2. topic evolution
