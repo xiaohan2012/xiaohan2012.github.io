@@ -70,7 +70,6 @@ Following is one related paper:
 - *Extracting Key Terms From Noisy and Multi-theme Documents*: one graph per document
   Can we take into account more documents in the graph so that keywords is not soled defined by the document itself but also other documents?
 - Automatic Construction and Ranking of Topical Keyphrases on Collections of Short Documents
-- [Constructing Topical Hierarchies in Heterogeneous Information Networks](http://hanj.cs.illinois.edu/pdf/icdm13_cwang.pdf)
 
 
 ## Community detection in general
@@ -89,23 +88,32 @@ Following is one related paper:
 ### Mining social network
 
 - From Micro to Macro: Uncovering and Predicting Information Cascading Process with Behavioral Dynamics
-- Mining Multi-Aspect Reflection of News Events in Twitter: Discovery, Linking and Presentation
-- Finding Time-Critical Responses for Information Seeking in Social Media
-- A Feature-Enhanced Ranking-Based Classifier for Multimodal Data and Heterogeneous Information Networks
+- Mining Multi-Aspect Reflection of News Events in Twitter: Discovery, Linking and Presentation(paper not available)
+- Suhas Ranganath, Suhang Wang, Xia Hu, Jiliang Tang and Huan Liu [Finding Time-Critical Responses for Information Seeking in Social Media](http://www.public.asu.edu/~swang187/publications/ICDM_2015.pdf), ICDM 2015
+  Problem: rank responders for a question to provide timely and relevant answer
+  Seems that no network structural information is used
+- Scott Deeann Chen, Ying-Yu Chen, Jiawei Han, and Pierre Moulin [A Feature-Enhanced Ranking-Based Classifier for Multimodal Data and Heterogeneous Information Networks](http://hanj.cs.illinois.edu/pdf/icdm13_schen.pdf), ICDM 2013
+  Rank and classify at the same time on heterogenous network by propagating class information via edges
+  Very interesting ideas in general
 
-### Spatio-temporal mining
+# Spatio-temporal mining
 
-- Rare Category Detection on Time-Evolving Graphs
+- Jingrui He, Yan Liu andRichard Lawrence [Rare Category Detection on Time-Evolving Graphs](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.188.6366&rep=rep1&type=pdf), ICDM 2008
+  Problem: identify examples of rare classes in unlabeled dataset(fraud detection, network intrusion detection)
+  Extension: detect spam in forum/email network
+  
 
 ### Network mining
 
 - Learning Predictive Substructures with Regularization for Network Data
-- Hierachies in directed networks
-- Mining Evolving Network Processes
+- Misael Mongiovi, [Mining Evolving Network Processes](http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=6729538&tag=1), ICDM 2013
+  Problem: mining smoothly evolving process(e.g, traffic jam, information foragin). Given a struturally static graph and time-varying edge weights, find snapshots of subgraphs that are smoothly evolving
+  
 
 ### Text mining
 
-- Constructing Topical Hierarchies in Heterogeneous Information Networks
+- Chi Wang, Marina Danilevsky, Jialu Liu, Nihit Desai, Heng Ji, Jiawei Han [Constructing Topical Hierarchies in Heterogeneous Information Networks](http://nlp.cs.rpi.edu/paper/icdm13.pdf), ICDM 2013
+  Hierarchical topic modeling using link information in heterogeneous network
 - Incorporating World Knowledge to Document Clustering via Heterogeneous Information Networks
 - Topic Periodicity Discovery from Text Data
 
@@ -160,5 +168,7 @@ See the anomaly categorization in [Anomaly Detection in Dynamic Networks: A Surv
 
 - Labeling relationship between two email users. For example, the relationship between A and B can be captured by "machine learning" and "thesis"
 - Email grouping: can we group the incoming/unread emails so that similar ones(course registraion by student) are together and the user can process them all together?
+
+
 
 
