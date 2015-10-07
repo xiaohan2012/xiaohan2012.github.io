@@ -28,3 +28,6 @@ For three different groups of Twitter users, they studied:
   - Do they add new contact at constant rate?
   - How actively contacted alters change over time?
 - Compared to Twitter, how is email ego network different?
+- If we get statistics from large number of online users, we can do more. For example:
+  - Are we using emails less than before?
+  - How does the type of traffic change on email network? Are we receiving more promotional emails than personal ones as online business gains popularity?
