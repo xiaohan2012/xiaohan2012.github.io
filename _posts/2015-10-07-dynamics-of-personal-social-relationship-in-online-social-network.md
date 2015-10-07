@@ -14,9 +14,9 @@ For three different groups of Twitter users, they studied:
 
 - the active life span(how long do they use)
 - the ego network evolution over time(only mention and reply considered)
-  - # of alters contacted
-  - # of alters actively contacted
-- # of non-direct communication(hashtag, url) on daily basis
+  - \# of alters contacted
+  - \# of alters actively contacted
+- \# of non-direct communication(hashtag, url) on daily basis
 - how the average time since last contact chagnes over time
 - statibility of ego network structure(the layer model)
 
