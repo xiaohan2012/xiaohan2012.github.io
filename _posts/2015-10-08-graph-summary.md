@@ -39,8 +39,6 @@ Some design issues:
 - Same question for the users. Again, it's desirable to select only the important users involved in the event. And the same question. How to select the important ones?
 
 
-## Model
-
 Some desired properties of the events:
 
 - **coverage**: they should cover as much as the whole communication network. Note that some email records, users and labels are not included in any of the events as they are relatively trivial
@@ -48,9 +46,9 @@ Some desired properties of the events:
 - **time continuity**: emails that happened within relatively short time span tend to be in the same event
 - **topical consistency**: emails that describe similar topic tend to be in the same event
 
-### Clustering approach
+## Clustering approach
 
-#### Hard clustering(K-kmeans)
+### Hard clustering(K-kmeans)
 
 The similarity function should consider time, user closeness(in graph), topic relatedness
 
@@ -61,7 +59,7 @@ Some graphical illustration:
 ![]()
 
 
-#### Soft clustering(probabilistic mixture model)
+### Soft clustering(probabilistic mixture model)
 
 Instead of using hard clustering, we can switch to soft clustering, for example, using mixture model(EM algorithm).
 
@@ -92,7 +90,7 @@ Potential benefit of mixture model:
 - Once being Bayesian, we can add our prior as well.
 
 
-### Dense subgraph detection approach
+## Dense subgraph detection approach
 
 
 Find a list of \\(K)\\ subgrpahs that:
