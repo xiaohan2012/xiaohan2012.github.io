@@ -65,17 +65,17 @@ Instead of using hard clustering, we can switch to soft clustering, for example,
 
 We can model it as a generative process, where we first select the event, then generate the time/topic/user conditioned on the event.
 
-<!-- {% xdot svg %} -->
-<!--    digraph G{ -->
-<!--       subgraph c1 { -->
-<!-- 	     E -> T [style=filled] -->
-<!-- 		 E -> L [style=filled] -->
-<!-- 		 E -> U [style=filled] -->
-<!-- 		 label = "M" -->
-<!--       } -->
-<!--    } -->
+{% xdot svg %}
+   digraph G{
+      subgraph c1 {
+	     E -> T [style=filled]
+		 E -> L [style=filled]
+		 E -> U [style=filled]
+		 label = "M"
+      }
+   }
 
-<!-- {% endxdot %} -->
+{% endxdot %}
 
 where
 
