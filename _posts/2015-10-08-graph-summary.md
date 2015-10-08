@@ -56,10 +56,10 @@ Potential issue: some trivial/singleton/outlier record(For example, Joe sent me 
 
 Some graphical illustration:
 
-![]()
+![](/assets/images/graph-summary/hard-clustering-illustration.png)
 
 
-### Soft clustering(probabilistic mixture model)
+### Soft clustering(mixture model)
 
 Instead of using hard clustering, we can switch to soft clustering, for example, using mixture model(EM algorithm).
 
