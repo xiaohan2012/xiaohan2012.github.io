@@ -1,0 +1,589 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>ClusType: Effective Entity Recognition and Typing by Relation Phrase-Based Clustering</title>
+    
+	
+	<meta name="author" content="Han Xiao">
+	
+	<link rel="stylesheet" href="/assets/themes/Snail/css/jquery.fancybox.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/main.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/pages/journal.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/team.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/static.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/errors.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/google-code-prettify/prettify.css">
+	<link rel="shortcut icon" href="/assets/themes/Snail/img/favicon.ico">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+	<script src="/assets/themes/Snail/google-code-prettify/prettify.js"></script>
+	<script type="text/javascript">
+	  $(function(){
+		$("pre code").addClass("prettyprint linenums");
+		prettyPrint();
+	  });
+	</script>
+	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+</head>
+<body>
+	<noscript>
+		&amp;lt;div id="no-js"&amp;gt;Please enable JavaScript in your browser to experience / fully&amp;lt;/div&amp;gt;
+	</noscript>
+    <div id="page-container">
+		<div>
+			<nav>
+	<div id="nav-l">
+	</div>
+	<div id="nav-c">
+		<ul id="nav-list" style="width: 700px;">
+			<li id="home"><a href="/">Home</a></li>
+			
+			
+			
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "About Me"><a href="/about.html">About Me</a></li>
+					
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Archive"><a href="/archive.html">Archive</a></li>
+					
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Categories"><a href="/categories.html">Categories</a></li>
+					
+				  
+				
+			 
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Tags"><a href="/tags.html">Tags</a></li>
+					
+				  
+				
+			 
+			
+			
+		</ul>
+		<form id="nav-search" method="GET" action="/search.html">
+			<div id="search-right-pix">
+				<div id="search-left-pix">
+					<div id="search-center-pix">
+						<div id="search-icon-pix"></div>
+						<input name="query" type="text" placeholder="Search">
+					</div>
+				</div>
+			</div>
+		</form>
+		
+		
+	</div>
+	<div id="nav-r">
+	</div>
+</nav>
+			<div id="page-content">
+				
+<div id="page-content">
+	<div class="cont932">
+	<div id="journal-articles-block">
+		<div class="journal-article">
+			<div class="journal-post-info">
+				<div class="journal-cat-box">
+				
+				
+				<div class="journal-cat-box">
+
+<a href="/categories.html#paper-ref" title="paper">
+	paper
+
+</a>
+</div>
+				
+				</div>
+			</div>
+			<div class="journal-body">
+				<h1 class="journal-title">ClusType: Effective Entity Recognition and Typing by Relation Phrase-Based Clustering<span class="author"></span>
+				</h1>
+				<span class="the-article">
+				<h2 id="what-it-solves">What it solves</h2>
+
+<p>Given a knowledge base, document corpus and a set of target types, T, the method:</p>
+
+<ul>
+  <li>Detects candidate entity mentions</li>
+  <li>Types the mentions to <em>one</em> of T or Not-Of-Interest</li>
+</ul>
+
+<p>As a side-product, it also:</p>
+
+<ul>
+  <li>Detects relation phrases</li>
+  <li>Clusters the phrases</li>
+</ul>
+
+<h2 id="basic-workflow">Basic workflow</h2>
+
+<p>It works as follow:</p>
+
+<ol>
+  <li>Mining possible entity mentions</li>
+  <li>Construct heterogenous graph on entity mentions, mention names and relation phrases</li>
+  <li>Based on confidently mapped entity mentions, perform label propagation and relation phrase clustering simultaneously by modeling it a mix integer optimization problem</li>
+</ol>
+
+<p>Three challenges it tries to address:</p>
+
+<ul>
+  <li><strong>Domain restriction</strong>: if using chunkers to detect entity mention, it might perform badly in domain-specific corpus. This papers makes little linguistic assumptions and mine the phrases in a data-driven way.</li>
+  <li><strong>Name ambiguity</strong>: some approaches treat mentions with the same surface names as one entity. This is probelmatic. This paper predicts each mention’s type individually</li>
+  <li><strong>Context sparsity</strong>: some relation phrase occurs rarely, making it hard to provide useful/reliable information for its argument. This paper clusters the phrases so that more information can be propagated/shared</li>
+</ul>
+
+<h2 id="steps-in-detail">Steps In detail</h2>
+
+<h3 id="entity-mention-and-relation-phrase-detection">Entity mention and relation phrase detection</h3>
+
+<ol>
+  <li>Mine <em>frequent continuous patterns</em> up to a maximum length</li>
+  <li>Merge the patterns agglomeratively and greedily. At each step, the decision is made by choosing the one with the highest <em>global significance score</em>, kind of <em>rectified phrase frequency</em>. Meanwhile, the merged phrases should obey certain POS tag patterns. <em>NN+</em> for mentions</li>
+  <li>Merging stops when the score is below some threshold.</li>
+</ol>
+
+<p>This step can be replaced by the method in “SegPhrase” paper.</p>
+
+<h3 id="heterogenous-graph-construction">Heterogenous graph construction</h3>
+
+<p>Three types of nodes:</p>
+
+<ul>
+  <li>Entity mention</li>
+  <li>Mention surface name(number far fewer than number of entity mentions)</li>
+  <li>Relation phrase</li>
+</ul>
+
+<p>Mention surface name is included to:</p>
+
+<ul>
+  <li>reduce time complexity / sparsity</li>
+  <li>(indirectly) allow more efficient information propagation</li>
+</ul>
+
+<p>Three types of edges/subgraphs:</p>
+
+<ul>
+  <li>
+    <p>mention-name: type info on name directly gives cues on types of mentions
+For each mention or name, its type is represented by a one-hot vector</p>
+  </li>
+  <li>
+    <p>name-phrase: if we know “XX” is “Food” and “serve XX”, then if we see “serve YY”, then “YY” might be “Food”. “serve” serves like a bridge. <strong>Hypothesis 1</strong><br />
+Type for phrase is represented by two(left/right arg) one-hot vector</p>
+  </li>
+  <li>
+    <p>mention-mention: if two mentions are <em>strongly correlated</em>, they tend to share similar type. <strong>Hypothesis 2</strong></p>
+  </li>
+</ul>
+
+<h3 id="clustype-algorithm"><em>ClusType</em> algorithm</h3>
+
+<p>Two more hypo:
+<em>Hypothesis 3</em>: if two relation phrases are in the same cluster, they tend have similar types
+<em>Hypothesis 4</em>: if two relation phrases tend to 1, words, 2, context words, 3, similar types signatures, they tend to be in similar cluster</p>
+
+<p>And these hypothesis are encoded in an optimization problem, 3 terms:</p>
+
+<ol>
+  <li>Minimize the distance between mention types and corresponding phrase type signature(<strong>Hypothesis 1</strong>)</li>
+  <li>Modeled as clustering as an non-negative matrix factorization problem plus some consensus matrix(because of multiple views). <strong>Hypothesis 3 and 4</strong></li>
+  <li>Miminize distance between mention type and aggregation(e.g, <em>sum</em>) from corresponding name type and relation phrase type. Plus, strongly correlated mentions should have similar types(<strong>Hypothesis 2</strong>). Last, should be consistent with types of initial seed.</li>
+</ol>
+
+<p><strong>Optimization:</strong></p>
+
+<p>Mix integer problem. NP-hard. Using relaxation and alternating algorithm(Updating subsets of parameters step by step) as approximation.</p>
+
+<p>Don’t quite understand.</p>
+
+<h2 id="what-i-learned">What I learned</h2>
+
+<ul>
+  <li>A cool thing: entity typing</li>
+  <li>Limitations of NER: domain restrictness(human effort)</li>
+  <li>Limitations of entity linking: limited coverage/freshness(entity may not be in KB)</li>
+  <li>The three challenges: entity detection, name ambiguity and context sparsity</li>
+  <li>The idea of mutually enhancing is also applied in the <em>SegPhrase</em> paper, in which segmentation and quality estimation enhances each other</li>
+  <li>Another way to do phrase mining: agglomeratively merging patterns under POS pattern constraint. The decision is based on some kind of <em>rectified frequency</em>, which also appeared in <em>SegPhrase</em> paper</li>
+  <li>Multiplication of N co-occurence matrices(of N+1 types of objects) lead to then co-occurence matrix between 1st type of obj and (N+1)th type of obj</li>
+  <li>I might need to know more about discrete optimization / integer programming</li>
+  <li><code>splotlight.dbpedia.org</code> can be used for entity linking</li>
+  <li>Very stunnhing entity coverage (<code>&lt;7%</code>) by some entity linking method</li>
+  <li>Non-negtive matrix factorization(NMF), <code>min_{U,V}||F - UV||</code></li>
+  <li>Clustering as an NMF problem</li>
+  <li>Relaxation and alternating minimization as approximation techniqu for mix-integer programming</li>
+  <li>Two broad types of efforts for entity typing: weak-supervision(bootstrapping)and distant supervision</li>
+</ul>
+
+<h2 id="my-questions-and-thinking">My questions and thinking</h2>
+
+<ol>
+  <li>Phrase have left/right argument: is it reasonable to distinguish the arguments by left/right? How about three or more arguments?</li>
+  <li>More cues for surface name, besides the relation or mention? How about from knowledge base, even though the name is ambigous</li>
+  <li>Vector representation for surface name can be an over-simplification, as name can be ambiguous. Can we apply some (non)-linear transformation function that transforms the type by context(also some vector)?</li>
+  <li>Can we also use entity mention clustering to further reduce the sparsity?</li>
+  <li>Should we normalize the relation phrases(passive/active voice)?</li>
+  <li>Representation for the phrases is sparse for now(BoW). Any stuff like <em>phrase2vec</em> like <em>word2vec</em>?</li>
+  <li>Can we <strong>link</strong> the mentions to KB also? For example, KB contain the  mentioned entity but doesn’t record its surface name.</li>
+  <li>Can we model <strong>multiple</strong> types? For now, only one type is assigned.</li>
+  <li>Is the POS tagger sensitive to domain? If so, the entity mention detection might be problematic? Also, for Twitter, specific taggers for Twitter might be used.</li>
+  <li></li>
+</ol>
+
+<h2 id="related-interesting-topics">Related interesting topics</h2>
+
+<ol>
+  <li>Online learning/prediction(forever learner)?</li>
+  <li>Scalability: can the integer programming algorithm be applied to large scale entity typing</li>
+</ol>
+
+<h2 id="related-papers-and-comparison">Related papers and comparison</h2>
+
+<h3 id="entity-typing--distance-supervision">Entity typing / distance supervision</h3>
+
+<ul>
+  <li>T. Lin, O. Etzioni, et al. No noun phrase left behind: detecting and typing unlinkable entities. In EMNLP, 2012.</li>
+  <li>N. Nakashole, T. Tylenda, and G. Weikum. Fine-grained semantic typing of emerging entities. In ACL, 2013.</li>
+</ul>
+
+<h3 id="entity-linking">Entity linking</h3>
+
+<ul>
+  <li>W. Shen, J. Wang, and J. Han. Entity linking with a knowledge base: Issues, techniques, and solutions. TKDE, (99):1-20, 2014.</li>
+</ul>
+
+<h3 id="label-propagation">Label propagation</h3>
+
+<ul>
+  <li>W. Shen, J. Wang, P. Luo, and M. Wang. A graph-based approach for ontology population with named entities. In CIKM, 2012.</li>
+  <li>P. P. Talukdar and F. Pereira. Experiments in graph-based semi-supervised learning methods for class-instance acquisition. In ACL, 2010.</li>
+</ul>
+
+<h3 id="relation-extraction">Relation extraction</h3>
+
+<ul>
+  <li>A. Fader, S. Soderland, and O. Etzioni. Identifying relations for open information extraction. In EMNLP, 2011.</li>
+</ul>
+
+<h3 id="nmfclustering">NMF&amp;Clustering</h3>
+
+<ul>
+  <li>J. Liu, C. Wang, J. Gao, and J. Han. Multi-view clustering via joint nonnegative matrix factorization. In SDM, 2013.</li>
+</ul>
+
+<h3 id="dimension-reduction">Dimension reduction</h3>
+
+<ul>
+  <li>X. He and P. Niyogi. Locality preserving projections. In NIPS, 2004.</li>
+</ul>
+
+<h3 id="discrete-optimization">Discrete optimization</h3>
+
+<ul>
+  <li>P. Tseng. Convergence of a block coordinate descent method for nondifferentiable minimization. JOTA, 109(3):475-494,2001.</li>
+</ul>
+
+				</span>
+				<div class="journal-date">Published 02 September 2015</div>
+				<div class="journal-tags">
+				
+				
+	 
+		<a class="tag-cont" href="/tags.html#dm-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">dm</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#nlp-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">nlp</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#entity-typing-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">entity-typing</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#graph-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">graph</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#optimization-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">optimization</div>
+			<div class="tag-r"></div>
+		</a>
+	
+
+
+
+				</div>
+			</div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+</div>
+	<div class="clearboth"></div>
+	
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'xiaohan2012'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+	<div class="clearboth"></div>
+</div>
+
+
+			</div>
+			<div class="clearboth pagebottom"></div>
+		</div>
+	</div>
+	<footer>
+	<div class="footer-940">
+		<div class="footer-general-info">
+			© 2014 Han Xiao.<br><br>
+			Content licensed under:<br>
+			<a class="cc" href="http://creativecommons.org/licenses/by-sa/3.0/">c a b</a><br>
+			<a href = "/about.html">About Me</a><br>
+		</div>
+		<div class="footer-col-cont">
+			<div class="footer-nav-col">
+				<h4><a>Categories</a></h4>
+				<ul>
+					
+					
+
+
+  
+     
+    	<li><a href="/categories.html#paper-reading-ref">
+    		paper-reading <span>5</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#experience-ref">
+    		experience <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#misc-ref">
+    		misc <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#software-ref">
+    		software <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#note-ref">
+    		note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#study-note-ref">
+    		study-note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resources-ref">
+    		resources <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#paper-ref">
+    		paper <span>12</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#tutorial-ref">
+    		tutorial <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#course-ref">
+    		course <span>8</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#thoughts-ref">
+    		thoughts <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resource-ref">
+    		resource <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#weekly-summary-ref">
+    		weekly-summary <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#modeling-ref">
+    		modeling <span>1</span>
+    	</a></li>
+    
+  
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Pages</a></h4>
+				<ul>
+					
+					
+					
+
+
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/about.html">About Me</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Feed</a></h4>
+				<ul>
+					<li><a href="/atom.xml">Atom Feed</a></li>
+					<li><a href="/rss.xml">RSS Feed</a></li>
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Links</a></h4>
+				<ul>
+				 
+					<li><a href = "http://xiaohan2012.github.io/">Han Xiao's Blog</a></li>
+				
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a href = "/about.html">About Me</a></h4>
+				<ul>
+				 
+					<li><a href = "mailto:han.xiao@cs.helsinki.fi">e-mail</a></li>
+				
+				</ul>
+			</div>
+			<div class="clearboth"></div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+	<div class="clearboth"></div>
+</footer>
+	
+</body>
+</html>
+

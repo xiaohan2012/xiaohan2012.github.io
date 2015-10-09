@@ -1,0 +1,541 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>PathSim: Meta PathBased TopK Similarity Search in Heterogeneous Information Networks</title>
+    
+	
+	<meta name="author" content="Han Xiao">
+	
+	<link rel="stylesheet" href="/assets/themes/Snail/css/jquery.fancybox.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/main.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/pages/journal.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/team.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/static.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/errors.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/google-code-prettify/prettify.css">
+	<link rel="shortcut icon" href="/assets/themes/Snail/img/favicon.ico">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+	<script src="/assets/themes/Snail/google-code-prettify/prettify.js"></script>
+	<script type="text/javascript">
+	  $(function(){
+		$("pre code").addClass("prettyprint linenums");
+		prettyPrint();
+	  });
+	</script>
+	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+</head>
+<body>
+	<noscript>
+		&amp;lt;div id="no-js"&amp;gt;Please enable JavaScript in your browser to experience / fully&amp;lt;/div&amp;gt;
+	</noscript>
+    <div id="page-container">
+		<div>
+			<nav>
+	<div id="nav-l">
+	</div>
+	<div id="nav-c">
+		<ul id="nav-list" style="width: 700px;">
+			<li id="home"><a href="/">Home</a></li>
+			
+			
+			
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "About Me"><a href="/about.html">About Me</a></li>
+					
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Archive"><a href="/archive.html">Archive</a></li>
+					
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Categories"><a href="/categories.html">Categories</a></li>
+					
+				  
+				
+			 
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Tags"><a href="/tags.html">Tags</a></li>
+					
+				  
+				
+			 
+			
+			
+		</ul>
+		<form id="nav-search" method="GET" action="/search.html">
+			<div id="search-right-pix">
+				<div id="search-left-pix">
+					<div id="search-center-pix">
+						<div id="search-icon-pix"></div>
+						<input name="query" type="text" placeholder="Search">
+					</div>
+				</div>
+			</div>
+		</form>
+		
+		
+	</div>
+	<div id="nav-r">
+	</div>
+</nav>
+			<div id="page-content">
+				
+<div id="page-content">
+	<div class="cont932">
+	<div id="journal-articles-block">
+		<div class="journal-article">
+			<div class="journal-post-info">
+				<div class="journal-cat-box">
+				
+				
+				<div class="journal-cat-box">
+
+<a href="/categories.html#paper-ref" title="paper">
+	paper
+
+</a>
+</div>
+				
+				</div>
+			</div>
+			<div class="journal-body">
+				<h1 class="journal-title">PathSim: Meta PathBased TopK Similarity Search in Heterogeneous Information Networks<span class="author"></span>
+				</h1>
+				<span class="the-article">
+				<h2 id="motivation">Motivation</h2>
+
+<p>In heterogoues information network(multiple types of nodes/edges), similarity measure between entities should have finer semantics. For example, an author can be similar to an another in terms of their influence, published conferences, published topics, co-authorship, etc.</p>
+
+<h2 id="contribution">Contribution</h2>
+
+<ul>
+  <li>Defined meta-path based similarity measure that distinguishes connection semantics and selects candidates that matches the visibility of the query object(<strong>meta-path framework</strong>)</li>
+  <li>Efficient algorithms to ranks the top-k similar objects(<strong>fast top-k ranking</strong>)</li>
+</ul>
+
+<h2 id="pathsim">PathSim</h2>
+
+<p>Given meta-path <code>P</code>, <strong>PathSim</strong> is defined as:</p>
+
+<p>s(i, j) = 2 * M(i, j) / (M(i, i) + M(j, j))</p>
+
+<ul>
+  <li><code>M</code>: <em>commuting matrix</em>. Shape is <code>(n, n)</code>, where <code>n</code> is the number of target objects</li>
+  <li><code>M(i, j)</code>: number of paths from object <code>i</code> to object <code>j</code> according to <code>P</code></li>
+  <li><code>M(i, i)</code>: number of paths from object <code>i</code> to itself according to <code>P</code></li>
+</ul>
+
+<p>The denomenator assures balance of visibility.</p>
+
+<p>In this paper, we only consider <em>symmetric</em> path, something like <code>ABCBA</code>.</p>
+
+<h2 id="computation-reduction">Computation reduction</h2>
+
+<p><code>M</code> can be pre-computed. However, saving <code>(n, n)</code> can be space consuming(<code>40G</code> in the paper’s example).</p>
+
+<p>To address this issue. It’s reasonable to save the commuting matrix, <code>M_P</code> of its half path, (e.g, <code>ABC</code>) and compute the similarities(vector multiply matrix) on line. Time complexity is <code>O(mn)</code>, where <code>m</code> is the number of objects of type <code>C</code>.</p>
+
+<p>As there can be many objects not accessible to the target, those objects can be dropped by checking if they are among the neighbors of target object’s neighbors according to <code>M_P</code>.</p>
+
+<p>Time complexity can be further reduced by co-clustering the rows and columns and prune unpromising candidate cluster according to its similarity upper bound. For example, if the cluster’s similarty upperbound is lower than the minimum of the current top-k list’s similarities, the whole cluster can be dropped. Therefore, only part of the similarity computation are materialized.</p>
+
+<p>In total, two levels of computation reduction is done:</p>
+
+<ol>
+  <li>prune non-accessible nodes</li>
+  <li>prune object cluster which is not promising according to their upperbound.</li>
+</ol>
+
+<h2 id="what-i-learned">What I learned</h2>
+
+<h3 id="basics">Basics</h3>
+
+<ul>
+  <li>Similarity search for graph as an alternative to the traditonal IR techniques(ranking a list of independent documents)</li>
+  <li>A list of application in similarity search for graph: author, paper, image search..</li>
+  <li>Several graph similarity measure: PageRank, SimRank, etc and the problems with them: bias towards high visibility/concentration</li>
+  <li>Basic idea of Random Walk as similarity measure: the probability of starting from x and ending at y</li>
+  <li><em>Meta-Path</em> as a framework to captures richer semantics. Other measure can be plugged in. For example, Random Walk that follows a certain paths.</li>
+  <li><code>PathSim</code> as an implementation of <code>Meta-Path</code> and it considers  among <em>peers</em>(similar visibility)</li>
+  <li><code>PathSim</code> can be computing by summing weighted different similarities on different meta-path.</li>
+</ul>
+
+<h3 id="more-technical-stuff">More technical stuff</h3>
+
+<ul>
+  <li>Commuting matrix: the result of multiplication of adjacancy matrices. For example, given <code>A</code>, the adj matrix from objects of type <code>a</code> to type <code>b</code> and B, the adj matrix from type <code>b</code> to <code>c</code>. Then <code>A * B</code> is the adj matrix from <code>a</code> to <code>c</code>.</li>
+  <li>Time consumption reduction can be gained in top-k ranking problem in this scenario as we don’t have to compute all the similarity values in order to only get the top-k</li>
+  <li>Co-clustering as another technique/problem and using it to further reduce computation by reducing the column dimension</li>
+  <li>Primary eigen vector can be used as <em>authority ranking</em> of objects</li>
+  <li>Jaccard coefficient: similarity between two sets</li>
+  <li>Linear algebra theorems: Holder’s Inequality and Cauchy-Schwarz inequality, are used to derive the similarty upper bound.</li>
+</ul>
+
+<h3 id="methedologies">Methedologies</h3>
+
+<ul>
+  <li>Detailed empiricial analysis of influencing factors of pruning power(commuting matrix density, size of neighborhood of query)</li>
+</ul>
+
+<h2 id="questions">Questions</h2>
+
+<ul>
+  <li>How to find relevant objects of <strong>different</strong> types?</li>
+</ul>
+
+<p>Similar images to this tag/keywords?</p>
+
+<p>We need to compute the whole matrix multiplication?</p>
+
+<p>Maybe first get similar images to the tag and then use meta-path to get similar images to the selected images? Local minimum?</p>
+
+<ul>
+  <li>Can we learn such path automatically given several matching pairs?</li>
+</ul>
+
+<p>Start with a list of candidates and adjusting the weights?</p>
+
+<ul>
+  <li>Is balance of invisibility necessarily important?</li>
+</ul>
+
+<p>It depends on the senario. Sometimes, we might want popular objects, for example, users similar to the query user but are much more famous.</p>
+
+<ul>
+  <li>What are the other applications of co-clustering?</li>
+</ul>
+
+<h2 id="related-papers">Related Papers</h2>
+
+<h3 id="similarity-search-in-homogenous-network">Similarity search in homogenous network</h3>
+
+<ul>
+  <li>G. Jeh and J. Widom. Simrank: a measure of structural-context similarity. In KDD’02, 538–543, 2002</li>
+  <li>G. Jeh and J. Widom. Scaling personalized web search. In WWW’03, 271–279, 2003.</li>
+  <li>X. Xu, N. Yuruk, Z. Feng, and T. A. J. Schweiger. Scan: a structural clustering algorithm for networks. In KDD’07,824–833, 2007.</li>
+  <li>D. Lizorkin, P. Velikhov, M. Grinev, and D. Turdakov. Accuracy estimate and optimization techniques for simrank computation. PVLDB, 1(1):422–433, 2008.</li>
+</ul>
+
+<h3 id="eigen-value-as-authority-measure">eigen value as authority measure</h3>
+
+<ul>
+  <li>Y. Sun, J. Han, P. Zhao, Z. Yin, H. Cheng, and T. Wu. Rankclus: integrating clustering with ranking for heterogeneous information network analysis. In EDBT’09, 565–576, 2009</li>
+</ul>
+
+<h3 id="co-clustering">Co-clustering</h3>
+
+<ul>
+  <li>I. S. Dhillon, S. Mallela, and D. S. Modha. Information-theoretic co-clustering. In KDD’03, 89–98,2003</li>
+  <li>F. Pan, X. Zhang, and W. Wang. Crd: fast co-clustering on large datasets utilizing sampling-based matrix decomposition. In SIGMOD’08, 173–184, 2008.</li>
+</ul>
+
+<h3 id="random-walk">Random Walk</h3>
+
+<ul>
+  <li>D. Fogaras, B. R´acz, K. Csalog´any, and T. Sarl´os. Towards scaling fully personalized pageRank: algorithms, lower bounds, and experiments. Int. Math., 2(3):333–358, 2005</li>
+  <li>H. Tong, C. Faloutsos, J. Pan. Fast Random Walk with Restart and Its Applications. In ICDM’06, 613–622, 2006.</li>
+</ul>
+
+<h3 id="fast-top-k-ranking">Fast top-k ranking</h3>
+
+<ul>
+  <li>M. Gupta, A. Pathak, and S. Chakrabarti. Fast algorithms for topk personalized pagerank queries. In WWW’08, 1225–1226, 2008.</li>
+</ul>
+
+<h3 id="pagerank-related">PageRank related</h3>
+
+<ul>
+  <li>A. Balmin, V. Hristidis, and Y. Papakonstantinou. Objectrank: authority-based keyword search in databases. In VLDB’04, 564–575, 2004.</li>
+  <li>Z. Nie, Y. Zhang, J.-R. Wen, and W.-Y. Ma. Object-level ranking: bringing order to web objects. In WWW’05, 567–574, 2005.</li>
+</ul>
+
+<p>Should RandomWalk, PageRank and similarity each be merged?</p>
+
+
+				</span>
+				<div class="journal-date">Published 05 September 2015</div>
+				<div class="journal-tags">
+				
+				
+	 
+		<a class="tag-cont" href="/tags.html#graph-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">graph</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#similarity-search-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">similarity-search</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#meta-path-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">meta-path</div>
+			<div class="tag-r"></div>
+		</a>
+	
+
+
+
+				</div>
+			</div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+</div>
+	<div class="clearboth"></div>
+	
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'xiaohan2012'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+	<div class="clearboth"></div>
+</div>
+
+
+			</div>
+			<div class="clearboth pagebottom"></div>
+		</div>
+	</div>
+	<footer>
+	<div class="footer-940">
+		<div class="footer-general-info">
+			© 2014 Han Xiao.<br><br>
+			Content licensed under:<br>
+			<a class="cc" href="http://creativecommons.org/licenses/by-sa/3.0/">c a b</a><br>
+			<a href = "/about.html">About Me</a><br>
+		</div>
+		<div class="footer-col-cont">
+			<div class="footer-nav-col">
+				<h4><a>Categories</a></h4>
+				<ul>
+					
+					
+
+
+  
+     
+    	<li><a href="/categories.html#paper-reading-ref">
+    		paper-reading <span>5</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#experience-ref">
+    		experience <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#misc-ref">
+    		misc <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#software-ref">
+    		software <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#note-ref">
+    		note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#study-note-ref">
+    		study-note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resources-ref">
+    		resources <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#paper-ref">
+    		paper <span>12</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#tutorial-ref">
+    		tutorial <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#course-ref">
+    		course <span>8</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#thoughts-ref">
+    		thoughts <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resource-ref">
+    		resource <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#weekly-summary-ref">
+    		weekly-summary <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#modeling-ref">
+    		modeling <span>1</span>
+    	</a></li>
+    
+  
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Pages</a></h4>
+				<ul>
+					
+					
+					
+
+
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/about.html">About Me</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Feed</a></h4>
+				<ul>
+					<li><a href="/atom.xml">Atom Feed</a></li>
+					<li><a href="/rss.xml">RSS Feed</a></li>
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Links</a></h4>
+				<ul>
+				 
+					<li><a href = "http://xiaohan2012.github.io/">Han Xiao's Blog</a></li>
+				
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a href = "/about.html">About Me</a></h4>
+				<ul>
+				 
+					<li><a href = "mailto:han.xiao@cs.helsinki.fi">e-mail</a></li>
+				
+				</ul>
+			</div>
+			<div class="clearboth"></div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+	<div class="clearboth"></div>
+</footer>
+	
+</body>
+</html>
+

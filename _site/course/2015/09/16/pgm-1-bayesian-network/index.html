@@ -1,0 +1,461 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>PGM course: Bayesian Network</title>
+    
+	
+	<meta name="author" content="Han Xiao">
+	
+	<link rel="stylesheet" href="/assets/themes/Snail/css/jquery.fancybox.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/main.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/pages/journal.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/team.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/static.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/errors.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/google-code-prettify/prettify.css">
+	<link rel="shortcut icon" href="/assets/themes/Snail/img/favicon.ico">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+	<script src="/assets/themes/Snail/google-code-prettify/prettify.js"></script>
+	<script type="text/javascript">
+	  $(function(){
+		$("pre code").addClass("prettyprint linenums");
+		prettyPrint();
+	  });
+	</script>
+	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+</head>
+<body>
+	<noscript>
+		&amp;lt;div id="no-js"&amp;gt;Please enable JavaScript in your browser to experience / fully&amp;lt;/div&amp;gt;
+	</noscript>
+    <div id="page-container">
+		<div>
+			<nav>
+	<div id="nav-l">
+	</div>
+	<div id="nav-c">
+		<ul id="nav-list" style="width: 700px;">
+			<li id="home"><a href="/">Home</a></li>
+			
+			
+			
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "About Me"><a href="/about.html">About Me</a></li>
+					
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Archive"><a href="/archive.html">Archive</a></li>
+					
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Categories"><a href="/categories.html">Categories</a></li>
+					
+				  
+				
+			 
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Tags"><a href="/tags.html">Tags</a></li>
+					
+				  
+				
+			 
+			
+			
+		</ul>
+		<form id="nav-search" method="GET" action="/search.html">
+			<div id="search-right-pix">
+				<div id="search-left-pix">
+					<div id="search-center-pix">
+						<div id="search-icon-pix"></div>
+						<input name="query" type="text" placeholder="Search">
+					</div>
+				</div>
+			</div>
+		</form>
+		
+		
+	</div>
+	<div id="nav-r">
+	</div>
+</nav>
+			<div id="page-content">
+				
+<div id="page-content">
+	<div class="cont932">
+	<div id="journal-articles-block">
+		<div class="journal-article">
+			<div class="journal-post-info">
+				<div class="journal-cat-box">
+				
+				
+				<div class="journal-cat-box">
+
+<a href="/categories.html#course-ref" title="course">
+	course
+
+</a>
+</div>
+				
+				</div>
+			</div>
+			<div class="journal-body">
+				<h1 class="journal-title">PGM course: Bayesian Network<span class="author"></span>
+				</h1>
+				<span class="the-article">
+				<h1 id="learned-from-book">Learned from book</h1>
+
+<h2 id="exploiting-independence-properties">Exploiting Independence Properties</h2>
+
+<ul>
+  <li>Why represent the joint probability in a compact way: computational(memory), cognitively(interpretability) and statistically(large amount of data for parameter estimation).</li>
+  <li>Compactness in terms of number of independent parameters</li>
+  <li>More compactness lead to less expressiveness</li>
+  <li>Naive Bayes model: assumptions and structure. Independence assumption lead to over-counting because single effect represented by highly correlated variables are considered multiple times.</li>
+</ul>
+
+<h2 id="bayesian-network">Bayesian Network</h2>
+
+<ul>
+  <li>Bayesian network: structure + conditional probability distribution(CPD)</li>
+  <li>The <code>Student</code> Bayesian network which is representative(4 types of typical \(X, Y, Z\) relation)</li>
+  <li>causal reasoning(cause observed), evidential reasoning(evidence observed) and intercausal reasoning(or explaining away, one cause of one effect can influence the other cause of the same effect)</li>
+  <li>\( \mathcal{I}_l(\mathcal{G})\): local independencies encoded by \( \mathcal{G} \): variable \(X\) independent of non-descendants given parents of \(X\)</li>
+  <li>I-map: \(\mathcal{G} \) is an I-map for \(P\) if \( \mathcal{I}_l(\mathcal{G}) \subseteq \mathcal{I}(P)\). There might be independencies not reflected in \(\mathcal{G}\)</li>
+  <li>Factorization: \( P \) factorizes according to \(\mathcal{G}\) if \( P \) can be expressed as <script type="math/tex">\prod\limits_{i} P(X_i \mid Pa_{X_i}^{\mathcal{G}})</script></li>
+  <li>I-map and factorization are equivalent(<strong>?</strong>): a strong correlation between graph structure and independence assertions</li>
+  <li>Knowledge engineering: picking variables, picking structures, picking probabilities</li>
+</ul>
+
+<h2 id="independencies-in-graphs">Independencies in Graphs</h2>
+
+<ul>
+  <li>v-structure(\( X \rightarrow Z \leftarrow Y\)), active trial</li>
+  <li>D-separation: \(\text{d-sep}_\mathcal{G}(\mathbf{X}; \mathbf{Y} \mid \mathbf{Z})\) if no active trials between any nodes in \(\mathbf{X}\) and \(\mathbf{Y}\) given \(\mathbf{Z}\)</li>
+  <li>Global Markov independencies: \( \mathcal{I}(\mathcal{G})\) independencies indicated by D-separation.</li>
+  <li>soundness of d-separation: if \( X \) and \( Y\) are d-separated given \(Z \), then they are conditionally independent given \( Z \). Equivalently, ( \( \mathcal{I}(\mathcal{G}) \subseteq \mathcal{I}(P) \))</li>
+  <li>completeness of d-separation: d-separation detects <em>all</em> possible independencies( \( \mathcal{I}(P) \subseteq \mathcal{I}(\mathcal{G})\)). <strong>Does not hold</strong></li>
+  <li>However, for almost all \( P\) that factorizes over \( g\), ( \( \mathcal{I}(P) = \mathcal{I}(\mathcal{G})\)). d-separation can lead to independency however, it’s not the other reason. The actual values in CPD can indicate independency as well.</li>
+  <li>A linear time algorithm(via BFS) that detects the reachable node from \( X\) given \(Z\) via active trials.</li>
+  <li>I-equivalence: \( \mathcal{K}_1\) and \( \mathcal{K}_2\) are I-equivalent if \( \mathcal{I}(\mathcal{K}_1) = \mathcal{I}(\mathcal{K}_2)\)</li>
+  <li>If same skeleton and same v-structures, then I-equivalent(sufficient but not necessary) and more theorems on that.</li>
+</ul>
+
+<h2 id="from-distributions-to-graphs">From Distributions to Graphs</h2>
+
+<ul>
+  <li>Fundamental question: how to construct the \(\mathcal{G}\) that reflects the \( \mathcal{I}(\mathcal{P})\)?</li>
+  <li>minimal I-map: the I-map of \( P \) such that removal of any edge will make it not an I-map. this is an approximation to \( \mathcal{I}(\mathcal{G})\)</li>
+  <li>For the algorithm that finds minimal I-map: different variable ordering may produce different result. Even for the same ordering, this result may not be unique</li>
+  <li>Perfect I-map: graph \( \mathcal{K} \) such that \( \mathcal{I}(\mathcal{K}) = \mathcal{I}(\mathcal{P})\)</li>
+  <li>Two good examples that reflects the type of independencies that BN <strong>fails to capture</strong>: 1, independencies that are inferred from specific problems, 2, the <em>misconception</em> example</li>
+</ul>
+
+<h1 id="learned-from-video">Learned from video</h1>
+
+<ul>
+  <li>If you gain something(parametrization), you lose something(dependency). It’s conversely true. representation cost vs representation power or expressiveness vs #parameters</li>
+  <li><em>Dishonest casino</em> example: evaluation(how likely is the sequence), decoding(what are the dices used for each toss), learning(how often does the casino player changes the dice and how loaded is the dice)</li>
+  <li>Purpose of using pgm: transform a computation(margin/posterior proba) which can be exponential into something polynomial. For example, HMM</li>
+  <li>Goal of BN: for \( P \) to be represented in a <em>factorized</em> way and represent <em>a set of conditional independence assumptions</em> about \( P \)</li>
+  <li>Why do we say <em>independence</em> instead of <em>dependence</em>? Because <em>independence</em> s a safer assumption(<strong>is that absolutely safe?</strong>). For example \( A \rightarrow B\) does not guarantee \(A \) is independent of \(B\)(we can craft some numbers to make them dependent)</li>
+  <li>Prove that the independence assumption by \(P\) is consistent with \(\mathcal{I}(\mathcal{G})\)</li>
+  <li>I-map: connects graph with distribution</li>
+  <li>Alternative definition of D-separation: separated in the <em>moralized ancestral</em> graph. Being <em>moral</em> means being connected(or married). Ancestral graph is the graph where the variables-in-question’s  descendants are removed</li>
+  <li>Graph can be an representation for probability distribution. As a result, in order for \(\mathcal{G}\) to be useful, the independence properties from it should also hold for \(P\).</li>
+  <li>Refresher: I-map and factorization are equivalent</li>
+  <li>D-separation guarantees soundness and almost “completeness”(exceptions are zero-measure distribution)</li>
+</ul>
+
+<h1 id="questions">Questions</h1>
+
+<ul>
+  <li>Why are factorization, i-map, d-separation and i-equivalence useful?
+Factorization and i-map are used to connect graph structure to conditional independence assumptions back and forth.
+D-separation: defines the criteria when \(X\) and \(Y\) are conditionally independent given \(Z\)</li>
+</ul>
+
+<h2 id="disclaimer">Disclaimer</h2>
+
+<p>Some portions of the content are directly taken from the <a href="http://www.cs.cmu.edu/~epxing/Class/10708-14/lectures/lecture2-BNrepresentation.pdf">slides</a> of CMU Probabilistic Graphical Model, 2014 by Eric Xing</p>
+
+				</span>
+				<div class="journal-date">Published 16 September 2015</div>
+				<div class="journal-tags">
+				
+				
+	 
+		<a class="tag-cont" href="/tags.html#pgm-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">pgm</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#bayesian-network-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">bayesian-network</div>
+			<div class="tag-r"></div>
+		</a>
+	
+
+
+
+				</div>
+			</div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+</div>
+	<div class="clearboth"></div>
+	
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'xiaohan2012'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+	<div class="clearboth"></div>
+</div>
+
+
+			</div>
+			<div class="clearboth pagebottom"></div>
+		</div>
+	</div>
+	<footer>
+	<div class="footer-940">
+		<div class="footer-general-info">
+			© 2014 Han Xiao.<br><br>
+			Content licensed under:<br>
+			<a class="cc" href="http://creativecommons.org/licenses/by-sa/3.0/">c a b</a><br>
+			<a href = "/about.html">About Me</a><br>
+		</div>
+		<div class="footer-col-cont">
+			<div class="footer-nav-col">
+				<h4><a>Categories</a></h4>
+				<ul>
+					
+					
+
+
+  
+     
+    	<li><a href="/categories.html#paper-reading-ref">
+    		paper-reading <span>5</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#experience-ref">
+    		experience <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#misc-ref">
+    		misc <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#software-ref">
+    		software <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#note-ref">
+    		note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#study-note-ref">
+    		study-note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resources-ref">
+    		resources <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#paper-ref">
+    		paper <span>12</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#tutorial-ref">
+    		tutorial <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#course-ref">
+    		course <span>8</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#thoughts-ref">
+    		thoughts <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resource-ref">
+    		resource <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#weekly-summary-ref">
+    		weekly-summary <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#modeling-ref">
+    		modeling <span>1</span>
+    	</a></li>
+    
+  
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Pages</a></h4>
+				<ul>
+					
+					
+					
+
+
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/about.html">About Me</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Feed</a></h4>
+				<ul>
+					<li><a href="/atom.xml">Atom Feed</a></li>
+					<li><a href="/rss.xml">RSS Feed</a></li>
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Links</a></h4>
+				<ul>
+				 
+					<li><a href = "http://xiaohan2012.github.io/">Han Xiao's Blog</a></li>
+				
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a href = "/about.html">About Me</a></h4>
+				<ul>
+				 
+					<li><a href = "mailto:han.xiao@cs.helsinki.fi">e-mail</a></li>
+				
+				</ul>
+			</div>
+			<div class="clearboth"></div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+	<div class="clearboth"></div>
+</footer>
+	
+</body>
+</html>
+
