@@ -1,0 +1,437 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>How Maui works with Wikipedia?</title>
+    
+	
+	<meta name="author" content="Han Xiao">
+	
+	<link rel="stylesheet" href="/assets/themes/Snail/css/jquery.fancybox.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/main.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/pages/journal.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/team.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/static.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/errors.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/google-code-prettify/prettify.css">
+	<link rel="shortcut icon" href="/assets/themes/Snail/img/favicon.ico">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+	<script src="/assets/themes/Snail/google-code-prettify/prettify.js"></script>
+	<script type="text/javascript">
+	  $(function(){
+		$("pre code").addClass("prettyprint linenums");
+		prettyPrint();
+	  });
+	</script>
+	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+</head>
+<body>
+	<noscript>
+		&amp;lt;div id="no-js"&amp;gt;Please enable JavaScript in your browser to experience / fully&amp;lt;/div&amp;gt;
+	</noscript>
+    <div id="page-container">
+		<div>
+			<nav>
+	<div id="nav-l">
+	</div>
+	<div id="nav-c">
+		<ul id="nav-list" style="width: 700px;">
+			<li id="home"><a href="/">Home</a></li>
+			
+			
+			
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "About Me"><a href="/about.html">About Me</a></li>
+					
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Archive"><a href="/archive.html">Archive</a></li>
+					
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Categories"><a href="/categories.html">Categories</a></li>
+					
+				  
+				
+			 
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Tags"><a href="/tags.html">Tags</a></li>
+					
+				  
+				
+			 
+			
+			
+		</ul>
+		<form id="nav-search" method="GET" action="/search.html">
+			<div id="search-right-pix">
+				<div id="search-left-pix">
+					<div id="search-center-pix">
+						<div id="search-icon-pix"></div>
+						<input name="query" type="text" placeholder="Search">
+					</div>
+				</div>
+			</div>
+		</form>
+		
+		
+	</div>
+	<div id="nav-r">
+	</div>
+</nav>
+			<div id="page-content">
+				
+<div id="page-content">
+	<div class="cont932">
+	<div id="journal-articles-block">
+		<div class="journal-article">
+			<div class="journal-post-info">
+				<div class="journal-cat-box">
+				
+				
+				<div class="journal-cat-box">
+
+<a href="/categories.html#paper-reading-ref" title="paper-reading">
+	paper-reading
+
+</a>
+</div>
+				
+				</div>
+			</div>
+			<div class="journal-body">
+				<h1 class="journal-title">How Maui works with Wikipedia?<span class="author"></span>
+				</h1>
+				<span class="the-article">
+				<p><a href="https://code.google.com/p/maui-indexer/" title="Maui host at google code">Maui</a> is a key phrase indexing tool. One of capability is assigning key terms to documents. One option is let the task base on the knowledge of Wikipedia. This article talks about how Maui actually does this by use of Wikipedia.</p>
+
+<p>Three steps, <em>Candidate generation</em>, <em>disambiguating</em> and <em>filter</em>, are performed.</p>
+
+<h2 id="candidate-generation">Candidate generation</h2>
+
+<p>Using keyphraseness(#links in all Wikipedia pages/ #occurrences in all Wikipedia pages) and a threshold value to be compared against to identifying important words and phrases</p>
+
+<h2 id="disambiguation">Disambiguation</h2>
+
+<p>Disambiguating the phrases is necessary due to the ambiguous nature of natural language. So this step maps each phrase to one Wikipedia article, which represents one sense/concept.</p>
+
+<p>First case-fold and stem all the phrases. If they happen to be the name of an article, use it as the sense. If the phase leads to redirect page. Then use the target article as the sense.</p>
+
+<p>Interesting happens when it leads to disambiguation pages, the intended sense needs to be determined.</p>
+
+<p>Commonness and semantic relatedness is used.</p>
+
+<ul>
+  <li><em>Commonness</em>: To what extent the sense T is well known as the phrase S</li>
+  <li><em>Semantic relatedness</em> in terms of the context: context refers to the set of senses unambiguous and relatedness computation of two senses is based on the number of shared in-going links to the two sense.</li>
+</ul>
+
+<h2 id="filtering">Filtering</h2>
+
+<p>Classifying the candidate article names as being key phrase or not</p>
+
+<p>Using several features to classify each article name individually.</p>
+
+<p>Features:</p>
+
+<ul>
+  <li>TD-IDF based</li>
+  <li>first/last occurences.</li>
+  <li>spreadness: last occur position - first occur (How about some measurement similar to Kurtosis)</li>
+  <li>total keyphrases of article name <code>A</code> in document <code>d</code>: sum of keyphrasesness of the phrase <code>p</code> that maps to <code>A</code> times the frequency of <code>p</code> appearing in <code>d</code>.</li>
+  <li>semantic relatedness:</li>
+</ul>
+
+
+				</span>
+				<div class="journal-date">Published 25 July 2014</div>
+				<div class="journal-tags">
+				
+				
+	 
+		<a class="tag-cont" href="/tags.html#maui-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">maui</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#wikipedia-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">wikipedia</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#keyword-extraction-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">keyword-extraction</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#nlp-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">nlp</div>
+			<div class="tag-r"></div>
+		</a>
+	
+
+
+
+				</div>
+			</div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+</div>
+	<div class="clearboth"></div>
+	
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'xiaohan2012'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+	<div class="clearboth"></div>
+</div>
+
+
+			</div>
+			<div class="clearboth pagebottom"></div>
+		</div>
+	</div>
+	<footer>
+	<div class="footer-940">
+		<div class="footer-general-info">
+			© 2014 Han Xiao.<br><br>
+			Content licensed under:<br>
+			<a class="cc" href="http://creativecommons.org/licenses/by-sa/3.0/">c a b</a><br>
+			<a href = "/about.html">About Me</a><br>
+		</div>
+		<div class="footer-col-cont">
+			<div class="footer-nav-col">
+				<h4><a>Categories</a></h4>
+				<ul>
+					
+					
+
+
+  
+     
+    	<li><a href="/categories.html#paper-reading-ref">
+    		paper-reading <span>5</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#experience-ref">
+    		experience <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#misc-ref">
+    		misc <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#software-ref">
+    		software <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#note-ref">
+    		note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#study-note-ref">
+    		study-note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resources-ref">
+    		resources <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#paper-ref">
+    		paper <span>12</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#tutorial-ref">
+    		tutorial <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#course-ref">
+    		course <span>8</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#thoughts-ref">
+    		thoughts <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resource-ref">
+    		resource <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#weekly-summary-ref">
+    		weekly-summary <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#modeling-ref">
+    		modeling <span>1</span>
+    	</a></li>
+    
+  
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Pages</a></h4>
+				<ul>
+					
+					
+					
+
+
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/about.html">About Me</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Feed</a></h4>
+				<ul>
+					<li><a href="/atom.xml">Atom Feed</a></li>
+					<li><a href="/rss.xml">RSS Feed</a></li>
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Links</a></h4>
+				<ul>
+				 
+					<li><a href = "http://xiaohan2012.github.io/">Han Xiao's Blog</a></li>
+				
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a href = "/about.html">About Me</a></h4>
+				<ul>
+				 
+					<li><a href = "mailto:han.xiao@cs.helsinki.fi">e-mail</a></li>
+				
+				</ul>
+			</div>
+			<div class="clearboth"></div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+	<div class="clearboth"></div>
+</footer>
+	
+</body>
+</html>
+

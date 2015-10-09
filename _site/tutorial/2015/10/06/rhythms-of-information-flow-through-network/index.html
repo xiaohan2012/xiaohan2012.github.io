@@ -1,0 +1,570 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>Rhythms of Information Flow through Networks by Jure Leskovec</title>
+    
+	
+	<meta name="author" content="Han Xiao">
+	
+	<link rel="stylesheet" href="/assets/themes/Snail/css/jquery.fancybox.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/main.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/pages/journal.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/team.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/static.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/errors.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/google-code-prettify/prettify.css">
+	<link rel="shortcut icon" href="/assets/themes/Snail/img/favicon.ico">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+	<script src="/assets/themes/Snail/google-code-prettify/prettify.js"></script>
+	<script type="text/javascript">
+	  $(function(){
+		$("pre code").addClass("prettyprint linenums");
+		prettyPrint();
+	  });
+	</script>
+	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+</head>
+<body>
+	<noscript>
+		&amp;lt;div id="no-js"&amp;gt;Please enable JavaScript in your browser to experience / fully&amp;lt;/div&amp;gt;
+	</noscript>
+    <div id="page-container">
+		<div>
+			<nav>
+	<div id="nav-l">
+	</div>
+	<div id="nav-c">
+		<ul id="nav-list" style="width: 700px;">
+			<li id="home"><a href="/">Home</a></li>
+			
+			
+			
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "About Me"><a href="/about.html">About Me</a></li>
+					
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Archive"><a href="/archive.html">Archive</a></li>
+					
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Categories"><a href="/categories.html">Categories</a></li>
+					
+				  
+				
+			 
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Tags"><a href="/tags.html">Tags</a></li>
+					
+				  
+				
+			 
+			
+			
+		</ul>
+		<form id="nav-search" method="GET" action="/search.html">
+			<div id="search-right-pix">
+				<div id="search-left-pix">
+					<div id="search-center-pix">
+						<div id="search-icon-pix"></div>
+						<input name="query" type="text" placeholder="Search">
+					</div>
+				</div>
+			</div>
+		</form>
+		
+		
+	</div>
+	<div id="nav-r">
+	</div>
+</nav>
+			<div id="page-content">
+				
+<div id="page-content">
+	<div class="cont932">
+	<div id="journal-articles-block">
+		<div class="journal-article">
+			<div class="journal-post-info">
+				<div class="journal-cat-box">
+				
+				
+				<div class="journal-cat-box">
+
+<a href="/categories.html#tutorial-ref" title="tutorial">
+	tutorial
+
+</a>
+</div>
+				
+				</div>
+			</div>
+			<div class="journal-body">
+				<h1 class="journal-title">Rhythms of Information Flow through Networks by Jure Leskovec<span class="author"></span>
+				</h1>
+				<span class="the-article">
+				<h2 id="topics">Topics</h2>
+
+<ul>
+  <li>Meme tracking in news media</li>
+  <li>Temporal patterns: what are the different types of temporal patterns</li>
+  <li>Predicting the influence(time series analysis): how many sites will report this news?</li>
+  <li>Inferring latent information diffusion network: how information is spread in the implicit network</li>
+</ul>
+
+<h2 id="cascading-behavior-in-large-blog-graphs-patterns-and-a-modelhttpscsstanfordedupeoplejurepubsblogs-sdm07pdf-sdm-07"><a href="https://cs.stanford.edu/people/jure/pubs/blogs-sdm07.pdf">Cascading Behavior in Large Blog Graphs Patterns and a model</a>, SDM 07</h2>
+
+<p>Patterns of information propagation  –&gt; how information(rumor, idea) spreads.</p>
+
+<p>Contribution:</p>
+
+<ul>
+  <li>temporal patterns: no bursty behavoir and post popularity drops with power law(<strong>?</strong>)(instead of exponentially)</li>
+  <li>topological patterns: the star shape is most popular</li>
+  <li>generating model: some model that mimics the cascading effect</li>
+</ul>
+
+<h2 id="meme-tracking-and-the-dynamics-of-the-news-cyclehttpswwwcscornelleduhomekleinberkdd09-quotespdf"><a href="https://www.cs.cornell.edu/home/kleinber/kdd09-quotes.pdf">Meme-tracking and the Dynamics of the News Cycle</a></h2>
+
+<p>What to track? Phrase, tags, links, tags, quotes, images, bar codes..</p>
+
+<p>In this case, quotes.</p>
+
+<p>How to identify variants of quotes?</p>
+
+<ul>
+  <li>Create DAG by adding edges between quotes if one contains the another as a substring(up to some edit distances)</li>
+  <li>Apply heuristic-based graph partitioning to cluster them</li>
+</ul>
+
+<p>Synchronization</p>
+
+<ul>
+  <li>Are blogs ahead or trailing of main stream media?</li>
+</ul>
+
+<p><strong>Q</strong>: Why use quote? Why not use phrase?</p>
+
+<h2 id="patterns-of-temporal-variation-in-online-mediahttpscsstanfordedupeoplejurepubsmemeshapes-wsdm11pdf"><a href="https://cs.stanford.edu/people/jure/pubs/memeshapes-wsdm11.pdf">Patterns of Temporal Variation in Online Media</a></h2>
+
+<p>Patterns of information attention. the shape of of information piece’s volume over time. How it gains popularity and loss popularity.</p>
+
+<ul>
+  <li>What classes of shapes?</li>
+</ul>
+
+<p>Clustering time-varying volume shapes. Properties of similarity metric: 1, invariance to scale, 2, invariance to translation(offset)</p>
+
+<p>K-means doesn’t work. <strong>Why?</strong> . Instead, k-spectral centroid clustering works.</p>
+
+<p>Different types of media give different patterns.</p>
+
+<h2 id="modeling-information-diffusion-in-implicit-networkshttpcsstanfordedupeoplejurepubslim-icdm10pdf"><a href="http://cs.stanford.edu/people/jure/pubs/lim-icdm10.pdf">Modeling Information Diffusion in Implicit Networks</a></h2>
+
+<p>Information attention prediction(classical time series prediction problem).</p>
+
+<p>Basic question: given who and when the information is reported, how many sites will mention this later on.</p>
+
+<p>Use influence function: how many sites mention this information after this site mentions it in correlation with this site?</p>
+
+<p>How to estimate the influence function?</p>
+
+<ul>
+  <li>Discretize each function as a vector(size 24 for example)</li>
+  <li>Use least square to solve</li>
+</ul>
+
+<p>Compared to standard time series regression, AR and ARMA. How do they work and why this model is better?</p>
+
+<p><strong>Q</strong>: modeling it in explicit network?</p>
+
+<h2 id="inferring-networks-of-diffusion-and-influencehttpdlacmorgcitationcfmid1835933"><a href="http://dl.acm.org/citation.cfm?id=1835933">Inferring Networks of Diffusion and Influence</a></h2>
+
+<p>How does the information really spread?</p>
+
+<p>Examples:</p>
+
+<ul>
+  <li>virus propagation: only know who and when got inflected. But don’t know who inflected whom</li>
+  <li>word of mouth: only see who bought what and when but don’t know who influenced whom</li>
+</ul>
+
+<p>\(P(G \vert C) \): how possible is \(G\) the generating graph for the inflections \(C\)? How to compute this quantity? How to find the one corresponding to maximum likelihood</p>
+
+<p>Intuition: if two nodes get inflected at two points of time quite close to each other, then there is probably an edge between the two nodes.</p>
+
+<p>Information diffusion process betwen two nodes:</p>
+
+<ol>
+  <li>flip a biased coin</li>
+  <li>sample some delay time(or incubation time)</li>
+</ol>
+
+<p>Consider only trees(no loop). NP-hard(max-k-cover). can use greedy hill climbing, at each iteration, add the edge that gives the most improvement to the score.</p>
+
+<p>Experiment:</p>
+
+<ul>
+  <li>Simulated data: better precision/reclal curve than baseline</li>
+  <li>On real data: topical cluster(political, entertainment, tech) as well as node position in the graph which indicates their topical preference.</li>
+</ul>
+
+<h2 id="further-questions">Further questions</h2>
+
+<ul>
+  <li>Sentiment change</li>
+  <li>Extensions to other domains: epidimiology, viral marketing</li>
+</ul>
+
+<h2 id="resrouceslinks">Resrouces/links</h2>
+
+<ul>
+  <li><a href="http://videolectures.net/eswc2011_leskovec_flow/">2011 talk by Jure</a></li>
+  <li><a href="http://snap.stanford.edu/">SNAP by Stanford</a></li>
+  <li><a href="http://snap.stanford.edu/data/index.html">Dataset by Snap</a></li>
+  <li><a href="http://www.mmds.org/">Mining Massive Data Set book/course</a></li>
+</ul>
+
+<h2 id="related-question-for-email-network">Related question for email network</h2>
+
+<ul>
+  <li>Meme tracking: track what I have been doing and at what involvement.
+    <ul>
+      <li>What is the meme for this case? How to extract the meme?</li>
+      <li>Maybe categorize the flow by event type, for example conference submission/course/research etc. How to define the event?</li>
+    </ul>
+  </li>
+  <li>Temporal pattern: what are the temporal patterns for events in user’s email?
+    <ul>
+      <li>How to define the pattern? Response time/rate to different users? volumes of emails to certain users at different time points? Why do we study this problem?</li>
+      <li>Can we categorize those patterns? The simplest case, we just don’t reply(conference calls, promotion, etc). Or some short reply to stranger? Long-term and frequent communication with some cooperator or relatively short term communication with a course staff?</li>
+    </ul>
+  </li>
+  <li>How information flows in email network? Or organizing the internal “logic” of the email timelines.
+    <ul>
+      <li>Why do we bother it? What do you mean by “information flow”? Can we find other information flow patterns besides those indicated by the staff network structure(this is not for ego network)?</li>
+      <li>For ego network, can we model how two different emails are correlated with each other or to what degree are they correlated. For example, one mail might be a simple extension of the work mentioned in another mail. Or some progress reporting based on some previously assigned task.</li>
+    </ul>
+  </li>
+  <li>Email timeline chaining/segmentation: can we chain the emails so that those in the same story line are in the same chain? Potentially useful for email organization or retrospection.
+    <ul>
+      <li>Is this like a special clustering problem where two emails might be in the same chain if they share similar topic, share common recipients and their timestamp are “reasonable”(impossible that two emails whose timestamp are within 1 sec are in the same line)</li>
+    </ul>
+  </li>
+  <li>What kind of information can we leverage for more efficient email using or less cognitive/mental load for the user?
+    <ul>
+      <li>What causes the load/inefficiency? Too many emails?</li>
+      <li>Grouping/sorting emails? Hide unnecessary/trivial emails?</li>
+      <li>Need some reading on cognitive science?</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="learned">Learned</h2>
+
+<ul>
+  <li>What does it mean by temporal patterns and one way/metric to cluster different patterns</li>
+  <li>In meme tracking, a new way to clustering/partitioning quotes by adding edges(considering substring edit distance)</li>
+  <li>Time series prediction method: AR, ARMA and via the influence function</li>
+  <li>A new problem: modeling how information is spread and method to approach it</li>
+</ul>
+
+
+				</span>
+				<div class="journal-date">Published 06 October 2015</div>
+				<div class="journal-tags">
+				
+				
+	 
+		<a class="tag-cont" href="/tags.html#information-diffusion-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">information-diffusion</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#meme-tracking-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">meme-tracking</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#temporal-pattern-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">temporal-pattern</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#social-media-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">social-media</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#network-inference-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">network-inference</div>
+			<div class="tag-r"></div>
+		</a>
+	
+
+
+
+				</div>
+			</div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+</div>
+	<div class="clearboth"></div>
+	
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'xiaohan2012'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+	<div class="clearboth"></div>
+</div>
+
+
+			</div>
+			<div class="clearboth pagebottom"></div>
+		</div>
+	</div>
+	<footer>
+	<div class="footer-940">
+		<div class="footer-general-info">
+			© 2014 Han Xiao.<br><br>
+			Content licensed under:<br>
+			<a class="cc" href="http://creativecommons.org/licenses/by-sa/3.0/">c a b</a><br>
+			<a href = "/about.html">About Me</a><br>
+		</div>
+		<div class="footer-col-cont">
+			<div class="footer-nav-col">
+				<h4><a>Categories</a></h4>
+				<ul>
+					
+					
+
+
+  
+     
+    	<li><a href="/categories.html#paper-reading-ref">
+    		paper-reading <span>5</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#experience-ref">
+    		experience <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#misc-ref">
+    		misc <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#software-ref">
+    		software <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#note-ref">
+    		note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#study-note-ref">
+    		study-note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resources-ref">
+    		resources <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#paper-ref">
+    		paper <span>12</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#tutorial-ref">
+    		tutorial <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#course-ref">
+    		course <span>8</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#thoughts-ref">
+    		thoughts <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resource-ref">
+    		resource <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#weekly-summary-ref">
+    		weekly-summary <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#modeling-ref">
+    		modeling <span>1</span>
+    	</a></li>
+    
+  
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Pages</a></h4>
+				<ul>
+					
+					
+					
+
+
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/about.html">About Me</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Feed</a></h4>
+				<ul>
+					<li><a href="/atom.xml">Atom Feed</a></li>
+					<li><a href="/rss.xml">RSS Feed</a></li>
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Links</a></h4>
+				<ul>
+				 
+					<li><a href = "http://xiaohan2012.github.io/">Han Xiao's Blog</a></li>
+				
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a href = "/about.html">About Me</a></h4>
+				<ul>
+				 
+					<li><a href = "mailto:han.xiao@cs.helsinki.fi">e-mail</a></li>
+				
+				</ul>
+			</div>
+			<div class="clearboth"></div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+	<div class="clearboth"></div>
+</footer>
+	
+</body>
+</html>
+

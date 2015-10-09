@@ -1,0 +1,529 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>Tour of scala: learning note -- Part One</title>
+    
+	
+	<meta name="author" content="Han Xiao">
+	
+	<link rel="stylesheet" href="/assets/themes/Snail/css/jquery.fancybox.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/main.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/pages/journal.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/team.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/static.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/errors.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/google-code-prettify/prettify.css">
+	<link rel="shortcut icon" href="/assets/themes/Snail/img/favicon.ico">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+	<script src="/assets/themes/Snail/google-code-prettify/prettify.js"></script>
+	<script type="text/javascript">
+	  $(function(){
+		$("pre code").addClass("prettyprint linenums");
+		prettyPrint();
+	  });
+	</script>
+	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+</head>
+<body>
+	<noscript>
+		&amp;lt;div id="no-js"&amp;gt;Please enable JavaScript in your browser to experience / fully&amp;lt;/div&amp;gt;
+	</noscript>
+    <div id="page-container">
+		<div>
+			<nav>
+	<div id="nav-l">
+	</div>
+	<div id="nav-c">
+		<ul id="nav-list" style="width: 700px;">
+			<li id="home"><a href="/">Home</a></li>
+			
+			
+			
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "About Me"><a href="/about.html">About Me</a></li>
+					
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Archive"><a href="/archive.html">Archive</a></li>
+					
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Categories"><a href="/categories.html">Categories</a></li>
+					
+				  
+				
+			 
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Tags"><a href="/tags.html">Tags</a></li>
+					
+				  
+				
+			 
+			
+			
+		</ul>
+		<form id="nav-search" method="GET" action="/search.html">
+			<div id="search-right-pix">
+				<div id="search-left-pix">
+					<div id="search-center-pix">
+						<div id="search-icon-pix"></div>
+						<input name="query" type="text" placeholder="Search">
+					</div>
+				</div>
+			</div>
+		</form>
+		
+		
+	</div>
+	<div id="nav-r">
+	</div>
+</nav>
+			<div id="page-content">
+				
+<div id="page-content">
+	<div class="cont932">
+	<div id="journal-articles-block">
+		<div class="journal-article">
+			<div class="journal-post-info">
+				<div class="journal-cat-box">
+				
+				
+				<div class="journal-cat-box">
+
+<a href="/categories.html#note-ref" title="note">
+	note
+
+</a>
+</div>
+				
+				</div>
+			</div>
+			<div class="journal-body">
+				<h1 class="journal-title">Tour of scala: learning note -- Part One<span class="author"></span>
+				</h1>
+				<span class="the-article">
+				<p>I am studying Scala now by starting with <a href="http://docs.scala-lang.org/tutorials/tour/tour-of-scala.html">tour-of-scala</a></p>
+
+<p>Here is a summary of the first half of tour.</p>
+
+<h2 id="abstract-types">Abstract Types</h2>
+
+<p>Types can be class members. For example:</p>
+
+<pre><code>  class MyClass{
+  	    type T
+    val elems &lt;: List[T]
+  }
+</code></pre>
+
+<p>Where  <code>elems</code> is subtype of <code>List[T]</code>.</p>
+
+<h2 id="annotations">Annotations</h2>
+
+<p>Just like the annotaiton in Java:</p>
+
+<ul>
+  <li>scala.serializable</li>
+  <li>scala.deprecated</li>
+</ul>
+
+<p>Java annotations can be used in Scala.</p>
+
+<p>Parameters(even optional parameter) can be passed in. The syntax between Java and Scala is slightly different.</p>
+
+<h2 id="classes">Classes</h2>
+
+<p>Methods inheritted from ancestors need should be marked with <code>override</code> if overriding the super one, for example, <code>toString</code>.</p>
+
+<h2 id="case-classes">Case classes</h2>
+
+<p>Useful for:</p>
+
+<ul>
+  <li>automatic class attribute setting through class initialization</li>
+  <li>recursive decomposition mechanism via pattern matching.</li>
+</ul>
+
+<h2 id="compound-types">Compound types</h2>
+
+<p>Use the <code>with</code> keyword to combine for example <code>trait</code>s.</p>
+
+<p>And it can be used to require the type of function parameter to have certain trais. For example:</p>
+
+<pre><code>def cloneAndReset(obj: Cloneable with Resetable): Cloneable = {...}
+</code></pre>
+
+<h2 id="sequence-comprehension">Sequence Comprehension</h2>
+
+<p>Syntax:</p>
+
+<pre><code>for(v &lt;- expr [if condition])  {
+      yield expr
+}
+</code></pre>
+
+<p>Iteration can be nested.</p>
+
+<pre><code>for(v1 &lt;- expr1 [if condition];
+    v2 &lt;- expr2 [if condition])  {
+      yield expr
+}
+</code></pre>
+
+<p><code>Unit</code> can be returned by omitting the <code>yield</code> keyword.</p>
+
+<h2 id="extractor-objects">Extractor Objects</h2>
+
+<p>Case classes provide built-in packing and unpacking. Without case clasess, these can also be done by using <code>apply</code> and <code>unapply</code>.</p>
+
+<p>Function/method can return something or nothing by using <code>Option[T]</code>.</p>
+
+<p><code>Some</code> and <code>None</code> are subtypes of <code>Option[T]</code>.</p>
+
+<h2 id="generic-classes">Generic classes</h2>
+
+<p>Class like this:
+       class Stack[T] {
+              …
+       }</p>
+
+<p><code>T</code> is a type parameter. It is invariant(as opposed to covariant/contravariant).</p>
+
+<h2 id="implicit-parameters">Implicit parameters</h2>
+
+<p>If not argument given, implicit parameter takes effect and only objects/methods that are marked implicit can be used to fill in the gap.</p>
+
+<h2 id="inner-classes">Inner classes</h2>
+
+<p>Similar to Java’s inner class, one class can be defined in another.</p>
+
+<pre><code>class Graph {
+	class Node {
+	}
+}
+
+val g1 = new G
+val g2 = new G
+
+g1.Node == g2.Node //false!
+</code></pre>
+
+<p>In order to refer to the same <code>Node</code>, use <code>Graph#Node</code>.</p>
+
+<h2 id="mixin-class-composition">Mixin Class Composition</h2>
+<p>How scala implements multiple inheritance —- through <code>trait</code>s.</p>
+
+<pre><code>class Iter extends StringIterator(args(0)) with RichIterator
+</code></pre>
+
+<p>We can even define class like this? <code>StringIterator(args(0))</code></p>
+
+<ul>
+  <li><code>StringIterator</code> is the super class</li>
+  <li><code>RichIterator</code> is the mixin</li>
+</ul>
+
+<h2 id="nested-functions">Nested Functions</h2>
+
+<p>Function definition can be nested. The inner function forms a closure.</p>
+
+<h2 id="anonymous-function-syntax">Anonymous Function Syntax</h2>
+
+<p>(x: Int) =&gt; x + 1</p>
+
+<p>is equal to</p>
+
+<pre><code>new Function1[Int, Int] {
+	def apply(x: Int): Int = x + 1
+}
+</code></pre>
+
+<p>Note: function in Scala is also object</p>
+
+<h2 id="currying">Currying</h2>
+
+<p>To use currying, define function like this:</p>
+
+<p>def func(arg1)(arg2)..(argn) = {…}</p>
+
+<h2 id="automatic-type-dependent-closure-construction">Automatic Type-Dependent Closure Construction</h2>
+
+<p>This is just a more advanced name of <em>call-by-name</em>. <em>call by name</em>, in contrast with <em>call by value</em>, evaluates the parameter when it is actually used in the function body.</p>
+
+<p>This feature can be used to create syntax like <em>while</em>, <em>do-until</em>.</p>
+
+				</span>
+				<div class="journal-date">Published 24 August 2014</div>
+				<div class="journal-tags">
+				
+				
+	 
+		<a class="tag-cont" href="/tags.html#scala-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">scala</div>
+			<div class="tag-r"></div>
+		</a>
+	
+
+
+
+				</div>
+			</div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+</div>
+	<div class="clearboth"></div>
+	
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'xiaohan2012'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+	<div class="clearboth"></div>
+</div>
+
+
+			</div>
+			<div class="clearboth pagebottom"></div>
+		</div>
+	</div>
+	<footer>
+	<div class="footer-940">
+		<div class="footer-general-info">
+			© 2014 Han Xiao.<br><br>
+			Content licensed under:<br>
+			<a class="cc" href="http://creativecommons.org/licenses/by-sa/3.0/">c a b</a><br>
+			<a href = "/about.html">About Me</a><br>
+		</div>
+		<div class="footer-col-cont">
+			<div class="footer-nav-col">
+				<h4><a>Categories</a></h4>
+				<ul>
+					
+					
+
+
+  
+     
+    	<li><a href="/categories.html#paper-reading-ref">
+    		paper-reading <span>5</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#experience-ref">
+    		experience <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#misc-ref">
+    		misc <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#software-ref">
+    		software <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#note-ref">
+    		note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#study-note-ref">
+    		study-note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resources-ref">
+    		resources <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#paper-ref">
+    		paper <span>12</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#tutorial-ref">
+    		tutorial <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#course-ref">
+    		course <span>8</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#thoughts-ref">
+    		thoughts <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resource-ref">
+    		resource <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#weekly-summary-ref">
+    		weekly-summary <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#modeling-ref">
+    		modeling <span>1</span>
+    	</a></li>
+    
+  
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Pages</a></h4>
+				<ul>
+					
+					
+					
+
+
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/about.html">About Me</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Feed</a></h4>
+				<ul>
+					<li><a href="/atom.xml">Atom Feed</a></li>
+					<li><a href="/rss.xml">RSS Feed</a></li>
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Links</a></h4>
+				<ul>
+				 
+					<li><a href = "http://xiaohan2012.github.io/">Han Xiao's Blog</a></li>
+				
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a href = "/about.html">About Me</a></h4>
+				<ul>
+				 
+					<li><a href = "mailto:han.xiao@cs.helsinki.fi">e-mail</a></li>
+				
+				</ul>
+			</div>
+			<div class="clearboth"></div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+	<div class="clearboth"></div>
+</footer>
+	
+</body>
+</html>
+

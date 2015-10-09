@@ -1,0 +1,493 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>Summary: Successful Data Mining Methods for NLP(ACL2015)</title>
+    
+	
+	<meta name="author" content="Han Xiao">
+	
+	<link rel="stylesheet" href="/assets/themes/Snail/css/jquery.fancybox.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/main.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/pages/journal.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/team.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/static.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/errors.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/google-code-prettify/prettify.css">
+	<link rel="shortcut icon" href="/assets/themes/Snail/img/favicon.ico">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+	<script src="/assets/themes/Snail/google-code-prettify/prettify.js"></script>
+	<script type="text/javascript">
+	  $(function(){
+		$("pre code").addClass("prettyprint linenums");
+		prettyPrint();
+	  });
+	</script>
+	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+</head>
+<body>
+	<noscript>
+		&amp;lt;div id="no-js"&amp;gt;Please enable JavaScript in your browser to experience / fully&amp;lt;/div&amp;gt;
+	</noscript>
+    <div id="page-container">
+		<div>
+			<nav>
+	<div id="nav-l">
+	</div>
+	<div id="nav-c">
+		<ul id="nav-list" style="width: 700px;">
+			<li id="home"><a href="/">Home</a></li>
+			
+			
+			
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "About Me"><a href="/about.html">About Me</a></li>
+					
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Archive"><a href="/archive.html">Archive</a></li>
+					
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Categories"><a href="/categories.html">Categories</a></li>
+					
+				  
+				
+			 
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Tags"><a href="/tags.html">Tags</a></li>
+					
+				  
+				
+			 
+			
+			
+		</ul>
+		<form id="nav-search" method="GET" action="/search.html">
+			<div id="search-right-pix">
+				<div id="search-left-pix">
+					<div id="search-center-pix">
+						<div id="search-icon-pix"></div>
+						<input name="query" type="text" placeholder="Search">
+					</div>
+				</div>
+			</div>
+		</form>
+		
+		
+	</div>
+	<div id="nav-r">
+	</div>
+</nav>
+			<div id="page-content">
+				
+<div id="page-content">
+	<div class="cont932">
+	<div id="journal-articles-block">
+		<div class="journal-article">
+			<div class="journal-post-info">
+				<div class="journal-cat-box">
+				
+				
+				<div class="journal-cat-box">
+
+<a href="/categories.html#paper-reading-ref" title="paper-reading">
+	paper-reading
+
+</a>
+</div>
+				
+				</div>
+			</div>
+			<div class="journal-body">
+				<h1 class="journal-title">Summary: Successful Data Mining Methods for NLP(ACL2015)<span class="author"></span>
+				</h1>
+				<span class="the-article">
+				<h2 id="topic-modeling--phrase-mining">Topic modeling &amp; phrase mining</h2>
+
+<p>What I learned:</p>
+
+<ul>
+  <li>Three ways to combine phrase mining and topic mining(pre, post and joint).</li>
+  <li>First phrase mining and then topic modeling has its justification(words in phrase tend to exhbit the same topic) and <code>PhraseLDA</code> is a LDA-variant.</li>
+  <li>There are some  ways to <strong>evaluate</strong> topic models, for example: coherence and phrase intrusion.</li>
+</ul>
+
+<h2 id="phrase-mining">Phrase mining</h2>
+
+<ul>
+  <li><a href="http://research.microsoft.com/apps/pubs/default.aspx?id=241783">Mining Quality Phrases from Massive Text Corpora, 2015</a></li>
+</ul>
+
+<p>Learned:</p>
+
+<ul>
+  <li>Several aspects to model the quality of phrase: <em>popularity</em>(frequency), <em>concordance</em>(the words tend to appear together), <em>informativeness</em>(they don’t appear everywhere), <em>completeness</em>(nothing is left nor extra)</li>
+  <li>Frequency indicates the <code>phraseness</code>. However, raw frequency doesn’t tell the whole truth. <code>cnt("vector machine") &gt;= cnt('support vector machine')</code>. It should be rectified. One way is to segment the document into phrases and then count.</li>
+</ul>
+
+<p>Questions:</p>
+
+<ul>
+  <li>How to segment the document into phrases?</li>
+  <li>How to bootstrap to get the training data for the classifier?</li>
+  <li>How to use distant supervision to avoid human labeling?</li>
+  <li>Can it be combined with the paper in the following section?</li>
+</ul>
+
+<h2 id="entity-linkingtyping">Entity linking/typing</h2>
+
+<ul>
+  <li><a href="http://web.engr.illinois.edu/~xren7/fp611-ren.pdf">ClusType: Effective Entity Recognition and Typing by Relation Phrase‐Based Clustering, 2015</a></li>
+</ul>
+
+<p>Intuition:</p>
+
+<ul>
+  <li>label propagation on the network where nodes are relation phrase, surface name and mentions</li>
+  <li>relation phrase can tell something about the types of surface names</li>
+  <li>surface name can tell something about the types of mentions</li>
+  <li>mentions can also tell something about the types of other mentions(e.g, with the same surface names)</li>
+</ul>
+
+<p>Three challenges in entity linking/typing:</p>
+
+<ul>
+  <li>mention extraction(chunker is used which cannot adapt to changing/specific domains)</li>
+  <li>surface name ambiguity(prev approaches map the same surface names to one entity)</li>
+  <li>context sparsity(two entities in the same relation described in different ways)</li>
+</ul>
+
+<p>Solution:</p>
+
+<ul>
+  <li>minimum linguistic knowledge</li>
+  <li>model each mention</li>
+  <li>clustering the relation phrases to allow more typing information sharing</li>
+</ul>
+
+<p>Learned:</p>
+
+<ul>
+  <li>There is semi-supervised way to perform entity linking/typing!</li>
+</ul>
+
+<p>Questions:</p>
+
+<ul>
+  <li>If the POS tagger is also sensitive to domain(e.g, news and twitter), any better ways to extract entity mention?</li>
+  <li>How to model the type inference as a joint optimization problem?</li>
+</ul>
+
+<p>Problems:</p>
+
+<ul>
+  <li>How to use the KB and annotate part of the heterogenous graph to get started? It’s a entity linking/typing problem?</li>
+  <li>Modeling the typing of phrase relation might be over-simplistic(e.g, passive/active voices, tri-relation)</li>
+</ul>
+
+<p>More related papers on the <a href="http://hanj.cs.illinois.edu/slides/dmnlp15.pdf">original slides</a>.</p>
+
+<h2 id="graph-mining-and-nlp">Graph-mining and NLP</h2>
+
+<h3 id="applications">Applications</h3>
+<ul>
+  <li>Q&amp;A</li>
+  <li>pattern-based classification</li>
+  <li>Entity morph resolution</li>
+  <li>personalized recommendation</li>
+</ul>
+
+<h3 id="related-papers">Related papers</h3>
+
+<ul>
+  <li>Unsupervised entity linking: <a href="http://nlp.cs.rpi.edu/paper/amrel.pdf">Unsupervised Entity Linking with Abstract Meaning Representation, 2015</a></li>
+  <li>Similarity search: <a href="http://www-dev.ccs.neu.edu/home/yzsun/papers/vldb11_topKSim.pdf">PathSim: Meta Path-Based Top-K Similarity Search in Heterogeneous Information Networks, 2011</a></li>
+  <li>Personalized recommendation: <a href="http://web.engr.illinois.edu/~hanj/pdf/wsdm14_xyu.pdf">Personalized Entity Recommendation: A Heterogeneous Information Network Approach, 2014</a></li>
+  <li>Co-author prediction: <a href="http://www.ccs.neu.edu/home/yzsun/papers/asonam11_pathpredict.pdf">CoAuthor Relationship Prediction in Heterogeneous Bibliographic Networks, 2011</a></li>
+  <li>Entity morph resolution: <a href="http://www.aclweb.org/anthology/P13-1107">Resolving Entity Morphs in Censored Data, 2013</a></li>
+  <li>Question&amp;answering: <a href="http://www.vldb.org/pvldb/vol7/p565-yang.pdf">Schemaless and Structureless Graph Querying, 2014</a></li>
+  <li>Authorship classification: <a href="http://hanj.cs.illinois.edu/pdf/sigir11_skim.pdf">Authorship Classification: A Discriminative Syntactic Tree Mining Approach, 2011</a></li>
+</ul>
+
+
+				</span>
+				<div class="journal-date">Published 29 August 2015</div>
+				<div class="journal-tags">
+				
+				
+	 
+		<a class="tag-cont" href="/tags.html#nlp-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">nlp</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#dm-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">dm</div>
+			<div class="tag-r"></div>
+		</a>
+	
+
+
+
+				</div>
+			</div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+</div>
+	<div class="clearboth"></div>
+	
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'xiaohan2012'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+	<div class="clearboth"></div>
+</div>
+
+
+			</div>
+			<div class="clearboth pagebottom"></div>
+		</div>
+	</div>
+	<footer>
+	<div class="footer-940">
+		<div class="footer-general-info">
+			© 2014 Han Xiao.<br><br>
+			Content licensed under:<br>
+			<a class="cc" href="http://creativecommons.org/licenses/by-sa/3.0/">c a b</a><br>
+			<a href = "/about.html">About Me</a><br>
+		</div>
+		<div class="footer-col-cont">
+			<div class="footer-nav-col">
+				<h4><a>Categories</a></h4>
+				<ul>
+					
+					
+
+
+  
+     
+    	<li><a href="/categories.html#paper-reading-ref">
+    		paper-reading <span>5</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#experience-ref">
+    		experience <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#misc-ref">
+    		misc <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#software-ref">
+    		software <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#note-ref">
+    		note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#study-note-ref">
+    		study-note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resources-ref">
+    		resources <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#paper-ref">
+    		paper <span>12</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#tutorial-ref">
+    		tutorial <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#course-ref">
+    		course <span>8</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#thoughts-ref">
+    		thoughts <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resource-ref">
+    		resource <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#weekly-summary-ref">
+    		weekly-summary <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#modeling-ref">
+    		modeling <span>1</span>
+    	</a></li>
+    
+  
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Pages</a></h4>
+				<ul>
+					
+					
+					
+
+
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/about.html">About Me</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Feed</a></h4>
+				<ul>
+					<li><a href="/atom.xml">Atom Feed</a></li>
+					<li><a href="/rss.xml">RSS Feed</a></li>
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Links</a></h4>
+				<ul>
+				 
+					<li><a href = "http://xiaohan2012.github.io/">Han Xiao's Blog</a></li>
+				
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a href = "/about.html">About Me</a></h4>
+				<ul>
+				 
+					<li><a href = "mailto:han.xiao@cs.helsinki.fi">e-mail</a></li>
+				
+				</ul>
+			</div>
+			<div class="clearboth"></div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+	<div class="clearboth"></div>
+</footer>
+	
+</body>
+</html>
+

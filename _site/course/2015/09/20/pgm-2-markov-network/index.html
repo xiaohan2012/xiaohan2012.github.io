@@ -1,0 +1,489 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>PGM course: Markov Network</title>
+    
+	
+	<meta name="author" content="Han Xiao">
+	
+	<link rel="stylesheet" href="/assets/themes/Snail/css/jquery.fancybox.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/main.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/pages/journal.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/team.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/static.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/errors.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/google-code-prettify/prettify.css">
+	<link rel="shortcut icon" href="/assets/themes/Snail/img/favicon.ico">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+	<script src="/assets/themes/Snail/google-code-prettify/prettify.js"></script>
+	<script type="text/javascript">
+	  $(function(){
+		$("pre code").addClass("prettyprint linenums");
+		prettyPrint();
+	  });
+	</script>
+	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+</head>
+<body>
+	<noscript>
+		&amp;lt;div id="no-js"&amp;gt;Please enable JavaScript in your browser to experience / fully&amp;lt;/div&amp;gt;
+	</noscript>
+    <div id="page-container">
+		<div>
+			<nav>
+	<div id="nav-l">
+	</div>
+	<div id="nav-c">
+		<ul id="nav-list" style="width: 700px;">
+			<li id="home"><a href="/">Home</a></li>
+			
+			
+			
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "About Me"><a href="/about.html">About Me</a></li>
+					
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Archive"><a href="/archive.html">Archive</a></li>
+					
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Categories"><a href="/categories.html">Categories</a></li>
+					
+				  
+				
+			 
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Tags"><a href="/tags.html">Tags</a></li>
+					
+				  
+				
+			 
+			
+			
+		</ul>
+		<form id="nav-search" method="GET" action="/search.html">
+			<div id="search-right-pix">
+				<div id="search-left-pix">
+					<div id="search-center-pix">
+						<div id="search-icon-pix"></div>
+						<input name="query" type="text" placeholder="Search">
+					</div>
+				</div>
+			</div>
+		</form>
+		
+		
+	</div>
+	<div id="nav-r">
+	</div>
+</nav>
+			<div id="page-content">
+				
+<div id="page-content">
+	<div class="cont932">
+	<div id="journal-articles-block">
+		<div class="journal-article">
+			<div class="journal-post-info">
+				<div class="journal-cat-box">
+				
+				
+				<div class="journal-cat-box">
+
+<a href="/categories.html#course-ref" title="course">
+	course
+
+</a>
+</div>
+				
+				</div>
+			</div>
+			<div class="journal-body">
+				<h1 class="journal-title">PGM course: Markov Network<span class="author"></span>
+				</h1>
+				<span class="the-article">
+				<h1 id="learned-from-book">Learned from book</h1>
+
+<p>BN and MN are different. They are incomparable in some sense.
+Log-linear model, feature functions
+They are be converted into I-map of each other. If MN(BN) is chordal, there exist BN(MN) that is a perfect I-map for it.
+Conditional random field: no need to model the distribution for the observed variables.</p>
+
+<h2 id="misconception-example">Misconception Example</h2>
+<p>This example demonstrates one case where BN <strong>cannot</strong> capture the desired independency assumptions while MN can.</p>
+
+<h2 id="parametrization">Parametrization</h2>
+
+<ul>
+  <li>factors(clique potentials): denoted as \(\phi_i(D_i)\)</li>
+  <li>Markov network factorization: a distribution of \(\phi_i(D_i)\) factorizes over \( \mathcal{H} \)if each \(D_i\) in \(\phi_i(D_i)\) is a <em>complete</em> subgraph of \(\mathcal{H}\))</li>
+  <li>There are multiple ways to factorize a MN(maximal clique or pair-wise)</li>
+</ul>
+
+<p>For CV:</p>
+
+<ul>
+  <li>Applications: image denoising, image segmentation, stereo reconstruction</li>
+  <li>Pixel value for each pixel is one variable</li>
+  <li>image denoising: recovering the real pixel value. Node potential for each pixel that penalizes discrepancy between observed value and predicted value. Edge potential that encourages continuity between adjacent pixel values. To avoid overpenalize, truncated norm is used.</li>
+  <li>stereo reconstruction: restore the depth of each pixel.</li>
+  <li>image segmentation: node potential for each superpixel and edge potential for adjacent superpixel to encourage continuity</li>
+  <li>values can be clustered to reduce dimensionality</li>
+</ul>
+
+<h2 id="markov-network-independencies">Markov Network Independencies</h2>
+
+<p>Too many details here. The conclusion is:</p>
+
+<ul>
+  <li>pairwise/local(Markov blanket)/global independency assumptions of \( \mathcal{H}\) that \( P \) factorizes on are equivalent if \( P \) is positive</li>
+</ul>
+
+<h2 id="parametrization-revisited">Parametrization Revisited</h2>
+
+<ul>
+  <li>energy function: \(-\ln(\phi(D))\)</li>
+  <li>factor graph(consisting of variable node and factor node) makes explicit the factor structure in the network</li>
+  <li>feature: factor without nonnegativity requirement. More compact(something like 1 if .. and 0 otherwise)</li>
+  <li>
+    <p>log-linear model: \(P(X_1, X_2, \cdots, X_n) = \frac{1}{Z}\exp[-\sum\limits_{i=1}^{k}w_if_i(\mathbf{D}_i)]\), where \(f_i\) is feature function, \(D_i\) is complete subgraph in \( \mathcal{H}\) and \(w_i\) are feature weights. More compact compared to the factor table that enumerates all combinations.</p>
+  </li>
+  <li>
+    <p>Ising model, Boltzmann distribution, their connection and Boltzmann distribution’s connection to activation model for neuron.</p>
+  </li>
+  <li>Overparametrization: more parameters than needed =&gt; infinite ways to represent the same distribution</li>
+  <li>Canonical factorization defined over all cliques of \( \mathcal{H}\) avoid the parametrization ambiguity.</li>
+  <li>Canonical factorization used to prove the Hammersley-Clifford theorem: if \( \mathcal{H}\) is I-map of \( P\), then \( P\) factorizes over \( \mathcal{H}\)</li>
+  <li>Linearly dependent features lead to non-unique parametrization. Or for linearly independent features, each set of feature weights unique define \(P\)</li>
+  <li>To avoid overparametrization, choose linearly independent features(<strong>how?</strong>)</li>
+</ul>
+
+<h2 id="bn-and-mn">BN and MN</h2>
+
+<ul>
+  <li>The question is how to convert from one to the other so that independency assumption in the original one is satisfied?</li>
+  <li>Chordal network is the intersection between MN and BN in that it can be represented in the other type of model perfectly if it’s chordal</li>
+</ul>
+
+<h2 id="partially-directed-models">Partially Directed Models</h2>
+
+<ul>
+  <li>Conditional Random Fields: models \(P(Y \vert X)\) instead of \(P(Y, X) \), \(Y\) target variables, \(X\) observed variables. Different partition function.</li>
+  <li>Benefit of conditioning on \(X\): avoid modeling \(X\), which can be quite complex and the possibility to incorporate rich set of features</li>
+  <li>The three different linear-chain graphical models: 1, fully undirected(CRF), 2, partially undirected and 3, fully directed(HMM). 1 and 2 differs in the feature function’s scope on \(X\) and 2 and 3 differs in the way they normalize(local and global) to probability and independency assumptions they make</li>
+  <li>Skip-chain CRF: one observation node can have multiple parents and long-range label dependency</li>
+  <li>Coupled linear-chain CRF: joint inference on two chains(POS and NER)</li>
+</ul>
+
+<h1 id="learned-from-course-video">Learned from course video</h1>
+
+<ul>
+  <li>Example of <code>sky or water?</code>: need context information to infer. Introduction to the Ising model and UGM.</li>
+  <li>Local Markov independencies: useful for Gibbs sampling, which requires such knowledge</li>
+  <li>max clique and sub clique parametrization: two different ways for parametrization. They capture the same conditional independencies while max-clique can capture probability distribution that sub-clique cannot catch(for example <em>explicitly</em> capture the multi-way interaction) but the representation cost(parameter space size) is bigger. Again, compactness vs expressive power.</li>
+  <li>potential function: more flexible/general than probability function. They can be probability function but not necessarily. They measure the compatibility. (Originates from atomic physics where we assign a number to various spin configurations of two atoms) We only have indirect measures sometimes.</li>
+  <li>The way BN and MN normalizes is quite different, which results in their different capabilities: <strong>local normalization</strong> in BN, of which variables are independent of other variables, is not very good in some cases. For example, long range dependency in natural language where we like <strong>global normalization</strong> is not possible in BN. Seems to be related to the <em>label bias problem</em> discussed in some CRF paper.</li>
+  <li>Computing the partition function is one of the biggest problem in PGM.</li>
+  <li>Directed and undirected graphical model both have their both representation power(v-structure cannot be captured by UGM while the diamond structure cannot be captured by DGM) and they both cannot capture all probability distributions</li>
+</ul>
+
+<p>Model examples:</p>
+
+<ul>
+  <li>Boltzmann distribution in physics refers to log-linear model in statistics</li>
+  <li>Boltzmann Machine defined on <strong>fully-connected</strong> graph with <strong>pairwise</strong> edges on nodes with <strong>binary</strong> values: <script type="math/tex">P(\mathbf{X}) = \frac{1}{Z}\exp{[\sum\limits_{i,j}\theta_{i,j} x_i x_j + \sum\limits_i \alpha_i x_i + C]} = \frac{1}{Z} \exp{(\mathbf{X} - \mu)^T \Theta (\mathbf{X} - \mu) }</script></li>
+  <li>Ising model: sparse version of Boltzmann machine</li>
+  <li>Potts model: multi-state Ising model</li>
+  <li>Restricted Boltzmann Machine: hidden variables are introduced(breaking the homogeneous property of nodes)</li>
+  <li>RBM properties: hidden variables <strong>conditionally independent</strong> given observation variables(<strong>decoupling</strong>).</li>
+  <li>RBM for text modeling: define conditional probability for \( P(h \vert x)\) and \( P(x \vert h)\) of your preference and you</li>
+</ul>
+
+<p>Soundness/completeness, those theorem between \( \mathcal{G}\) and \(P\) are not talked in detail. This might indicate I don’t need to pay too much attention on those topics.</p>
+
+<h2 id="disclaimer">Disclaimer</h2>
+
+<p>Some portions of the content are directly taken from the <a href="http://www.cs.cmu.edu/~epxing/Class/10708-14/lectures/lecture3-MRFrepresentation.pdf">slides</a> of CMU Probabilistic Graphical Model, 2014 by Eric Xing</p>
+
+
+				</span>
+				<div class="journal-date">Published 20 September 2015</div>
+				<div class="journal-tags">
+				
+				
+	 
+		<a class="tag-cont" href="/tags.html#pgm-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">pgm</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#markov-network-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">markov-network</div>
+			<div class="tag-r"></div>
+		</a>
+	
+
+
+
+				</div>
+			</div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+</div>
+	<div class="clearboth"></div>
+	
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'xiaohan2012'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+	<div class="clearboth"></div>
+</div>
+
+
+			</div>
+			<div class="clearboth pagebottom"></div>
+		</div>
+	</div>
+	<footer>
+	<div class="footer-940">
+		<div class="footer-general-info">
+			© 2014 Han Xiao.<br><br>
+			Content licensed under:<br>
+			<a class="cc" href="http://creativecommons.org/licenses/by-sa/3.0/">c a b</a><br>
+			<a href = "/about.html">About Me</a><br>
+		</div>
+		<div class="footer-col-cont">
+			<div class="footer-nav-col">
+				<h4><a>Categories</a></h4>
+				<ul>
+					
+					
+
+
+  
+     
+    	<li><a href="/categories.html#paper-reading-ref">
+    		paper-reading <span>5</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#experience-ref">
+    		experience <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#misc-ref">
+    		misc <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#software-ref">
+    		software <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#note-ref">
+    		note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#study-note-ref">
+    		study-note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resources-ref">
+    		resources <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#paper-ref">
+    		paper <span>12</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#tutorial-ref">
+    		tutorial <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#course-ref">
+    		course <span>8</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#thoughts-ref">
+    		thoughts <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resource-ref">
+    		resource <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#weekly-summary-ref">
+    		weekly-summary <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#modeling-ref">
+    		modeling <span>1</span>
+    	</a></li>
+    
+  
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Pages</a></h4>
+				<ul>
+					
+					
+					
+
+
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/about.html">About Me</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Feed</a></h4>
+				<ul>
+					<li><a href="/atom.xml">Atom Feed</a></li>
+					<li><a href="/rss.xml">RSS Feed</a></li>
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Links</a></h4>
+				<ul>
+				 
+					<li><a href = "http://xiaohan2012.github.io/">Han Xiao's Blog</a></li>
+				
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a href = "/about.html">About Me</a></h4>
+				<ul>
+				 
+					<li><a href = "mailto:han.xiao@cs.helsinki.fi">e-mail</a></li>
+				
+				</ul>
+			</div>
+			<div class="clearboth"></div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+	<div class="clearboth"></div>
+</footer>
+	
+</body>
+</html>
+

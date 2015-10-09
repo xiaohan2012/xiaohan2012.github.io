@@ -1,0 +1,526 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>Graphical Model: Learning in Fully Observed Markov Networks</title>
+    
+	
+	<meta name="author" content="Han Xiao">
+	
+	<link rel="stylesheet" href="/assets/themes/Snail/css/jquery.fancybox.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/main.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/pages/journal.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/team.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/static.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/errors.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/google-code-prettify/prettify.css">
+	<link rel="shortcut icon" href="/assets/themes/Snail/img/favicon.ico">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+	<script src="/assets/themes/Snail/google-code-prettify/prettify.js"></script>
+	<script type="text/javascript">
+	  $(function(){
+		$("pre code").addClass("prettyprint linenums");
+		prettyPrint();
+	  });
+	</script>
+	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+</head>
+<body>
+	<noscript>
+		&amp;lt;div id="no-js"&amp;gt;Please enable JavaScript in your browser to experience / fully&amp;lt;/div&amp;gt;
+	</noscript>
+    <div id="page-container">
+		<div>
+			<nav>
+	<div id="nav-l">
+	</div>
+	<div id="nav-c">
+		<ul id="nav-list" style="width: 700px;">
+			<li id="home"><a href="/">Home</a></li>
+			
+			
+			
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "About Me"><a href="/about.html">About Me</a></li>
+					
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Archive"><a href="/archive.html">Archive</a></li>
+					
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Categories"><a href="/categories.html">Categories</a></li>
+					
+				  
+				
+			 
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Tags"><a href="/tags.html">Tags</a></li>
+					
+				  
+				
+			 
+			
+			
+		</ul>
+		<form id="nav-search" method="GET" action="/search.html">
+			<div id="search-right-pix">
+				<div id="search-left-pix">
+					<div id="search-center-pix">
+						<div id="search-icon-pix"></div>
+						<input name="query" type="text" placeholder="Search">
+					</div>
+				</div>
+			</div>
+		</form>
+		
+		
+	</div>
+	<div id="nav-r">
+	</div>
+</nav>
+			<div id="page-content">
+				
+<div id="page-content">
+	<div class="cont932">
+	<div id="journal-articles-block">
+		<div class="journal-article">
+			<div class="journal-post-info">
+				<div class="journal-cat-box">
+				
+				
+				<div class="journal-cat-box">
+
+<a href="/categories.html#course-ref" title="course">
+	course
+
+</a>
+</div>
+				
+				</div>
+			</div>
+			<div class="journal-body">
+				<h1 class="journal-title">Graphical Model: Learning in Fully Observed Markov Networks<span class="author"></span>
+				</h1>
+				<span class="the-article">
+				<h2 id="structural-learning">Structural Learning</h2>
+
+<p>Precision matrix(Q matrix) and covariance matrix(C matrix): different implication.</p>
+
+<ul>
+  <li>C matrix: captures marginal dependence and independence</li>
+  <li>
+    <p>Q matrix: captures conditional dependence and independence</p>
+  </li>
+  <li><strong>Q</strong>: Why this conclusion?
+When \(q_{ij}=0\), we have
+<img src="/assets/images/pgm/q_matrix_conditional_independence.png" alt="" /></li>
+  <li><strong>Q</strong>: Why precision matrix more meaningful than covariance matrix?
+Because many seemingly unrelated factors can be correlated(even butterfly and hurricane) thus there is the densely connected graph under then C matrix implication. However under Q matrix, we only consider conditional independence, thus a more sparsely connected graph. Easier to interpret and compute.</li>
+</ul>
+
+<p>For example, some contrast between covariance matrix and precision matrix:</p>
+
+<p><img src="/assets/images/pgm/covariance-and-precision-matrix-example.png" alt="cov-prec-mat" /></p>
+
+<p>If \(n\) is sufficiently large compared to \(p\), which means the covariance matrix is well-conditioned, then it’s easy to get \(Q\).</p>
+
+<p>However, if \(p \gg n\), data sample size much smaller than data dimension. Covariance matrix is <em>ill-conditioned</em>, thus not invertible(<strong>why?</strong>)</p>
+
+<p>It’s a hot topic on estimation of the precision matrix for high-dimensional data from limited amount of samples. One way is called <em>Graph Regression</em>.</p>
+
+<p><em>Graph Regression</em> works as follows:</p>
+
+<ol>
+  <li>Use Lasso to selected neighbors for each node
+For each <script type="math/tex">x_i</script>, treat it as the output of the linear regression on the rest of variables <script type="math/tex">\mathbf{x}_{-i}</script>, or <script type="math/tex">x_i \sim \mathcal{N}(\mathbf{q}_{i} \mathbf{x}_{-i}, \sigma^2)</script>. By adding a Lasso regularizer, we can obtain a sparse \(\mathbf{q}_{i}\) and only the non-zero ones are selected as the neighbors.
+The <script type="math/tex">\mathbf{q}_i</script> might be wrong, but using the below theorem,  the neighbors are correct.</li>
+  <li>Estimate \(Q\) by constraining the nonzero entries in \(Q\) to correspond to the selected neighbors of each node. In this way, the problem reduces to parameter estimation given known graph structure(discussed next)</li>
+</ol>
+
+<p>Lasso gives sparse parameter estimation, which is attractive because we would like a sparsely connected graph.</p>
+
+<p><img src="/assets/images/pgm/linear-regression-with-lasso.png" alt="lasso" /></p>
+
+<p>Tuning \(\lambda\): cross validation. At some point, \(\mathbf{q}_{i}\) drops to zero more quickly.</p>
+
+<p>One theorem on the graph consistency(sparsistency) of Graph Regression algorithm:</p>
+
+<p><img src="/assets/images/pgm/sparsistent.png" alt="sparsistent" /></p>
+
+<p>We are actually using Lasso to recover the graphical structure.</p>
+
+<p>For <strong>discrete</strong> values, we can use logistic regression.</p>
+
+<h2 id="parameter-estimation-given-known-structure">Parameter Estimation given known structure</h2>
+
+<p>No decomposibility. Partition function \(Z\) defined on all parameters.</p>
+
+<p>In order to maximize the log-likelihood:</p>
+
+<p><img src="/assets/images/pgm/log_p_mn.png" alt="" /></p>
+
+<p>we get the derivative:</p>
+
+<p><img src="/assets/images/pgm/derivative_log_p.png" alt="" /></p>
+
+<p>And setting the derivative to zero leads to:</p>
+
+<p><img src="/assets/images/pgm/p_mle.png" alt="" /></p>
+
+<p>which is the condition that must be satisfied for MLE, though this result does not tell us <strong>how</strong> to estimate.</p>
+
+<h3 id="decomposable-ugm">Decomposable UGM</h3>
+
+<p>Roadmap:</p>
+
+<p><img src="/assets/images/pgm/estimation-method-table-for-ugm.png" alt="" /></p>
+
+<h3 id="decomposable-ugm-1">Decomposable UGM</h3>
+
+<p>For triangulated graph and potentials defined on maximal cliques(<strong>why this?</strong>):</p>
+
+<p><img src="/assets/images/pgm/joint-distribution-of-decomposable-ugm.png" alt="" /></p>
+
+<p>We can verify that if</p>
+
+<script type="math/tex; mode=display">\hat{p}_{MLE}(\mathbf{x}) = \frac{\prod \widetilde{p}(\mathbf{x}_c)}{\prod \widetilde{p}(\mathbf{x}_s)}</script>
+
+<p>then above condition is satisfied.</p>
+
+<p>So if the UGM is decomposable, its potentials defined on maximal cliques and potential function is tabular, the potential functions’ value can be directly inspected(easily computed) using the MLE condition.</p>
+
+<h3 id="iterative-proportional-fittingipf">Iterative Proportional Fitting(IPF)</h3>
+
+<p>Observing that:</p>
+
+<p><img src="/assets/images/pgm/ipf_p_over_psi.PNG" alt="" /></p>
+
+<p>we can know that this is a iterated function, meaning \( X \rightarrow X \) and finding the closed form solution is hard.</p>
+
+<p>Fixed point iteration can help:</p>
+
+<p><img src="/assets/images/pgm/ipf_fixed_point_iteration.PNG" alt="" /></p>
+
+<p>Calculating \(p^{(t)}(\mathbf{x}_c)\) is actually an inference problem. What makes learning in MN different to that in BN is the the inference problem nested in the learning problem.</p>
+
+<p>IPF from the information theoretic view(I-projection).</p>
+
+<p><strong>Q</strong>: <a href="https://en.wikipedia.org/wiki/Coordinate_descent">Coordinate ascent</a> algorithm? Convergence proof?</p>
+
+<p><img src="/assets/images/pgm/ipf_convergence_proof.png" alt="" /></p>
+
+<p>The above proof relies on \(Z^{(t)}=Z^{(t+1)}\). <strong>Why?</strong></p>
+
+<p>As we can verify that each step sets the gradient to zerp. Thus \(\mathcal{l}\) increases at each iteration. As \(\mathcal{l}\) is convex(<strong>why?</strong>), we can show it converges to global optimum.</p>
+
+<h3 id="feature-based-clique-potentialsgeneralized-iterative-scaling">Feature-based clique potentials(Generalized Iterative Scaling)</h3>
+
+<p>Motivation for feature-based one: fewer parameters while using the same graphical model.</p>
+
+<p>Basic ideas in learning: instead of directly taking the derivative(because computing \(\log Z \) term is expensive), lower bound is derived using the maximum value of log(tagent line) and Jensen’s inequality for \(\exp\)</p>
+
+<p>The result is:</p>
+
+<p><img src="/assets/images/pgm/gis_result.png" alt="" /></p>
+
+<p>The \(\sum\limits_x \tilde{p}(x)f_i(x)\) is actually the sum of \(f_i\) in training dataset. If \(f_i\) is binary, it’s essentially counting.</p>
+
+<p>GIS is more general than IPF as the tabular potential function is a special case of feature based potential function. However, inference needs to be done for \(\sum\limits_x p^{(t)}(x)f_i(x)\).</p>
+
+<h2 id="disclaimer">Disclaimer</h2>
+
+<p>Some portions of the content are directly taken from the <a href="http://www.cs.cmu.edu/~epxing/Class/10708-14/lectures/lecture8-LearningObsMRF.pdf">slides</a> of CMU Probabilistic Graphical Model, 2014 by Eric Xing</p>
+
+				</span>
+				<div class="journal-date">Published 29 September 2015</div>
+				<div class="journal-tags">
+				
+				
+	 
+		<a class="tag-cont" href="/tags.html#pgm-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">pgm</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#markov-network-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">markov-network</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#structure-learning-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">structure-learning</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#parameter-estimation-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">parameter-estimation</div>
+			<div class="tag-r"></div>
+		</a>
+	
+
+
+
+				</div>
+			</div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+</div>
+	<div class="clearboth"></div>
+	
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'xiaohan2012'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+	<div class="clearboth"></div>
+</div>
+
+
+			</div>
+			<div class="clearboth pagebottom"></div>
+		</div>
+	</div>
+	<footer>
+	<div class="footer-940">
+		<div class="footer-general-info">
+			© 2014 Han Xiao.<br><br>
+			Content licensed under:<br>
+			<a class="cc" href="http://creativecommons.org/licenses/by-sa/3.0/">c a b</a><br>
+			<a href = "/about.html">About Me</a><br>
+		</div>
+		<div class="footer-col-cont">
+			<div class="footer-nav-col">
+				<h4><a>Categories</a></h4>
+				<ul>
+					
+					
+
+
+  
+     
+    	<li><a href="/categories.html#paper-reading-ref">
+    		paper-reading <span>5</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#experience-ref">
+    		experience <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#misc-ref">
+    		misc <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#software-ref">
+    		software <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#note-ref">
+    		note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#study-note-ref">
+    		study-note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resources-ref">
+    		resources <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#paper-ref">
+    		paper <span>12</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#tutorial-ref">
+    		tutorial <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#course-ref">
+    		course <span>8</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#thoughts-ref">
+    		thoughts <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resource-ref">
+    		resource <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#weekly-summary-ref">
+    		weekly-summary <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#modeling-ref">
+    		modeling <span>1</span>
+    	</a></li>
+    
+  
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Pages</a></h4>
+				<ul>
+					
+					
+					
+
+
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/about.html">About Me</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Feed</a></h4>
+				<ul>
+					<li><a href="/atom.xml">Atom Feed</a></li>
+					<li><a href="/rss.xml">RSS Feed</a></li>
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Links</a></h4>
+				<ul>
+				 
+					<li><a href = "http://xiaohan2012.github.io/">Han Xiao's Blog</a></li>
+				
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a href = "/about.html">About Me</a></h4>
+				<ul>
+				 
+					<li><a href = "mailto:han.xiao@cs.helsinki.fi">e-mail</a></li>
+				
+				</ul>
+			</div>
+			<div class="clearboth"></div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+	<div class="clearboth"></div>
+</footer>
+	
+</body>
+</html>
+
