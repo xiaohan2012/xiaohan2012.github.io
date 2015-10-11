@@ -1,0 +1,8 @@
+digraph G{
+   subgraph c1 {
+     E -> T [style=filled]
+	 E -> L [style=filled]
+	 E -> U [style=filled]
+	 label = "M"
+   }
+}

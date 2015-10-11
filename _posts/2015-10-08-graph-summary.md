@@ -67,18 +67,6 @@ We can model it as a generative process, where we first select the event, then g
 
 ![](/images/graphviz/gen-b570b3235b7f99222039aa0390a49796.gv.png)
 
-<!-- {% xdot svg %} -->
-<!--    digraph G{ -->
-<!--       subgraph c1 { -->
-<!-- 	     E -> T [style=filled] -->
-<!-- 		 E -> L [style=filled] -->
-<!-- 		 E -> U [style=filled] -->
-<!-- 		 label = "M" -->
-<!--       } -->
-<!--    } -->
-
-<!-- {% endxdot %} -->
-
 where
 
 - \\(T\\): sending time, multinomial distribution
