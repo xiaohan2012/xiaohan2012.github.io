@@ -1,0 +1,523 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>PGM course: Variable Elimination</title>
+    
+	
+	<meta name="author" content="Han Xiao">
+	
+	<link rel="stylesheet" href="/assets/themes/Snail/css/jquery.fancybox.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/main.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/pages/journal.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/team.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/static.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/errors.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/google-code-prettify/prettify.css">
+	<link rel="shortcut icon" href="/assets/themes/Snail/img/favicon.ico">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+	<script src="/assets/themes/Snail/google-code-prettify/prettify.js"></script>
+	<script type="text/javascript">
+	  $(function(){
+		$("pre code").addClass("prettyprint linenums");
+		prettyPrint();
+	  });
+	</script>
+	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+</head>
+<body>
+	<noscript>
+		&amp;lt;div id="no-js"&amp;gt;Please enable JavaScript in your browser to experience / fully&amp;lt;/div&amp;gt;
+	</noscript>
+    <div id="page-container">
+		<div>
+			<nav>
+	<div id="nav-l">
+	</div>
+	<div id="nav-c">
+		<ul id="nav-list" style="width: 700px;">
+			<li id="home"><a href="/">Home</a></li>
+			
+			
+			
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "About Me"><a href="/about.html">About Me</a></li>
+					
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Archive"><a href="/archive.html">Archive</a></li>
+					
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Categories"><a href="/categories.html">Categories</a></li>
+					
+				  
+				
+			 
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Tags"><a href="/tags.html">Tags</a></li>
+					
+				  
+				
+			 
+			
+			
+		</ul>
+		<form id="nav-search" method="GET" action="/search.html">
+			<div id="search-right-pix">
+				<div id="search-left-pix">
+					<div id="search-center-pix">
+						<div id="search-icon-pix"></div>
+						<input name="query" type="text" placeholder="Search">
+					</div>
+				</div>
+			</div>
+		</form>
+		
+		
+	</div>
+	<div id="nav-r">
+	</div>
+</nav>
+			<div id="page-content">
+				
+<div id="page-content">
+	<div class="cont932">
+	<div id="journal-articles-block">
+		<div class="journal-article">
+			<div class="journal-post-info">
+				<div class="journal-cat-box">
+				
+				
+				<div class="journal-cat-box">
+
+<a href="/categories.html#course-ref" title="course">
+	course
+
+</a>
+</div>
+				
+				</div>
+			</div>
+			<div class="journal-body">
+				<h1 class="journal-title">PGM course: Variable Elimination<span class="author"></span>
+				</h1>
+				<span class="the-article">
+				<h2 id="background">Background</h2>
+
+<p>Two typical tasks of graphical model:</p>
+
+<ul>
+  <li>Inference: \(P(X \vert Y)\)</li>
+  <li>Estimate a model(learning): learning point estimate for model parameters or inference in Bayesian modeling</li>
+</ul>
+
+<p>We talk about inference here. Several types of inference tasks:</p>
+
+<ul>
+  <li>likelihood: \(P(e)\), just marginalization the remaining uninterested variables</li>
+  <li>conditional probability(or posterior belief): \(P(X \vert e)\), which equals to \( \frac{P(X, e)}{P(e)}\)</li>
+  <li>most probable assignment or maximum a posterior: \(argmax_{y \in \mathcal{Y}} P(y \vert e)\), Usually, the unnormalized quantity is considered. Can be used for classification/prediction and explanation</li>
+</ul>
+
+<p>In this section, exact inference method called <em>variable elimination</em> is discussed.</p>
+
+<h2 id="complexity-in-general">Complexity in general</h2>
+
+<p>Computing \(P(X = x \vert e)\) in a GM is NP-hard. This means this is not <strong>general</strong> algorithm that can solve the problem in polynomial time.</p>
+
+<p>Two major inference approaches:</p>
+
+<ul>
+  <li>exact inference: variable elimination, belief propagation(message passing), junction tree algorithm</li>
+  <li>approximate inference: MCMC, variational methods</li>
+</ul>
+
+<p>For certain structures, we can solve it efficiently and exactly.</p>
+
+<h2 id="elimination-in-chains">Elimination in chains</h2>
+
+<p>Given the graph:</p>
+
+<script type="math/tex; mode=display">A \rightarrow B \rightarrow C \rightarrow D \rightarrow E</script>
+
+<p>Calculating  \(P(e)\)</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{eqnarray*}
+P(e)
+& = &
+\sum\limits_{a,b,c,d} P(a) P(b \vert a) P(c \vert b) P(d \vert c) P(e \vert d) \\
+& = &
+\sum\limits_{b,c,d} P(c \vert b) P(d \vert c) P(e \vert d) \sum\limits_{a} P(a) P(b \vert a) \\
+& = &
+\sum\limits_{b,c,d} P(d \vert c) P(e \vert d) \sum\limits_{b} m(b) P(c \vert b) 
+\end{eqnarray*} %]]></script>
+
+<p>Complexity drops from \(O(k^n)\) to \(O(nk^2)\), where there are \(n\) nodes and each node takes \(k\) values.</p>
+
+<p>More examples: HMM, linear chain CRF</p>
+
+<p>Forward/backward algorithm in quadratic time</p>
+
+<h2 id="exact-inference">Exact inference</h2>
+
+<p>Inference is in this general form:</p>
+
+<script type="math/tex; mode=display">\sum\limits_{z}\prod\limits_{\phi \in \mathcal{F}} \phi</script>
+
+<p>Essentially elimination of variables. Called <em>sum-product</em> inference</p>
+
+<h2 id="dealing-with-evidence">Dealing with evidence</h2>
+
+<p>in a computationally homogeneous way</p>
+
+<script type="math/tex; mode=display">\tau(Y, e) = \sum\limits_{z, e} \prod\limits_{\phi \in \mathcal{F}} \phi \times \delta(E, e)</script>
+
+<p>where \(Y\) is the query, \(e\) is the evidence, \(z\) are the hidden variables and \(\delta\) is the evidence potential(indicator)</p>
+
+<h2 id="elimination-algorithm">Elimination algorithm</h2>
+
+<ol>
+  <li><strong>Initialization</strong>
+Let \(\mathcal{F}\) is the full set of factors</li>
+  <li><strong>Evidence</strong>
+Multiply the factors with their evidence potential</li>
+  <li><strong>Sum-product variable elimination</strong>
+Eliminate one hidden variable, \(z\) at a time
+During each elimination, factors \(\mathcal{F}^{‘}\) whose scope contains \(z\) are first selected from \(\mathcal{F}\). Remaining factors \(\mathcal{F}^{‘’} = \mathcal{F}^ - \mathcal{F}^{‘}\).  \(\mathcal{F}^{‘’} \) are multiplied and summed over \(z\). The resulting new factors are \(\tau \cup \mathcal{F} \)</li>
+  <li><strong>Normalization</strong></li>
+</ol>
+
+<p><strong>Q</strong>:</p>
+
+<ul>
+  <li>How to determine the optimal variable elimination order? NP-hard</li>
+  <li><strong>What types</strong> of graphical model can we perform efficient exact inference on?</li>
+</ul>
+
+<h2 id="complexity-of-variable-elimination">Complexity of variable elimination</h2>
+
+<p>For each elimination step, suppose \(X\) is to be eliminated, \( Y_c \) are in the factors and \( \vert Y_c \vert = k \)</p>
+
+<p>For the factor multiplication: \( k \times \vert Val(X) \vert \times \prod\limits_i \vert Val(Y_{c_i}) \vert \)</p>
+
+<p>For the summation:  \( \vert Val(X) \vert \times \vert Val(Y_{c_i}) \vert \)</p>
+
+<p>Thus, <strong>exponential</strong> for the intermediate factor values.</p>
+
+<p>Variable elimination produces a sequence of elimination factors along with a corresponding sequence of elimination cliques for the graphical model.</p>
+
+<p>Elimination orders determines both the elimination factors and the elimination cliques.</p>
+
+<p>The complexity is determined by the clique with the largest cardinality, \( \prod\limits_i \vert Val(Y_{c_i}) \vert \)</p>
+
+<p>Good elimination order lead to cliques with small cardinality.</p>
+
+<p>Finding the best elimination ordering is NP-hard.</p>
+
+<p>Example that illustrates the importance of elimination order: star and tree model</p>
+
+<p>Benefit of graphical model:</p>
+
+<ul>
+  <li>figure out the capacity/complexity of a certain elimination order</li>
+  <li>easily figure out a good variable elimination order</li>
+</ul>
+
+<h2 id="intractable-exact-inference">Intractable exact inference</h2>
+
+<p>Exact inference can be intractable. For example Ising model:</p>
+
+<p>Inference can lead to clique of size \(n\), the row/column number, which can be quite large(e.g, image)(try to eliminate variables in the Ising model)</p>
+
+<h2 id="disclaimer">Disclaimer</h2>
+
+<p>Some portions of the content are directly taken from the <a href="http://www.cs.cmu.edu/~epxing/Class/10708-14/lectures/lecture4-Elimination.pdf">slides</a> of CMU Probabilistic Graphical Model, 2014 by Eric Xing</p>
+
+				</span>
+				<div class="journal-date">Published 22 September 2015</div>
+				<div class="journal-tags">
+				
+				
+	 
+		<a class="tag-cont" href="/tags.html#pgm-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">pgm</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#variable-elimination-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">variable-elimination</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#exact-inference-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">exact-inference</div>
+			<div class="tag-r"></div>
+		</a>
+	
+
+
+
+				</div>
+			</div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+</div>
+	<div class="clearboth"></div>
+	
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'xiaohan2012'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+	<div class="clearboth"></div>
+</div>
+
+
+			</div>
+			<div class="clearboth pagebottom"></div>
+		</div>
+	</div>
+	<footer>
+	<div class="footer-940">
+		<div class="footer-general-info">
+			© 2014 Han Xiao.<br><br>
+			Content licensed under:<br>
+			<a class="cc" href="http://creativecommons.org/licenses/by-sa/3.0/">c a b</a><br>
+			<a href = "/about.html">About Me</a><br>
+		</div>
+		<div class="footer-col-cont">
+			<div class="footer-nav-col">
+				<h4><a>Categories</a></h4>
+				<ul>
+					
+					
+
+
+  
+     
+    	<li><a href="/categories.html#paper-reading-ref">
+    		paper-reading <span>5</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#experience-ref">
+    		experience <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#misc-ref">
+    		misc <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#software-ref">
+    		software <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#note-ref">
+    		note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#study-note-ref">
+    		study-note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resources-ref">
+    		resources <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#paper-ref">
+    		paper <span>12</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#tutorial-ref">
+    		tutorial <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#course-ref">
+    		course <span>8</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#thoughts-ref">
+    		thoughts <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resource-ref">
+    		resource <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#weekly-summary-ref">
+    		weekly-summary <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#modeling-ref">
+    		modeling <span>1</span>
+    	</a></li>
+    
+  
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Pages</a></h4>
+				<ul>
+					
+					
+					
+
+
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/about.html">About Me</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Feed</a></h4>
+				<ul>
+					<li><a href="/atom.xml">Atom Feed</a></li>
+					<li><a href="/rss.xml">RSS Feed</a></li>
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Links</a></h4>
+				<ul>
+				 
+					<li><a href = "http://xiaohan2012.github.io/">Han Xiao's Blog</a></li>
+				
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a href = "/about.html">About Me</a></h4>
+				<ul>
+				 
+					<li><a href = "mailto:han.xiao@cs.helsinki.fi">e-mail</a></li>
+				
+				</ul>
+			</div>
+			<div class="clearboth"></div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+	<div class="clearboth"></div>
+</footer>
+	
+</body>
+</html>
+

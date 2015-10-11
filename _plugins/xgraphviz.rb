@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # (The MIT License)
 # 
 # Copyright © 2013 Ibrahim Maguiraga
@@ -249,7 +250,7 @@ module Jekyll
             @style = %[style="#{@style}"]
           end
 
-          return "<img #{@style} src='#{output}'>" 
+          return "<img #{@style} src='/#{output}'>" 
         end
       end
 

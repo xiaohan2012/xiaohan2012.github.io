@@ -1,0 +1,590 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>Graphical Model: Learning in Fully Observed Bayesian Networks </title>
+    
+	
+	<meta name="author" content="Han Xiao">
+	
+	<link rel="stylesheet" href="/assets/themes/Snail/css/jquery.fancybox.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/main.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/pages/journal.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/team.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/static.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/errors.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/google-code-prettify/prettify.css">
+	<link rel="shortcut icon" href="/assets/themes/Snail/img/favicon.ico">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+	<script src="/assets/themes/Snail/google-code-prettify/prettify.js"></script>
+	<script type="text/javascript">
+	  $(function(){
+		$("pre code").addClass("prettyprint linenums");
+		prettyPrint();
+	  });
+	</script>
+	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+</head>
+<body>
+	<noscript>
+		&amp;lt;div id="no-js"&amp;gt;Please enable JavaScript in your browser to experience / fully&amp;lt;/div&amp;gt;
+	</noscript>
+    <div id="page-container">
+		<div>
+			<nav>
+	<div id="nav-l">
+	</div>
+	<div id="nav-c">
+		<ul id="nav-list" style="width: 700px;">
+			<li id="home"><a href="/">Home</a></li>
+			
+			
+			
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "About Me"><a href="/about.html">About Me</a></li>
+					
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Archive"><a href="/archive.html">Archive</a></li>
+					
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Categories"><a href="/categories.html">Categories</a></li>
+					
+				  
+				
+			 
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Tags"><a href="/tags.html">Tags</a></li>
+					
+				  
+				
+			 
+			
+			
+		</ul>
+		<form id="nav-search" method="GET" action="/search.html">
+			<div id="search-right-pix">
+				<div id="search-left-pix">
+					<div id="search-center-pix">
+						<div id="search-icon-pix"></div>
+						<input name="query" type="text" placeholder="Search">
+					</div>
+				</div>
+			</div>
+		</form>
+		
+		
+	</div>
+	<div id="nav-r">
+	</div>
+</nav>
+			<div id="page-content">
+				
+<div id="page-content">
+	<div class="cont932">
+	<div id="journal-articles-block">
+		<div class="journal-article">
+			<div class="journal-post-info">
+				<div class="journal-cat-box">
+				
+				
+				<div class="journal-cat-box">
+
+<a href="/categories.html#course-ref" title="course">
+	course
+
+</a>
+</div>
+				
+				</div>
+			</div>
+			<div class="journal-body">
+				<h1 class="journal-title">Graphical Model: Learning in Fully Observed Bayesian Networks <span class="author"></span>
+				</h1>
+				<span class="the-article">
+				<h2 id="structural-learning">Structural learning</h2>
+
+<p>An interesting problem but not many statistically optimal solutions by far. Optimal means maximizing some objective function such as log-likelihood.</p>
+
+<p>For \(n\)nodes, there are \(O(2^{n^2})\) possible graphs, while \(n!\) trees.</p>
+
+<h3 id="chow-liu-algorithm">Chow-Liu algorithm</h3>
+
+<p>Chow-Liu algorithm finds the exact solution for an optimal <strong>directed</strong> tree(under MLE)</p>
+
+<p>Tricks:</p>
+
+<ol>
+  <li>MLE decomposable</li>
+  <li>Each child has only one child</li>
+</ol>
+
+<h4 id="decomposing-mle">Decomposing MLE</h4>
+
+<p><img src="/assets/images/pgm/chowliu-mle-decompose-1.png" alt="chowliu-mle-1" />
+<img src="/assets/images/pgm/chowliu-mle-decompose-2.png" alt="chowliu-mle-2" /></p>
+
+<p>MLE can be decomposed into sum of mutual information between nodes and their parents.</p>
+
+<p>Several transformation note:</p>
+
+<ul>
+  <li>Changing the index order \(n\) and \(t\)</li>
+  <li>Use \(count(x_i, x_{\pi_i(G)})\)</li>
+</ul>
+
+<h4 id="single-parent-constraint">Single parent constraint</h4>
+
+<p>As each node can only have at most one parent, we only consider the \(\hat{I}\) between <strong>each pair</strong> of nodes.</p>
+
+<p><script type="math/tex">\hat{I}(X_i, X_j) = \sum\limits_{x_i, x_j} \hat{p}(x_i, x_j) \log \frac{\hat{p}(x_i, x_j)}{\hat{p}(x_i)\hat{p}(x_j)}</script>
+<script type="math/tex">\hat{p}(x_i, x_j) = \frac{count(x_i, x_j)}{M}</script></p>
+
+<p>Given the edge weights(MI) between each pair of nodes, we want to find the set of edges that:</p>
+
+<ol>
+  <li>form a tree</li>
+  <li>maximize the sum</li>
+</ol>
+
+<p>This reduces to maximum spanning tree problem. You can solve it using <a href="http://mathworld.wolfram.com/KruskalsAlgorithm.html">Kruskal’s Algorithm</a> for example.</p>
+
+<h4 id="multiple-optimal-trees">Multiple optimal trees</h4>
+
+<p>Given one tree topology, there can be multiple BNs with the same loss value. For example:</p>
+
+<p><img src="/assets/images/pgm/chow-liu-i-equivalent.png" alt="ChowLiu-i-equivalent" /></p>
+
+<p>Moreover, those BNs are I-equivalent.</p>
+
+<p>However, those I-equivalent BNs have different interpretations.</p>
+
+<h4 id="application-dna-sequence-classification">Application: DNA sequence classification</h4>
+
+<p>The motif/junk DNA sequence classification example.</p>
+
+<p>Basic idea: use the tree and CPD as define a density function, apply the pairwise CPD to give the likelihood that a sequence(a list of nodes can be seen as list of pairs of nodes) appear.</p>
+
+<h2 id="parameter-learning-for-fully-observable-gm">Parameter learning for fully observable GM</h2>
+
+<p>Estimation principles:</p>
+
+<ul>
+  <li>MLE</li>
+  <li>Bayesian estimation</li>
+  <li>Maximal conditional likelihood(part of the graph)</li>
+  <li>Maximal margin(origin from SVM)</li>
+  <li>Maximum entropy</li>
+</ul>
+
+<p>The log likelihood can be decomposed into a set of smaller CPDs, each parametrized by local parameter, \(\theta_i\). Density estimation for the GM can be done independently for each node. As the CPD is actually multinomial, which is an instance of exponential family distribution. We can get the MLE for natural parameter via moment matching.</p>
+
+<h3 id="discrete-example-multinomial-distribution">Discrete example: multinomial distribution</h3>
+
+<h4 id="mle">MLE</h4>
+
+<p>Objective function:</p>
+
+<p><img src="/assets/images/pgm/ll-for-multinomial.png" alt="ll-for-multinomial" /></p>
+
+<p>with constraint:</p>
+
+<script type="math/tex; mode=display">\sum\limits_k=1^K \theta_k = 1</script>
+
+<p>Which leads to constraint cost function with Lagrange multiplier</p>
+
+<p><img src="/assets/images/pgm/cost-function-for-multinomial-in-lagrange-form.png" alt="cost-for-multinomial-in-lagrange" /></p>
+
+<p>Thus we have \(\lambda = N\). So \(\hat{\theta}_{k, MLE} = \frac{n_k}{N}\)</p>
+
+<h4 id="bayesian-estimationdirichlet-prior">Bayesian Estimation(Dirichlet prior)</h4>
+
+<p>We use Dirichlet distribution as prior(conjugate prior):</p>
+
+<script type="math/tex; mode=display">P(\theta \vert \alpha) = C(\alpha) \prod\limits_k \theta_{k}^{\alpha_k-1}</script>
+
+<p>Posterior:</p>
+
+<script type="math/tex; mode=display">P(\theta \vert \mathbf{X}) \propto  \prod\limits_k \theta_{k}^{n_k + \alpha_k-1}</script>
+
+<p>Posterior mean estimation <script type="math/tex">\theta_k = E_{p(\theta \vert \mathbf{X})} (\theta_k) = \frac{n_k + \alpha_k}{N + \sum \alpha_k}</script></p>
+
+<p>Sequential Bayesian update is equivalent to batch update.</p>
+
+<p>Beside manually setting \(\alpha\) another way is through Empirical Bayes, where</p>
+
+<script type="math/tex; mode=display">\alpha_{MLE} = argmax_{\alpha} p(D | \alpha) = \int p(D \vert \theta) p(\theta \vert \alpha) d \theta</script>
+
+<h4 id="logistic-normal-prior">Logistic Normal prior</h4>
+
+<p>Compared to Dirichlet, it’s more flexible because of co-variance structure, but non-conjugate for multinomial distribution.</p>
+
+<p><img src="/assets/images/pgm/dirichlet-3d.png" alt="dirichlet-3d" />
+<img src="/assets/images/pgm/logistic-normal-3d.png" alt="logistic-normal-3d" /></p>
+
+<p>Used in <a href="https://www.cs.princeton.edu/~blei/papers/BleiLafferty2006.pdf">Correlated Topic Modeling</a></p>
+
+<h3 id="continuous-example-multivariate-gaussian">Continuous example: multivariate Gaussian</h3>
+
+<h4 id="mle-1">MLE</h4>
+
+<p><img src="/assets/images/pgm/mle-multivariate-gaussian.png" alt="mle-multivariate-gaussian" /></p>
+
+<p>Recall moment matching(from sufficient statistics to natural parameter), the sufficient statistics here are \(\sum x_n\) and \(\sum x_n x_n^T\)</p>
+
+<h4 id="bayesian-estimation">Bayesian estimation</h4>
+
+<p>Unknown \(\mu\) and \(\sigma\), the resulting posterior is parametrized by:</p>
+
+<p><img src="/assets/images/pgm/bayesian-estimation-result-for-multivariat-gaussian.png" alt="mle-multivariate-gaussian" /></p>
+
+<p>See the details in <em>Bayesian Data Analysis</em> book.</p>
+
+<p>The list of prior distributions for unknown/known \(\mu\) and \(\sigma\)…</p>
+
+<h2 id="learning-for-fully-observable-bn-in-general">Learning for fully observable BN in general</h2>
+
+<p>Parameter estimation for fully observable BN can be decomposed into local conditional or marginal probability(smaller BNs) whose parameters are globally independently. So we can break down the global parameter estimation into local pieces. We rely on this property to perform efficient parameter estimation.</p>
+
+<p>An illustration:</p>
+
+<p><img src="/assets/images/pgm/parameter-estimation-for-BN-illustration.png" alt="illustration for learning for BN" /></p>
+
+<p>Moreover, if the smaller BNs belongs to exponential family, MLE amounts to moment matching.</p>
+
+<h3 id="defining-prior-for-graphical-model">Defining prior for graphical model</h3>
+
+<p>This is not arbitrary. Guidelines are:</p>
+
+<ul>
+  <li>Global Parameter Independence: if we want local estimation for efficiency, we cannot couple the priors of different nodes. Instead, the priors should be separated by nodes. For example, \( p(\Theta \vert G)=\prod\limits_i p(\theta_i \vert G)\)</li>
+  <li>Local Parameter Independence: parameters for a single node under different <em>configuration/conditions</em> shouldn’t be coupled. For example,\(p(\theta_i) = \prod\limits_j p(\theta_{x_i \vert \pi_i(x)_j} \vert G)\)</li>
+</ul>
+
+<p>Some safe priors satisfying the requirements:</p>
+
+<ul>
+  <li>Dirichlet for discrete DAG</li>
+  <li>Normal prior for Gaussian DAG(\(\mu\) is unknown) and Normal-Wishart prior when \(\sigma\) also unknown.</li>
+</ul>
+
+<h3 id="parameter-sharing">Parameter sharing</h3>
+
+<p>Example: the transition and emission probability in HMM. Instead of using one set of parameters indexed by the position, we replicate them along all positions so that only one set of parameters are shared.</p>
+
+<h2 id="summary">Summary</h2>
+
+<ol>
+  <li>Structural learning: ChowLiu algorithm guarantees optimality for directed tree.</li>
+  <li>Learning in fully observable BN is easy and it can be decomposed into local estimation problems, which usually belongs to exponential family</li>
+</ol>
+
+<h2 id="disclaimer">Disclaimer</h2>
+
+<p>Some portions of the content are directly taken from the <a href="http://www.cs.cmu.edu/~epxing/Class/10708-14/lectures/lecture7-LearningObs.pdf">slides</a> of CMU Probabilistic Graphical Model, 2014 by Eric Xing</p>
+
+				</span>
+				<div class="journal-date">Published 25 September 2015</div>
+				<div class="journal-tags">
+				
+				
+	 
+		<a class="tag-cont" href="/tags.html#pgm-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">pgm</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#bayesian-network-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">bayesian-network</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#parameter-estimation-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">parameter-estimation</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#mle-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">mle</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#bayesian-estimation-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">bayesian-estimation</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#structure-learning-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">structure-learning</div>
+			<div class="tag-r"></div>
+		</a>
+	
+
+
+
+				</div>
+			</div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+</div>
+	<div class="clearboth"></div>
+	
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'xiaohan2012'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+	<div class="clearboth"></div>
+</div>
+
+
+			</div>
+			<div class="clearboth pagebottom"></div>
+		</div>
+	</div>
+	<footer>
+	<div class="footer-940">
+		<div class="footer-general-info">
+			© 2014 Han Xiao.<br><br>
+			Content licensed under:<br>
+			<a class="cc" href="http://creativecommons.org/licenses/by-sa/3.0/">c a b</a><br>
+			<a href = "/about.html">About Me</a><br>
+		</div>
+		<div class="footer-col-cont">
+			<div class="footer-nav-col">
+				<h4><a>Categories</a></h4>
+				<ul>
+					
+					
+
+
+  
+     
+    	<li><a href="/categories.html#paper-reading-ref">
+    		paper-reading <span>5</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#experience-ref">
+    		experience <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#misc-ref">
+    		misc <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#software-ref">
+    		software <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#note-ref">
+    		note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#study-note-ref">
+    		study-note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resources-ref">
+    		resources <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#paper-ref">
+    		paper <span>12</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#tutorial-ref">
+    		tutorial <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#course-ref">
+    		course <span>8</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#thoughts-ref">
+    		thoughts <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resource-ref">
+    		resource <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#weekly-summary-ref">
+    		weekly-summary <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#modeling-ref">
+    		modeling <span>1</span>
+    	</a></li>
+    
+  
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Pages</a></h4>
+				<ul>
+					
+					
+					
+
+
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/about.html">About Me</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Feed</a></h4>
+				<ul>
+					<li><a href="/atom.xml">Atom Feed</a></li>
+					<li><a href="/rss.xml">RSS Feed</a></li>
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Links</a></h4>
+				<ul>
+				 
+					<li><a href = "http://xiaohan2012.github.io/">Han Xiao's Blog</a></li>
+				
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a href = "/about.html">About Me</a></h4>
+				<ul>
+				 
+					<li><a href = "mailto:han.xiao@cs.helsinki.fi">e-mail</a></li>
+				
+				</ul>
+			</div>
+			<div class="clearboth"></div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+	<div class="clearboth"></div>
+</footer>
+	
+</body>
+</html>
+

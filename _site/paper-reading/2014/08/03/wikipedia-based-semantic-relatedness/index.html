@@ -1,0 +1,450 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>Computing Semantic Relatedness using Wikipedia-based Explicit Semantic Analysis</title>
+    
+	
+	<meta name="author" content="Han Xiao">
+	
+	<link rel="stylesheet" href="/assets/themes/Snail/css/jquery.fancybox.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/main.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/pages/journal.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/team.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/static.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/errors.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/google-code-prettify/prettify.css">
+	<link rel="shortcut icon" href="/assets/themes/Snail/img/favicon.ico">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+	<script src="/assets/themes/Snail/google-code-prettify/prettify.js"></script>
+	<script type="text/javascript">
+	  $(function(){
+		$("pre code").addClass("prettyprint linenums");
+		prettyPrint();
+	  });
+	</script>
+	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+</head>
+<body>
+	<noscript>
+		&amp;lt;div id="no-js"&amp;gt;Please enable JavaScript in your browser to experience / fully&amp;lt;/div&amp;gt;
+	</noscript>
+    <div id="page-container">
+		<div>
+			<nav>
+	<div id="nav-l">
+	</div>
+	<div id="nav-c">
+		<ul id="nav-list" style="width: 700px;">
+			<li id="home"><a href="/">Home</a></li>
+			
+			
+			
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "About Me"><a href="/about.html">About Me</a></li>
+					
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Archive"><a href="/archive.html">Archive</a></li>
+					
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Categories"><a href="/categories.html">Categories</a></li>
+					
+				  
+				
+			 
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Tags"><a href="/tags.html">Tags</a></li>
+					
+				  
+				
+			 
+			
+			
+		</ul>
+		<form id="nav-search" method="GET" action="/search.html">
+			<div id="search-right-pix">
+				<div id="search-left-pix">
+					<div id="search-center-pix">
+						<div id="search-icon-pix"></div>
+						<input name="query" type="text" placeholder="Search">
+					</div>
+				</div>
+			</div>
+		</form>
+		
+		
+	</div>
+	<div id="nav-r">
+	</div>
+</nav>
+			<div id="page-content">
+				
+<div id="page-content">
+	<div class="cont932">
+	<div id="journal-articles-block">
+		<div class="journal-article">
+			<div class="journal-post-info">
+				<div class="journal-cat-box">
+				
+				
+				<div class="journal-cat-box">
+
+<a href="/categories.html#paper-reading-ref" title="paper-reading">
+	paper-reading
+
+</a>
+</div>
+				
+				</div>
+			</div>
+			<div class="journal-body">
+				<h1 class="journal-title">Computing Semantic Relatedness using Wikipedia-based Explicit Semantic Analysis<span class="author"></span>
+				</h1>
+				<span class="the-article">
+				<h2 id="problem-to-solve">Problem to solve</h2>
+<p>Using information from Wikipedia to compute the semantic relatedness between:</p>
+
+<ol>
+  <li>Word and word</li>
+  <li>Text and text</li>
+</ol>
+
+<h2 id="highlight-of-the-paper">Highlight of the paper</h2>
+
+<ol>
+  <li>It exceeds state-of-art performance prior to its time.</li>
+  <li>It is <em>explicit</em>, rather than latent in the way that human can  the <em>underlying</em> representation of word and text.</li>
+</ol>
+
+<h2 id="how-to-solve">How to solve</h2>
+
+<p>The method is termed as Explicit Semantic Analysis due to the use of <em>article headline</em>, or <em>concept</em> in Wikipedia to represent words and text. In short, word is represented by a weighted vector of Wikipedia concepts and text as a weighted vector summation(vector weighted by word TD-IDF value) of all the  word vectors derived from the text.</p>
+
+<p>Word-word and text-text similarity can be calculated using any distance metric. Cosine distance metric is preferred as it calculates the angle similarity, which is preferable for text of diverging length.</p>
+
+<h3 id="word-as-concept-vector">Word as concept vector</h3>
+
+<p>Concept vector for each word can be calculated using TF-IDF schema. The model is essentially the same as the document-word TD-IDF calculation. Each Wikipedia concept/article has a unique page with words in it. Thus, each concept can be represented using word vector.</p>
+
+<h3 id="text-as-concept-vector">Text as concept vector</h3>
+
+<p>Text consists of words, each of which has a concept vector. Thus, the concept vector is simply the vector summation of the vectors of its containing words.</p>
+
+<h2 id="practical-consideration">Practical consideration</h2>
+<p>When deriving the concept vector for words, the following preprocessing is applied:</p>
+
+<ol>
+  <li>word stemming, stop-word/rare-word removal is applied</li>
+  <li>overly specific concept/article(too few words, too few incoming/outgoing links) is removed from consideration.</li>
+</ol>
+
+<h2 id="why-this-approachadvantage">Why this approach/advantage</h2>
+
+<ol>
+  <li>In contrast to Latent Semantic Analysis, it is <em>explicit</em> for words/text are represented by <strong>explicit</strong> Wikipedia concepts. Thus it is easier to interpret.</li>
+  <li>According to observation, word sense disambiguation can be accomplished implicitly. Given the phrase, <em>Bank of America</em> and <em>Bank of Amazon</em>, in which <em>bank</em> are actually two totally different concepts, <em>bank</em> can be disambiguated. Thanks to the context information, a voting scheme involving all the words in the phrase manages to disambiguation the pivotal word, <em>bank</em> in the case.</li>
+  <li>It uses information encoded in Wikipedia, which is vast and rich in knowledge.</li>
+</ol>
+
+<h2 id="roaming-thinking-word-sense-disambiguation-by-vector-projection">Roaming thinking-word sense disambiguation by vector projection</h2>
+
+<p>In this paper, word sense disambiguation is achieved by <em>summing up</em> the vectors from contextual words, which resembles the scenario of voting. In this scenario, a list of words, each with its associated concepts, votes on the concepts and finally come up with a ranked list of concepts in terms of their association.</p>
+
+<p>However, since we can think of a word as a vector in the high dimensional space of concepts, can we <strong>project</strong> a word into the context so that irrelevant concepts can be denoised?</p>
+
+<p>In addition, the drawbacks of the word sense disambiguation approach in this paper is, it considers also the concepts in other words so that concepts from there might over-emphasize the intended concepts. For example, for the phrase, <em>Bank of China</em>, if we want to disambiguate <em>bank</em> using the summation approach, <em>China</em> might pop up as the first relevant concept.</p>
+
+				</span>
+				<div class="journal-date">Published 03 August 2014</div>
+				<div class="journal-tags">
+				
+				
+	 
+		<a class="tag-cont" href="/tags.html#wikipedia-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">wikipedia</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#semantic-analysis-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">semantic-analysis</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#semantic-relatedness-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">semantic-relatedness</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#word-sense-disambiguation-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">word-sense-disambiguation</div>
+			<div class="tag-r"></div>
+		</a>
+	
+
+
+
+				</div>
+			</div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+</div>
+	<div class="clearboth"></div>
+	
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'xiaohan2012'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+	<div class="clearboth"></div>
+</div>
+
+
+			</div>
+			<div class="clearboth pagebottom"></div>
+		</div>
+	</div>
+	<footer>
+	<div class="footer-940">
+		<div class="footer-general-info">
+			© 2014 Han Xiao.<br><br>
+			Content licensed under:<br>
+			<a class="cc" href="http://creativecommons.org/licenses/by-sa/3.0/">c a b</a><br>
+			<a href = "/about.html">About Me</a><br>
+		</div>
+		<div class="footer-col-cont">
+			<div class="footer-nav-col">
+				<h4><a>Categories</a></h4>
+				<ul>
+					
+					
+
+
+  
+     
+    	<li><a href="/categories.html#paper-reading-ref">
+    		paper-reading <span>5</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#experience-ref">
+    		experience <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#misc-ref">
+    		misc <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#software-ref">
+    		software <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#note-ref">
+    		note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#study-note-ref">
+    		study-note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resources-ref">
+    		resources <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#paper-ref">
+    		paper <span>12</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#tutorial-ref">
+    		tutorial <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#course-ref">
+    		course <span>8</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#thoughts-ref">
+    		thoughts <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resource-ref">
+    		resource <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#weekly-summary-ref">
+    		weekly-summary <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#modeling-ref">
+    		modeling <span>1</span>
+    	</a></li>
+    
+  
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Pages</a></h4>
+				<ul>
+					
+					
+					
+
+
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/about.html">About Me</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Feed</a></h4>
+				<ul>
+					<li><a href="/atom.xml">Atom Feed</a></li>
+					<li><a href="/rss.xml">RSS Feed</a></li>
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Links</a></h4>
+				<ul>
+				 
+					<li><a href = "http://xiaohan2012.github.io/">Han Xiao's Blog</a></li>
+				
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a href = "/about.html">About Me</a></h4>
+				<ul>
+				 
+					<li><a href = "mailto:han.xiao@cs.helsinki.fi">e-mail</a></li>
+				
+				</ul>
+			</div>
+			<div class="clearboth"></div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+	<div class="clearboth"></div>
+</footer>
+	
+</body>
+</html>
+

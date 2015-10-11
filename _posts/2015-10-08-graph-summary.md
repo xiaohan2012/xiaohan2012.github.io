@@ -65,6 +65,8 @@ Instead of using hard clustering, we can switch to soft clustering, for example,
 
 We can model it as a generative process, where we first select the event, then generate the time/topic/user conditioned on the event.
 
+![](/images/graphviz/gen-b570b3235b7f99222039aa0390a49796.gv.png)
+
 <!-- {% xdot svg %} -->
 <!--    digraph G{ -->
 <!--       subgraph c1 { -->

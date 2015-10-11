@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	
+	<title>GloVe: Global Vectors forWord Representation</title>
+    
+	
+	<meta name="author" content="Han Xiao">
+	
+	<link rel="stylesheet" href="/assets/themes/Snail/css/jquery.fancybox.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/main.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/pages/journal.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/team.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/static.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/css/errors.css">
+	<link rel="stylesheet" href="/assets/themes/Snail/google-code-prettify/prettify.css">
+	<link rel="shortcut icon" href="/assets/themes/Snail/img/favicon.ico">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+	<script src="/assets/themes/Snail/google-code-prettify/prettify.js"></script>
+	<script type="text/javascript">
+	  $(function(){
+		$("pre code").addClass("prettyprint linenums");
+		prettyPrint();
+	  });
+	</script>
+	<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!-- atom & rss feed -->
+    <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
+    <link href="/rss.xml" type="application/rss+xml" rel="alternate" title="Sitewide RSS Feed">
+</head>
+<body>
+	<noscript>
+		&amp;lt;div id="no-js"&amp;gt;Please enable JavaScript in your browser to experience / fully&amp;lt;/div&amp;gt;
+	</noscript>
+    <div id="page-container">
+		<div>
+			<nav>
+	<div id="nav-l">
+	</div>
+	<div id="nav-c">
+		<ul id="nav-list" style="width: 700px;">
+			<li id="home"><a href="/">Home</a></li>
+			
+			
+			
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "About Me"><a href="/about.html">About Me</a></li>
+					
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Archive"><a href="/archive.html">Archive</a></li>
+					
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Categories"><a href="/categories.html">Categories</a></li>
+					
+				  
+				
+			 
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+				
+			 
+				
+				  
+					
+					<li id = "Tags"><a href="/tags.html">Tags</a></li>
+					
+				  
+				
+			 
+			
+			
+		</ul>
+		<form id="nav-search" method="GET" action="/search.html">
+			<div id="search-right-pix">
+				<div id="search-left-pix">
+					<div id="search-center-pix">
+						<div id="search-icon-pix"></div>
+						<input name="query" type="text" placeholder="Search">
+					</div>
+				</div>
+			</div>
+		</form>
+		
+		
+	</div>
+	<div id="nav-r">
+	</div>
+</nav>
+			<div id="page-content">
+				
+<div id="page-content">
+	<div class="cont932">
+	<div id="journal-articles-block">
+		<div class="journal-article">
+			<div class="journal-post-info">
+				<div class="journal-cat-box">
+				
+				
+				<div class="journal-cat-box">
+
+<a href="/categories.html#paper-ref" title="paper">
+	paper
+
+</a>
+</div>
+				
+				</div>
+			</div>
+			<div class="journal-body">
+				<h1 class="journal-title">GloVe: Global Vectors forWord Representation<span class="author"></span>
+				</h1>
+				<span class="the-article">
+				<h1 id="glove-global-vectors-forword-representation">GloVe: Global Vectors forWord Representation</h1>
+
+<p><a href="http://www-nlp.stanford.edu/pubs/glove.pdf">paper link</a></p>
+
+<p>It proposes a model that combines global co-occurence information with local context window methods.</p>
+
+<h2 id="problem">Problem</h2>
+
+<p>How to compute meaningful word representations from corpus in an unsupervised way?</p>
+
+<h2 id="approach">Approach</h2>
+
+<p>Maximize the objective function:</p>
+
+<script type="math/tex; mode=display">J = \sum_{i,j=1}^V f(X_{ij}) (w_i^T \widetilde{w}_j + b_i + \widetilde{b}_j - \log{X_{ij}})</script>
+
+<p>Where:</p>
+
+<ul>
+  <li>\(w_i,  \widetilde{w}_j\) are word representations</li>
+  <li>\(X_{ij}\) is the frequency of jth word occuring within the context windown of the ith word</li>
+  <li>\( b_i, \widetilde{b}_j\) are bias terms</li>
+  <li>\(f\) are weighting function to prevent the overwhelming effect of large \(X_{ij}\)</li>
+</ul>
+
+<h2 id="connection-with-skip-gram-in-word2vec">Connection with <em>Skip Gram</em> in <em>word2vec</em></h2>
+
+<p>In skip gram,</p>
+
+<script type="math/tex; mode=display">J = \sum_{i \in corpus, j \in context(i)} log Q(i, j)</script>
+
+<p>where:</p>
+
+<script type="math/tex; mode=display">Q(i, j) = \frac{\exp(w_i^T \widetilde{w}_j)}{\sum_{k=1}^V \exp{w_i^T \widetilde{w}_k}}</script>
+
+<p>which is the probability that word j appears in the context of word i.</p>
+
+<p>The above is the same as:(<strong>key transformation</strong>)</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{eqnarray}
+ J & = \sum_{i, j=1}^V X_{i,j} log Q(i, j) \\
+   & = \sum_{i} X_i \sum_j  P_{i,j} log Q(i, j) \\
+   & = \sum_{i} X_i H(P_i, Q_i)
+\end{eqnarray} %]]></script>
+
+<p><strong>Q</strong>: does the training algorithm differ for the above two objective functions?</p>
+
+<p>where \(H\) is cross entropy.</p>
+
+<p>And the following modifications are made with reasons given.</p>
+
+<p>The \( \log \) term in \( H\) approaches to \(-\infty\) if \(Q_i \rightarrow 0 \), which is bad(underflow) and often happen.</p>
+
+<script type="math/tex; mode=display">J = \sum_{i,j} X_i (\hat{P}_{ij} - \hat{Q}_{ij})^2</script>
+
+<p>where \(\hat{P}, \hat{Q}\) are the unnormalized quantity, as normalization for \(Q\) is expensive.</p>
+
+<p>However, the \(\exp\) in \( \hat{Q} \) makes it bad for training(large values), we can apply \(\log\) to it.</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{eqnarray}
+J & = \sum_{i,j} X_{ij} (\log\hat{P}_{ij} - \log\hat{Q}_{ij})^2 \\
+  & = \sum_{i,j} X_{ij} (w_i^T \widetilde{w}_j - \log X_{ij})^2 
+\end{eqnarray} %]]></script>
+
+<p>After applying reweighting on \(X_{i,j}\), it’s almost equivalent to the <em>GloVe</em> objective function.</p>
+
+<p>So the \(J\) of <em>Skip Gram</em> and <em>GloVe</em> differs in:</p>
+
+<ul>
+  <li><em>GloVe</em> <strong>direcly</strong> uses global occurence information \(X_{ij}\) in two parts while <em>Skip Gram</em> <strong>implicitly</strong> uses it only in one part</li>
+  <li><em>GloVe</em> reweights \(X_{ij}\) using \(f\)</li>
+</ul>
+
+<h2 id="connection-to-matrix-factorization">Connection to Matrix Factorization</h2>
+
+<script type="math/tex; mode=display">\sum_{i,j} X_{ij} (w_i^T \widetilde{w}_j - \log X_{ij})^2</script>
+
+<p>is a modified form of</p>
+
+<script type="math/tex; mode=display">(w_i^T \widetilde{w}_j - X_{ij})^2</script>
+
+<h2 id="training">Training</h2>
+
+<p>Stochastic Gradient Descent by sampling <strong>non-negative</strong> elements from \(X\).</p>
+
+<h2 id="misc">Misc</h2>
+
+<ul>
+  <li>The final word embedding is \( w_i + \widetilde{w}_i\)</li>
+  <li>When calculating \(X_{ij}\), words that are \(d\) words apart is discounted by \(1/d\) to capture the fact that distant words provide less information</li>
+</ul>
+
+<h2 id="what-i-learned">What I learned</h2>
+
+<ul>
+  <li>One way to infer meaning for word: use the global word-word co-occurence to infer. The intuition: word’s meaning can be defined by it’s co-occuring words.</li>
+  <li>Connection prediction-based model such as <em>Skip Gram</em> with co-occurence matrix factorization model</li>
+  <li>Evaluation for word embedding: word analogy test, word similarity, downstream NLP tasks(using the embedding as features for tasks such as NER)</li>
+  <li>Why <em>Skip Gram</em> and <em>GloVe</em> perform matrix factorization <em>implicitly</em> and <em>explicitly</em> due to their different ways to formulating the objective function</li>
+  <li>Connection between language model and word embeddings: \( P(w_1 \cdots w_n) = \prod_i P(w_i | context)\) where \( P(w_i | context) \) is calculated using word embeddings.</li>
+  <li>Application of word embedding: as feature for downstream NLP tasks(NER, parsing, etc), representing document (<a href="http://www.aclweb.org/anthology/W13-3212">Aggregating ContinuousWord Embeddings for Information Retrieval</a>)</li>
+  <li>Recap on <em>word2vec</em> and Bengio’s 2003 neural language model paper: the goal is to maximize the log-likelihood of the corpus.</li>
+</ul>
+
+<h2 id="questions">Questions</h2>
+
+<ul>
+  <li>Why word analogy test is used? Does it indicate a better performance on other NLP tasks such as parsing and question-answering</li>
+  <li>Similarly, why do we bother learn word embedding that captures <em>linear</em> (\( w_i - w_j\)) relationships with other word embeddings?</li>
+  <li>When is <em>word2vec</em> useful? Especially, when is the linear property useful?</li>
+</ul>
+
+				</span>
+				<div class="journal-date">Published 13 September 2015</div>
+				<div class="journal-tags">
+				
+				
+	 
+		<a class="tag-cont" href="/tags.html#word-embedding-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">word-embedding</div>
+			<div class="tag-r"></div>
+		</a>
+	 
+		<a class="tag-cont" href="/tags.html#glove-ref">
+			<div class="tag-l"></div>
+			<div class="tag-c">glove</div>
+			<div class="tag-r"></div>
+		</a>
+	
+
+
+
+				</div>
+			</div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+</div>
+	<div class="clearboth"></div>
+	
+
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_developer = 1;
+    var disqus_shortname = 'xiaohan2012'; // required: replace example with your forum shortname
+    
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+	<div class="clearboth"></div>
+</div>
+
+
+			</div>
+			<div class="clearboth pagebottom"></div>
+		</div>
+	</div>
+	<footer>
+	<div class="footer-940">
+		<div class="footer-general-info">
+			© 2014 Han Xiao.<br><br>
+			Content licensed under:<br>
+			<a class="cc" href="http://creativecommons.org/licenses/by-sa/3.0/">c a b</a><br>
+			<a href = "/about.html">About Me</a><br>
+		</div>
+		<div class="footer-col-cont">
+			<div class="footer-nav-col">
+				<h4><a>Categories</a></h4>
+				<ul>
+					
+					
+
+
+  
+     
+    	<li><a href="/categories.html#paper-reading-ref">
+    		paper-reading <span>5</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#experience-ref">
+    		experience <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#misc-ref">
+    		misc <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#software-ref">
+    		software <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#note-ref">
+    		note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#study-note-ref">
+    		study-note <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resources-ref">
+    		resources <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#paper-ref">
+    		paper <span>12</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#tutorial-ref">
+    		tutorial <span>2</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#course-ref">
+    		course <span>8</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#thoughts-ref">
+    		thoughts <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#resource-ref">
+    		resource <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#weekly-summary-ref">
+    		weekly-summary <span>1</span>
+    	</a></li>
+     
+    	<li><a href="/categories.html#modeling-ref">
+    		modeling <span>1</span>
+    	</a></li>
+    
+  
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Pages</a></h4>
+				<ul>
+					
+					
+					
+
+
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/about.html">About Me</a></li>
+      	
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/archive.html">Archive</a></li>
+      	
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/categories.html">Categories</a></li>
+      	
+      
+    
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+      	
+      	<li><a href="/tags.html">Tags</a></li>
+      	
+      
+    
+  
+
+
+
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Feed</a></h4>
+				<ul>
+					<li><a href="/atom.xml">Atom Feed</a></li>
+					<li><a href="/rss.xml">RSS Feed</a></li>
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a>Links</a></h4>
+				<ul>
+				 
+					<li><a href = "http://xiaohan2012.github.io/">Han Xiao's Blog</a></li>
+				
+				</ul>
+			</div>
+			<div class="footer-nav-col">
+				<h4><a href = "/about.html">About Me</a></h4>
+				<ul>
+				 
+					<li><a href = "mailto:han.xiao@cs.helsinki.fi">e-mail</a></li>
+				
+				</ul>
+			</div>
+			<div class="clearboth"></div>
+		</div>
+		<div class="clearboth"></div>
+	</div>
+	<div class="clearboth"></div>
+</footer>
+	
+</body>
+</html>
+
