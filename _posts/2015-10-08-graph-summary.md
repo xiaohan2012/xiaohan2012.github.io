@@ -65,17 +65,17 @@ Instead of using hard clustering, we can switch to soft clustering, for example,
 
 We can model it as a generative process, where we first select the event, then generate the time/topic/user conditioned on the event.
 
-{% xdot svg %}
-   digraph G{
-      subgraph c1 {
-	     E -> T [style=filled]
-		 E -> L [style=filled]
-		 E -> U [style=filled]
-		 label = "M"
-      }
-   }
+<!-- {% xdot svg %} -->
+<!--    digraph G{ -->
+<!--       subgraph c1 { -->
+<!-- 	     E -> T [style=filled] -->
+<!-- 		 E -> L [style=filled] -->
+<!-- 		 E -> U [style=filled] -->
+<!-- 		 label = "M" -->
+<!--       } -->
+<!--    } -->
 
-{% endxdot %}
+<!-- {% endxdot %} -->
 
 where
 
@@ -89,9 +89,7 @@ Potential benefit of mixture model:
 - For the user/label selection critia, we can set a threshold as probability is assigned to the generating process from event to time/topic/user.
 - Once being Bayesian, we can add our prior as well.
 
-
 ## Dense subgraph detection approach
-
 
 Find a list of \\(K)\\ subgrpahs that:
 
@@ -101,3 +99,6 @@ Find a list of \\(K)\\ subgrpahs that:
 # Dynamic ego network
 
 # Static network
+
+- Can we leverage the label information(possibly on vertice and edge) to perform better community detection?
+- 
