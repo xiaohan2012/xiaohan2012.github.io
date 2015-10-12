@@ -20,12 +20,37 @@ For a subset of edges \\(D \subseteq E\\), we define the *time span*  \\( T(D) =
 
 For a label \\(l\\) and an edge set \\(D\\), we define the *label coverage ratio* \\(r(l, D) = \frac{N(l, D)}{\vert D \vert}\\) where \\(N(l, D) = \vert \\{ (u, v, L, t) \in D \vert l \in L\\} \vert \\).
 
-
 # Problem Definition
 
-Given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span and minimum label coverage ratio threshold, \\(B\\), find the set of edges \\(D \subseteq E\\) and a label \\(l \in \mathcal{L}\\) that maximizes some quality function \\(q(D, l, G)\\) such that \\(T(D) \le A\\) and \\(r(l, D) \ge B\\).
+Given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span and minimum label coverage ratio threshold, \\(B\\), find the set of edges \\(D \subseteq E\\) and a label \\(l \in \mathcal{L}\\) that maximizes some quality function \\(q(D, G)\\) such that \\(T(D) \le A\\) and \\(r(l, D) \ge B\\).
 
-For example, the quality function computes the density of the induced graph, \\(q(D, l, G) = \frac{2 \vert D \vert}{\vert V(D, G) \vert}\\).
+For example, the quality function corresponds to the density of the induced graph, \\(q(D, G) = \frac{2 \vert D \vert}{\vert V(D, G) \vert}\\).
+
+# Example & question
+
+![](/images/graphviz/email-network-ambiguous-partition-example.dot.png)
+
+Consider the example, A, B and C talked about {"hangout", "nuuksio"} at some point. We have the edges, \\(E_1\\):
+
+- \\( (A, B, \\{"hangout", "nuuksio"\\}, 1) \\)
+- \\( (A, C, \\{"hangout"\\}, 2) \\)
+- \\( (B, C, \\{"hangout"\\}, 1) \\)
+
+At the same time, C told D and E about Y and they chatted. The edges are \\(E_2\\):
+
+- \\( (C, D, \\{"hangout"\\}, 2) \\)
+- \\( (C, E, \\{"hangout"\\}, 2) \\)
+- \\( (D, E, \\{"hangout", "picnic"\\}, 2) \\)
+
+And later, A, B, C, D and E hangout to Nuukio Nation Park.
+
+Intuitively, we might consider \\((E_1 \cap E_2, \\{"hangout"\\}) \\) as one event. However, we cannot get this under ths above problem definition. Given \\(A=2\\) and \\(B=0.8\\), we have\\((E_1, X)\\) and \\((E_e, Y)\\) achieves better score/density while satisfying the constraint. 
+
+The implication densely connected induced subgraph is not necessarily desirable, especially when it's small. Maybe we can penalize subgraph of small vertex number.
+
+Then how to make the problem definition favor \\((E_1 \cap E_2, \\{X, Y\\}) \\) as one event?
+
+
 
 
 
