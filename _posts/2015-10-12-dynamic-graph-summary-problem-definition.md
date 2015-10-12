@@ -16,9 +16,9 @@ with $$ i = 1 \ldots m $$ such that \\(u_i, v_i \in V \\), \\(L_i \subseteq \mat
 
 For \\(G = (V, E) \\)  and a subset of edges \\(D \subseteq E\\), the *induced graph* of \\(D\\) is defined as \\(G(D, G) = (V(D, G), D)\\) such that \\(V(D, G)\\) consists of all the nodes in that occurs in \\(D\\).
 
-For a subset of edges \\(D \subseteq E\\), we define the *time span*  \\( T(D) = max_t (\{t \vert (u, v, l, t) \in D\})  - min_i (\{t \vert (u, v, l, t) \in D\})\\)
+For a subset of edges \\(D \subseteq E\\), we define the *time span*  \\( T(D) = max_t ( \\{t \vert (u, v, l, t) \in D\\} )  - min_i ( \\{t \vert (u, v, l, t) \in D\\} )\\)
 
-For a label \\(l\\) and an edge set \\(D\\), we define the *label coverage ratio* \\(r(l, D) = \frac{N(l, D)}{\vert D \vert}\\) where \\(N(l, D) = \vert \{ (u, v, L, t) \in D \vert l \in L\} \vert \\).
+For a label \\(l\\) and an edge set \\(D\\), we define the *label coverage ratio* \\(r(l, D) = \frac{N(l, D)}{\vert D \vert}\\) where \\(N(l, D) = \vert \\{ (u, v, L, t) \in D \vert l \in L\\} \vert \\).
 
 
 
