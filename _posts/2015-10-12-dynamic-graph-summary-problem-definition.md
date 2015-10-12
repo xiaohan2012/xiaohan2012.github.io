@@ -20,6 +20,7 @@ For a subset of edges \\(D \subseteq E\\), we define the *time span*  \\( T(D) =
 
 For a label \\(l\\) and an edge set \\(D\\), we define the *label coverage ratio* \\(r(l, D) = \frac{N(l, D)}{\vert D \vert}\\) where \\(N(l, D) = \vert \\{ (u, v, L, t) \in D \vert l \in L\\} \vert \\).
 
+$$ \{ hahaha\}$$
 
 
 # Problem Definition
