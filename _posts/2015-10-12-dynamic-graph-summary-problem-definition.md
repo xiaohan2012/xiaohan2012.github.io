@@ -14,9 +14,11 @@ $$ E = {(u_i, v_i, L_i, t_i)} $$
 
 with $$ i = 1 \ldots m $$ such that \\(u_i, v_i \in V \\), \\(L_i \subseteq \mathcal{L} \\) and \\(t_i \in \mathbb{R} \\), where \\(\mathcal{L}\\) is the global label set.
 
-For \\(G = (V, E) \\)  and a subset of edges \\(D \subseteq E\\), the *induced graph* of \\(D\\) is defined as \\(G(D, G) = (V(D, G), D)\\) such that \\(V(D, G)\\) consists of all the nodes in that occurs in \\(D\\).
+For \\(G = (V, E) \\)  and a subset of edges \\(D \subseteq E\\), the *induced graph* of \\(D\\) is defined as \\(G(D, G) = (V(D, G), D)\\) such that \\(V(D, G)\\) consists of all the nodes that occurs in \\(D\\).
 
-For a subset of edges \\(D \subseteq E\\), we define the *time span*  \\( T(D) = max_t ( \\{t \vert (u, v, L, t) \in D\\} )  - min_i ( \\{t \vert (u, v, L, t) \in D\\} )\\)
+For a subset of edges \\(D \subseteq E\\), we define the *time span*  as
+
+$$ T(D) = max_t ( \\{t \vert (u, v, L, t) \in D\\} )  - min_i ( \\{t \vert (u, v, L, t) \in D\\} ) $$
 
 For a label \\(l\\) and an edge set \\(D\\), we define the *label coverage ratio* \\(r(l, D) = \frac{N(l, D)}{\vert D \vert}\\) where \\(N(l, D) = \vert \\{ (u, v, L, t) \in D \vert l \in L\\} \vert \\).
 
@@ -25,6 +27,8 @@ For a label \\(l\\) and an edge set \\(D\\), we define the *label coverage ratio
 Given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span and minimum label coverage ratio threshold, \\(B\\), find the set of edges \\(D \subseteq E\\) and a label \\(l \in \mathcal{L}\\) that maximizes some quality function \\(q(D, G)\\) such that \\(T(D) \le A\\) and \\(r(l, D) \ge B\\).
 
 For example, the quality function corresponds to the density of the induced graph, \\(q(D, G) = \frac{2 \vert D \vert}{\vert V(D, G) \vert}\\).
+
+Then, finding the top-k event reduces to sequentially finding K best edge set for the graph where edges, which are in previously-found event, are removed from the graph.
 
 # Example & question
 
