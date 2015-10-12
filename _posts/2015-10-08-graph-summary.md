@@ -32,6 +32,13 @@ where:
 2. \\(\mathbf{L}_e^{(i)}\\): the labels that best describe the event
 3. \\(t_1^{(i)}, t_2^{(i)}\\): the time interval in which the event happened
 
+Some desired properties of the events:
+
+- **dense**: emails that happened within some organization/department/group tend to be in the same event
+- **time continuity and short period**: emails that happened within relatively short and continuous time span tend to be in the same event
+- **topical consistency**: emails that describe similar topic tend to be in the same event
+- **coverage**: they should cover as much as the whole communication network. Note that some email records, users and labels are not included in any of the events as they are relatively trivial
+
 Some design issues:
 
 - Besides the time interval, should be also include the **communication strength** at different time points?
@@ -39,12 +46,10 @@ Some design issues:
 - Same question for the users. Again, it's desirable to select only the important users involved in the event. And the same question. How to select the important ones?
 
 
-Some desired properties of the events:
+You can ignore the following content. They are there for stuff-keeping reason.
 
-- **coverage**: they should cover as much as the whole communication network. Note that some email records, users and labels are not included in any of the events as they are relatively trivial
-- **dense**: emails that happened within some organization/department/group tend to be in the same event
-- **time continuity**: emails that happened within relatively short time span tend to be in the same event
-- **topical consistency**: emails that describe similar topic tend to be in the same event
+-----------------
+
 
 ## Clustering approach
 
