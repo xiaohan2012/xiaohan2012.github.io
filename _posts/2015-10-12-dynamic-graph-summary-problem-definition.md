@@ -36,8 +36,8 @@ Then, finding the top-k event reduces to sequentially finding K best edge set fo
 
 Consider the example, A, B and C talked about {"hangout", "nuuksio"} at some point. We have the edges, \\(E_1\\):
 
-- \\( (A, B, \\{"hangout", "nuuksio"\\}, 1) \\)
-- \\( (A, C, \\{"hangout"\\}, 2) \\)
+- \\( (A, B, \\{"hangout", "nuuksio"\\}, 2) \\)
+- \\( (A, C, \\{"hangout"\\}, 1) \\)
 - \\( (B, C, \\{"hangout"\\}, 1) \\)
 
 At the same time, C told D and E about Y and they chatted. The edges are \\(E_2\\):
@@ -46,13 +46,13 @@ At the same time, C told D and E about Y and they chatted. The edges are \\(E_2\
 - \\( (C, E, \\{"hangout"\\}, 2) \\)
 - \\( (D, E, \\{"hangout", "picnic"\\}, 2) \\)
 
-And later, A, B, C, D and E hangout to Nuukio Nation Park.
+And later, A, B, C, D and E hangout to Nuuksio National Park.
 
 Intuitively, we might consider \\((E_1 \cap E_2, \\{"hangout"\\}) \\) as one event. However, we cannot get this under the above problem definition. Given \\(A=2\\) and \\(B=0.8\\), we have\\((E_1, X)\\) and \\((E_e, Y)\\) achieves better score/density while satisfying the constraint. 
 
 How to make the problem definition favor \\((E_1 \cap E_2, \\{X, Y\\}) \\) as one event?
 
-One possible approach: the above implies that densely connected induced subgraph is not necessarily desirable, especially when it's small. Maybe we should penalize event with small graph size.
+The above implies that densely connected induced subgraph is not necessarily desirable, especially when it's small. One possible approach is to encourage event with moderately larger graph size.
 
 
 
