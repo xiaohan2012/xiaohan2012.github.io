@@ -52,12 +52,9 @@ Intuitively, we might consider \\((E_1 \cap E_2, \\{"hangout"\\}) \\) as one eve
 
 How to make the problem definition favor \\((E_1 \cap E_2, \\{X, Y\\}) \\) as one event?
 
-The above implies that densely connected induced subgraph is not necessarily desirable, especially when it's small. One possible approach is to encourage event with moderately larger graph size.
+The above implies that densely connected induced subgraph is not necessarily desirable, especially when it's small. One possible approach is to encourage event with moderately larger graph size. For example, the quality function becomes:
+
+$$ q(D, G) = \frac{2 \vert D \vert \log \vert V(D, G) \vert}{\vert V(D, G) \vert} $$
 
 
-
-
-
-
-
-
+Is the label coverage ratio reasonable? In the above example, it's 1.0. What if it's 0.9, can it be the solution?
