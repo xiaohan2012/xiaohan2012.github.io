@@ -44,11 +44,13 @@ At the same time, C told D and E about Y and they chatted. The edges are \\(E_2\
 
 And later, A, B, C, D and E hangout to Nuukio Nation Park.
 
-Intuitively, we might consider \\((E_1 \cap E_2, \\{"hangout"\\}) \\) as one event. However, we cannot get this under ths above problem definition. Given \\(A=2\\) and \\(B=0.8\\), we have\\((E_1, X)\\) and \\((E_e, Y)\\) achieves better score/density while satisfying the constraint. 
+Intuitively, we might consider \\((E_1 \cap E_2, \\{"hangout"\\}) \\) as one event. However, we cannot get this under the above problem definition. Given \\(A=2\\) and \\(B=0.8\\), we have\\((E_1, X)\\) and \\((E_e, Y)\\) achieves better score/density while satisfying the constraint. 
 
-The implication densely connected induced subgraph is not necessarily desirable, especially when it's small. Maybe we can penalize subgraph of small vertex number.
+How to make the problem definition favor \\((E_1 \cap E_2, \\{X, Y\\}) \\) as one event?
 
-Then how to make the problem definition favor \\((E_1 \cap E_2, \\{X, Y\\}) \\) as one event?
+One possible approach: the above implies that densely connected induced subgraph is not necessarily desirable, especially when it's small. Maybe we should penalize event with small graph size.
+
+
 
 
 
