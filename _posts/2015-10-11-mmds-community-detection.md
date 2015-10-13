@@ -57,3 +57,21 @@ Usercase: community finding in Web graph(Hubs link to authoritie)
 Can be converted to frequent itemset finding.
 
 
+## Mining stream data
+
+Compared to RDBS, streaming data is characterized by:
+
+- rapid data flow whose speed controled by external factor(Google search query)
+- system cannot store the entire stream
+
+Possible application:
+
+- mining search query to get the hot trend(Google Trend)
+- mining user link click to get hot news
+- mining packet flow on router to optimize routing strategy
+
+Human brain is essentially processing many kinds of streaming data(sound, light, smell, etc)
+
+Why sliding window?
+
+The Aalto summer internship question of 2014 summer.
