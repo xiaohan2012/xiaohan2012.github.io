@@ -81,8 +81,16 @@ An *event* \\(e\\) is defined to be a list of vertices, a label and a time inter
 
 Define the *event size* \\( \vert e=(W, l, [t_1, t_2]) \vert = \vert \\{  (u, v, L, t) \in E \vert e \text{ covers } r \\} \vert \\)
 
-Given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span and a budget \\(B\\) on the number of vertices for each event, find \\(K\\) events, \\( e_i = (W_i, l_i, [t_{i,1}, t_{i,2}]), i=1 \ldots K \\) that maximizes
+Given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span and a budget \\(B\\) on the number of vertices for each event, find \\(K\\) events
+
+$$ e_i = (W_i, l_i, [t_{i,1}, t_{i,2}]), i=1 \ldots K $$
+
+that maximizes
 
 $$ \sum\limits_{i=1 \ldots K} \vert e_i \vert $$
 
-under the constraint that  \\( t_{i{,}2} - t_{i{,}1} \le A\\) and \\(\vert W_i \vert \le B\\).
+under the constraint
+
+$$ t_{i,2} - t_{i,1} \le A \text{ and } \vert W_i \vert \le B $$
+
+
