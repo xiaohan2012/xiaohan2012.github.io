@@ -112,9 +112,35 @@ We can add some topic coherence constraint:
 
 $$ H(X_e)  \le C $$, where \\(C\\) is some maximum threshold.
 
-# Problem with single label requirement
+# Alternatives
+
+## Problem with one-label requirement
+
+There are several potential issues with the requirment that one event can only have one label
+
+1. Ambiguity of natural language
+   In most cases, the label is some natural language phrase, which can be quite ambiguous. "paper" can mean totally different thing in different context(toilet paper? writing paper? academic paper?). Mneawhile, different phrases can mean the same thing(for example, "graph" and "network" in the data mining community)
+2. Limited expressiveness of one-label
+   The expressing power of one label can be limited. For example, we might have several events that are about "paper". And they all describe distinct topics. In that case, we are unable to capture the difference.
+3. Sensitivity to keyword extraction result
+   In order to have good result, we first need to have good keywords extracted. Extracting good keywords is not a easy task which depends both on the tool itself as well as the domain of the documents.
+4. Difficulty for short length text
+   For some document, which is quite short like "OK", "Thanks". Extracting keyword doesn't make sense.
+
+## Topic model
+
+One way to address this issue is to use topic modeling. Instead of using one label to describe the event, we can use topic distribution/proportion. For each topic, a multinomial distribution on the tokens is associated with it. Compared to only label, this is more interpretable and less ambiguous.
+
+Moreover, if we prefer tokens instead of distribution, we can rank the tokens by their probability given the event documents and select the top-k.
+
+Besides better interpretability, topic modeling is a more well defined problem with more mature techniques, such as Latent Dirichlet Allocation(LDA). Speaking of keyword extraction, what defines a good keyword? People with different background have different opinions. Also, for topic modeling, we don't have to consider the domain adaptation problem because for the simplest form, we only consider individual words.
+
+For short length text, we just give a almost uniform topic distribution.
 
 
+## Problem Definition 2
+
+Let's redefine the problem. Define an event to be \\(e = (W, [t_1, t_2])\\)
 
 ----------------------
 
@@ -126,8 +152,6 @@ Is it possible that edges that are in some logical event do not share label? For
 Under the above proposal, the keyword quality matters(ideally, we would like both edge set to share some label) or as an alternative, we allow multiple labels for each event. 
 
 Problems with keyword: hard to extract keywords for some social network interactions. For example, Facebook chat. Because text in some interactions are too short(such as "Thanks", "ok") for the keyword extractor to extract anything meaningful. To address this issue, one might merge the tiny interactions into a bigger and more meaniningful one(merging information within one day as a bigger one?)
-
-
 
 
 What are the other dataset that we can use?
