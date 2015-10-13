@@ -82,7 +82,7 @@ $$ q(e=(W, l, [t_1, t_2])) = \frac{2 \vert e \vert}{\vert W \vert} $$
 
 Maximizing density might be a bad choice under the following scenario:
 
-During time \\(t_1, t_2), *A* discussed wtih *B* about "hangout", *B* then passed the message to *C* and discussed with *C* about "hangout" as well. Later, they hang out.
+During time \\( (t_1, t_2) \\), *A* discussed wtih *B* about "hangout", *B* then passed the message to *C* and discussed with *C* about "hangout" as well. Later, they hang out.
 
 Intuitively, we should have an event, \\(({A, B, C}, "hangout", [t_1, t_2]) \\)
 
@@ -91,6 +91,12 @@ However, this result does not have the highest density. Both \\(({A, B}, "hangou
 To address this issue, we would like to have the quality function also take into account the subgraph size. Something like:
 
 $$ q(e=(W, l, [t_1, t_2])) = \frac{2 \vert e \vert}{\vert W \vert} \log \vert W \vert $$
+
+Or weighted sum of the two quantities:
+
+$$ q(e=(W, l, [t_1, t_2])) = \alpha \frac{2 \vert e \vert}{\vert W \vert} + \beta \log \vert W \vert $$
+
+where \\( \alpha, \beta \\) are hyperparameters.
 
 ## Label purity/coherence
 
@@ -105,6 +111,9 @@ The more topically coherent, the lower \\(H(X_e)\\).
 We can add some topic coherence constraint:
 
 $$ H(X_e)  \le C $$, where \\(C\\) is some maximum threshold.
+
+# Problem with single label requirement
+
 
 
 ----------------------
