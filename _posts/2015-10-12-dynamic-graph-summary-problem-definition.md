@@ -77,9 +77,12 @@ What are the other dataset that we can use?
 
 # Problem Definition 2
 
-An *event* \\(e\\) is defined to be a list of vertices, a label and a time interval, \\( (W, l, [s, t]) \\). An event \\(e=(W, l, [t_1, t_2])\\) *covers* an edge \\(r=(u, v, L, t) \in E \\) if \\(l \in L \\)and  \\(t_1 \ge t \le t_2\\)
+An *event* \\(e\\) is defined to be a list of vertices, a label and a time interval, \\( (W, l, [s, t]) \\). An event \\(e=(W, l, [t_1, t_2])\\) *covers* an edge \\(r=(u, v, L, t) \in E \\) if \\(l \in L \\),  \\(u, v \in W\\) and \\(t_1 \ge t \le t_2 \\).
 
-Given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span and a budget \\(B\\) on the number of vertices, find K events *covers* as many \\(r \in E \\) as possible under the constraint that  \\(t_2 - t_1 \le A\\) and \\(\vert V \vert \le B\\).
+Define the *event size* \\( \vert e=(W, l, [t_1, t_2]) \vert = \vert \\{  (u, v, L, t) \in E \vert e \text{covers} r \\} \vert \\)
 
+Given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span and a budget \\(B\\) on the number of vertices for each event, find K events, \\(e_i=(W_i, l_i, [t_{i,1}, t_{i, 2}]), i=1 \ldots K\\) that maximizes
 
-Output the top-k events, \\( e_i = (V, l, [s, t]) \\), \\(i=1 \ldots K\\) such that they *cover* as many \\(r\\) as possible meanwhile they satisfy the constraint:
+$$ \sum\limits_{i=1 \ldots K} \vert e_i \vert $$
+
+under the constraint that  \\(t_{i, 2} - t_{i, 1} \le A\\) and \\(\vert V_i \vert \le B\\).
