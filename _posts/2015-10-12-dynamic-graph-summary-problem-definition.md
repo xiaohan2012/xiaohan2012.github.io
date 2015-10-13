@@ -85,4 +85,4 @@ Given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total t
 
 $$ \sum\limits_{i=1 \ldots K} \vert e_i \vert $$
 
-under the constraint that  \\(t_{i,2} - t_{i,1} \le A\\) and \\(\vert V_i \vert \le B\\).
+under the constraint that  \\(t_{i,2} - t_{i,1} \le A\\) and \\(\vert W_i \vert \le B\\).
