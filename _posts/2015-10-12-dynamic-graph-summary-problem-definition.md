@@ -6,7 +6,8 @@ categories: crafting
 tags: graph-summary
 ---
 
-# Notation
+
+# Problem Definition 1
 
 A *labeled dynamic graph* is defined as \\(G = (V, E) \\), where \\(V\\) is a set of \\(n\\) nodes and \\(E\\) is a set of \\(m\\) time-stamped and multiply-labeled interactions between pairs of nodes.
 
@@ -20,11 +21,10 @@ For a subset of edges \\(D \subseteq E\\), we define the *time span*  as
 
 $$ T(D) = max_t ( \{t \vert (u, v, L, t) \in D\} )  - min_i ( \{t \vert (u, v, L, t) \in D\} ) $$
 
-For a label \\(l\\) and an edge set \\(D\\), we define the *label coverage ratio* \\(r(l, D) = \frac{N(l, D)}{\vert D \vert}\\) where \\(N(l, D) = \vert \\{ (u, v, L, t) \in D \vert l \in L\\} \vert \\).
+<!-- For a label \\(l\\) and an edge set \\(D\\), we define the *label coverage ratio* \\(r(l, D) = \frac{N(l, D)}{\vert D \vert}\\) where \\(N(l, D) = \vert \\{ (u, v, L, t) \in D \vert l \in L\\} \vert \\). -->
 
-# Problem Definition
 
-Given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span and minimum label coverage ratio threshold, \\(B\\), find the set of edges \\(D \subseteq E\\) and a label \\(l \in \mathcal{L}\\) that maximizes some quality function \\(q(D, G)\\) such that \\(T(D) \le A\\) and \\(r(l, D) \ge B\\).
+**Problem 1**: given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span and minimum label coverage ratio threshold, \\(B\\), find the set of edges \\(D \subseteq E\\) and a label \\(l \in \mathcal{L}\\) that maximizes some quality function \\(q(D, G)\\) such that \\(T(D) \le A\\) and \\(r(l, D) \ge B\\).
 
 For example, the quality function corresponds to the density of the induced graph, \\(q(D, G) = \frac{2 \vert D \vert}{\vert V(D, G) \vert}\\).
 
@@ -77,11 +77,13 @@ What are the other dataset that we can use?
 
 # Problem Definition 2
 
-An *event* \\(e\\) is defined to be a list of vertices, a label and a time interval, \\( (W, l, [s, t]) \\). An event \\(e=(W, l, [t_1, t_2])\\) *covers* an edge \\(r=(u, v, L, t) \in E \\) if \\(l \in L \\),  \\(u, v \in W\\) and \\(t_1 \le t \le t_2 \\).
+An *event* \\(e\\) is defined to be a list of vertices, a label and a time interval, \\( (W, l, [s, t]) \\).
 
-Define the *event size* \\( \vert e=(W, l, [t_1, t_2]) \vert = \vert \\{  (u, v, L, t) \in E \vert e \text{ covers } r \\} \vert \\)
+An event \\(e=(W, l, [t_1, t_2])\\) *covers* an edge \\(r=(u, v, L, t) \in E \\) if \\(l \in L \\),  \\(u, v \in W\\) and \\(t_1 \le t \le t_2 \\).
 
-Given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span and a budget \\(B\\) on the number of vertices for each event, find \\(K\\) events
+Define the *event size* \\( \vert e \vert = \vert \\{  r \in E \vert e \text{ covers } r \\} \vert \\)
+
+**Problem 2**: given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span and a budget \\(B\\) on the number of vertices for each event, find \\(K\\) events
 
 $$ e_i = (W_i, l_i, [t_{i,1}, t_{i,2}]), i=1 \ldots K $$
 
