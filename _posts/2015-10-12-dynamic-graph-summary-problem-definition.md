@@ -7,7 +7,7 @@ tags: graph-summary
 ---
 
 
-# Problem Definition 1
+# General Notation
 
 A *labeled dynamic graph* is defined as \\(G = (V, E) \\), where \\(V\\) is a set of \\(n\\) nodes and \\(E\\) is a set of \\(m\\) time-stamped and multiply-labeled interactions between pairs of nodes.
 
@@ -15,20 +15,59 @@ $$ E = {(u_i, v_i, L_i, t_i)} $$
 
 with $$ i = 1 \ldots m $$ such that \\(u_i, v_i \in V \\), \\(L_i \subseteq \mathcal{L} \\) and \\(t_i \in \mathbb{R} \\), where \\(\mathcal{L}\\) is the global label set.
 
+# Problem Definition 1
+
+An *event* \\(e\\) is defined to be a list of vertices, a label and a time interval, \\( (W, l, [s, t]) \\).
+
+An event \\(e=(W, l, [t_1, t_2])\\) *covers* an edge \\(r=(u, v, L, t) \in E \\) if \\(l \in L \\),  \\(u, v \in W\\) and \\(t_1 \le t \le t_2 \\).
+
+Define the *event size* \\( \vert e \vert = \vert \\{  r \in E \vert e \text{ covers } r \\} \vert \\)
+
+**Problem 1**: given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span and a budget \\(B\\) on the number of vertices for each event, find \\(K\\) events
+
+$$ e_i = (W_i, l_i, [t_{i,1}, t_{i,2}]), i=1 \ldots K $$
+
+that maximizes
+
+$$ \sum\limits_{i=1 \ldots K} \vert e_i \vert $$
+
+under the constraint
+
+$$ t_{i,2} - t_{i,1} \le A \text{ and } \vert W_i \vert \le B $$
+
+Some note: by adding constraint on the vertex set size of an event, \\(e\\) meanwhile maximizing the \\( \vert e \vert \\), we implicitly find the subgraph with high density.
+
+
+# Problem Definition 2
+
 For \\(G = (V, E) \\)  and a subset of edges \\(D \subseteq E\\), the *induced graph* of \\(D\\) is defined as \\(G(D, G) = (V(D, G), D)\\) such that \\(V(D, G)\\) consists of all the nodes that occurs in \\(D\\).
 
 For a subset of edges \\(D \subseteq E\\), we define the *time span*  as
 
 $$ T(D) = max_t ( \{t \vert (u, v, L, t) \in D\} )  - min_i ( \{t \vert (u, v, L, t) \in D\} ) $$
 
+For \\(G = (V, E) \\), an event is defined to be \\(e = (D, l)\\), where \\(D \subseteq E\\) and \\(l \in \mathcal{L}\\).
+
 <!-- For a label \\(l\\) and an edge set \\(D\\), we define the *label coverage ratio* \\(r(l, D) = \frac{N(l, D)}{\vert D \vert}\\) where \\(N(l, D) = \vert \\{ (u, v, L, t) \in D \vert l \in L\\} \vert \\). -->
 
 
-**Problem 1**: given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span and minimum label coverage ratio threshold, \\(B\\), find the set of edges \\(D \subseteq E\\) and a label \\(l \in \mathcal{L}\\) that maximizes some quality function \\(q(D, G)\\) such that \\(T(D) \le A\\) and \\(r(l, D) \ge B\\).
+**Problem 2**: given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span <!-- and minimum label coverage ratio threshold, \\(B\\) -->, find \\(K\\) events
 
-For example, the quality function corresponds to the density of the induced graph, \\(q(D, G) = \frac{2 \vert D \vert}{\vert V(D, G) \vert}\\).
+$$ (D_i, l_i), i = 1 \ldots K \text{ and } D_i \subset E \text{ and } l_i \in \mathcal{L} $$
 
-Then, finding the top-k event reduces to sequentially finding K best edge set for the graph where edges, which are in previously-found event, are removed from the graph.
+that maximizes
+
+$$ \sum\limits_{i=1 \ldots K} q(D_i, l_i, G) $$
+
+Under the constraint that
+
+$$ T(D) \le A $$ <!-- and \\(r(l, D) \ge B\\) -->.
+
+where \\(q(D, l, G)  \\) is some *quality function*  to be defined.
+
+
+The quality function might be the density of the induced graph, \\(q(D, l, G) = \frac{2 \vert D \vert}{\vert V(D, G) \vert}\\).
+
 
 ## Example & question
 
@@ -73,26 +112,3 @@ Problems with keyword: hard to extract keywords for some social network interact
 What are the other dataset that we can use?
 
 - Transaction network: \\(A\\) and \\(B\\) traded some good \\(X\\) at time \\(t\\)
-
-
-# Problem Definition 2
-
-An *event* \\(e\\) is defined to be a list of vertices, a label and a time interval, \\( (W, l, [s, t]) \\).
-
-An event \\(e=(W, l, [t_1, t_2])\\) *covers* an edge \\(r=(u, v, L, t) \in E \\) if \\(l \in L \\),  \\(u, v \in W\\) and \\(t_1 \le t \le t_2 \\).
-
-Define the *event size* \\( \vert e \vert = \vert \\{  r \in E \vert e \text{ covers } r \\} \vert \\)
-
-**Problem 2**: given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span and a budget \\(B\\) on the number of vertices for each event, find \\(K\\) events
-
-$$ e_i = (W_i, l_i, [t_{i,1}, t_{i,2}]), i=1 \ldots K $$
-
-that maximizes
-
-$$ \sum\limits_{i=1 \ldots K} \vert e_i \vert $$
-
-under the constraint
-
-$$ t_{i,2} - t_{i,1} \le A \text{ and } \vert W_i \vert \le B $$
-
-
