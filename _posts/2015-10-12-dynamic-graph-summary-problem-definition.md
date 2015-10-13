@@ -18,7 +18,7 @@ For \\(G = (V, E) \\)  and a subset of edges \\(D \subseteq E\\), the *induced g
 
 For a subset of edges \\(D \subseteq E\\), we define the *time span*  as
 
-$$ T(D) = max_t ( \\{t \vert (u, v, L, t) \in D\\} )  - min_i ( \\{t \vert (u, v, L, t) \in D\\} ) $$
+$$ T(D) = max_t ( \{t \vert (u, v, L, t) \in D\} )  - min_i ( \{t \vert (u, v, L, t) \in D\} ) $$
 
 For a label \\(l\\) and an edge set \\(D\\), we define the *label coverage ratio* \\(r(l, D) = \frac{N(l, D)}{\vert D \vert}\\) where \\(N(l, D) = \vert \\{ (u, v, L, t) \in D \vert l \in L\\} \vert \\).
 
@@ -30,7 +30,7 @@ For example, the quality function corresponds to the density of the induced grap
 
 Then, finding the top-k event reduces to sequentially finding K best edge set for the graph where edges, which are in previously-found event, are removed from the graph.
 
-# Example & question
+## Example & question
 
 ![](/images/graphviz/email-network-ambiguous-partition-example.dot.png)
 
@@ -57,4 +57,29 @@ The above implies that densely connected induced subgraph is not necessarily des
 $$ q(D, G) = \frac{2 \vert D \vert \log \vert V(D, G) \vert}{\vert V(D, G) \vert} $$
 
 
-Is the label coverage ratio reasonable? In the above example, it's 1.0. What if it's 0.9, can it be the solution?
+Is the label coverage ratio reasonable? If the interaction does not have label \\(l\\), why would we add it to the event since it can be considered as irrelevant.
+
+**Proposal**: Is it possible that we contrain all edges in some event to share at least one label?
+
+Is it possible that edges that are in some logical event do not share label? For example, one set of edges are about "hangout" without "picnic" and another set edges are about "picnic" without "hangout", but they are talking about the same thing? 
+
+Under the above proposal, the keyword quality matters(ideally, we would like both edge set to share some label) or as an alternative, we allow multiple labels for each event. 
+
+Problems with keyword: hard to extract keywords for some social network interactions. For example, Facebook chat. Because text in some interactions are too short(such as "Thanks", "ok") for the keyword extractor to extract anything meaningful. To address this issue, one might merge the tiny interactions into a bigger and more meaniningful one(merging information within one day as a bigger one?)
+
+
+
+
+What are the other dataset that we can use?
+
+- Transaction network: \\(A\\) and \\(B\\) traded some good \\(X\\) at time \\(t\\)
+
+
+# Problem Definition 2
+
+An *event* \\(e\\) is defined to be a list of vertices, a label and a time interval, \\( (W, l, [s, t]) \\). An event \\(e=(W, l, [t_1, t_2])\\) *covers* an edge \\(r=(u, v, L, t) \in E \\) if \\(l \in L \\)and  \\(t_1 \ge t \le t_2\\)
+
+Given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span and a budget \\(B\\) on the number of vertices, find K events *covers* as many \\(r \in E \\) as possible under the constraint that  \\(t_2 - t_1 \le A\\) and \\(\vert V \vert \le B\\).
+
+
+Output the top-k events, \\( e_i = (V, l, [s, t]) \\), \\(i=1 \ldots K\\) such that they *cover* as many \\(r\\) as possible meanwhile they satisfy the constraint:
