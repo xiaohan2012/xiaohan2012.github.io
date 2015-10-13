@@ -23,6 +23,104 @@ An event \\(e=(W, l, [t_1, t_2])\\) *covers* an edge \\(r=(u, v, L, t) \in E \\)
 
 Define the *event size* \\( \vert e \vert = \vert \\{  r \in E \vert e \text{ covers } r \\} \vert \\)
 
+**General problem**:
+
+Given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the maximum time span for each event and a set of other hyperparameters, \\( \eta \\), find \\(K\\) events
+
+$$ e_i = (W_i, l_i, [t_{i,1}, t_{i,2}]), i=1 \ldots K $$
+
+that maximizes
+
+$$ \sum\limits_{i=1 \ldots K} q(e_i) $$
+
+, where \\(q(e_i)  \\) is some *quality function*.
+
+under the constraint
+
+$$ t_{i,2} - t_{i,1} \le A \text{ and } \vert W_i \vert \le B $$
+
+and a set of other problem-specific constraints \\(\mathcal{C}\\)
+
+
+# Variants
+
+Under the above general definition, it's flexible to define different variants with different designing concerns.
+
+
+## Maximizing interaction coverage
+
+Our goal can be: cover as many interactions in \\(G = (V, E) \\) as possible. 
+
+An event \\(e=(W, l, [t_1, t_2])\\) *covers* an edge \\(r=(u, v, L, t) \in E \\) if \\(l \in L \\),  \\(u, v \in W\\) and \\(t_1 \le t \le t_2 \\).
+
+Define the *event size* \\( \vert e \vert = \vert \\{  r \in E \vert e \text{ covers } r \\} \vert \\)
+
+This goal can be translated into:
+
+$$ q(e) = \vert e \vert $$
+
+with another contraint
+
+$$ \vert W_i \vert \le B, i = 1 \ldots K $$
+
+where \\(B\\) is another budget parameter.
+
+Some property of this design: the induced subgraph of event \\(e\\) might not be dense.
+
+For example, several communities are talking about the same thing at the same time point. Is this design good or not?
+
+If we only care about the label, it's not a problem. If we'd like to know the participants in the graph, it would be good to separate the event across communities.
+
+
+## Maximizing density
+
+The above design does not capture dense subgraphs. In some cases, we might prefer dense interaction graphs. We can define:
+
+$$ q(e=(W, l, [t_1, t_2])) = \frac{2 \vert e \vert}{\vert W \vert} $$
+
+## Find dense-yet-relatively-large subgraphs
+
+Maximizing density might be a bad choice under the following scenario:
+
+During time \\(t_1, t_2), *A* discussed wtih *B* about "hangout", *B* then passed the message to *C* and discussed with *C* about "hangout" as well. Later, they hang out.
+
+Intuitively, we should have an event, \\(({A, B, C}, "hangout", [t_1, t_2]) \\)
+
+However, this result does not have the highest density. Both \\(({A, B}, "hangout", [t_1, t_2]) \\) and \\(({B, C}, "hangout", [t_1, t_2]) \\) have higher density.
+
+To address this issue, we would like to have the quality function also take into account the subgraph size. Something like:
+
+$$ q(e=(W, l, [t_1, t_2])) = \frac{2 \vert e \vert}{\vert W \vert} \log \vert W \vert $$
+
+## Label purity/coherence
+
+Ideally, we would like the interactions within an event to be about the similar topic. In case the event label is very general(like "paper" or "meeting"), it's very likely the event is not really an event. A series of very different "meeting" interaction might happen within the same period of time or discussion on several different papers could happen as well.
+
+Define \\( X_e \\) as the event of seeing some label in event \\(e\\), which follows some multinomial distribution.
+
+Then the *coherence* of an event \\(e\\) is \\(H(X_e)\\), where \\(H\\) is the entropy function.
+
+The more topically coherent, the lower \\(H(X_e)\\).
+
+We can add some topic coherence constraint:
+
+$$ H(X_e)  \le C $$, where \\(C\\) is some maximum threshold.
+
+
+
+The content below is deprecated as they are the thinking process before the above content
+
+--------------------------------------
+
+
+# Problem Definition 1
+
+An *event* \\(e\\) is defined to be a list of vertices, a label and a time interval, \\( (W, l, [s, t]) \\).
+
+An event \\(e=(W, l, [t_1, t_2])\\) *covers* an edge \\(r=(u, v, L, t) \in E \\) if \\(l \in L \\),  \\(u, v \in W\\) and \\(t_1 \le t \le t_2 \\).
+
+Define the *event size* \\( \vert e \vert = \vert \\{  r \in E \vert e \text{ covers } r \\} \vert \\)
+
 **Problem 1**: given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span and a budget \\(B\\) on the number of vertices for each event, find \\(K\\) events
 
 $$ e_i = (W_i, l_i, [t_{i,1}, t_{i,2}]), i=1 \ldots K $$
@@ -46,22 +144,24 @@ For a subset of edges \\(D \subseteq E\\), we define the *time span*  as
 
 $$ T(D) = max_t ( \{t \vert (u, v, L, t) \in D\} )  - min_i ( \{t \vert (u, v, L, t) \in D\} ) $$
 
-For \\(G = (V, E) \\), an event is defined to be \\(e = (D, l)\\), where \\(D \subseteq E\\) and \\(l \in \mathcal{L}\\).
+For \\(G = (V, E) \\) and label set \\( \mathcal{L} \\), an event is defined to be \\(e = (D, l)\\), where \\(D \subseteq E\\) and \\(l \in \mathcal{L}\\).
 
 <!-- For a label \\(l\\) and an edge set \\(D\\), we define the *label coverage ratio* \\(r(l, D) = \frac{N(l, D)}{\vert D \vert}\\) where \\(N(l, D) = \vert \\{ (u, v, L, t) \in D \vert l \in L\\} \vert \\). -->
 
 
 **Problem 2**: given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the total time span <!-- and minimum label coverage ratio threshold, \\(B\\) -->, find \\(K\\) events
 
-$$ (D_i, l_i), i = 1 \ldots K \text{ and } D_i \subset E \text{ and } l_i \in \mathcal{L} $$
+$$ (D_i, l_i), D_i \subset E \text{ and } l_i \in \mathcal{L} \text{ and } i = 1 \ldots K $$
 
 that maximizes
 
 $$ \sum\limits_{i=1 \ldots K} q(D_i, l_i, G) $$
 
-Under the constraint that
+under the constraint:
 
-$$ T(D) \le A $$ <!-- and \\(r(l, D) \ge B\\) -->.
+$$ T(D) \le A $$
+
+<!-- and \\(r(l, D) \ge B\\) -->.
 
 where \\(q(D, l, G)  \\) is some *quality function*  to be defined.
 
