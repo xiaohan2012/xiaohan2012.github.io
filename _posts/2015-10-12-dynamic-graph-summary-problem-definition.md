@@ -105,7 +105,7 @@ Condutance measures the connectivity of a subgraph to the rest of the whole grap
 
 Given \\( G=(V, E) \\), define the edges within period \\([t_1, t_2]\\) to be
 
-$$ E_{[t_1,t_2]} = {(u, v, L, t) \in E \vert t_1 \le t \le t_2} $$
+$$ E_{[t_1,t_2]} = \{ (u, v, L, t) \in E \vert t_1 \le t \le t_2 \} $$
 
 Define the conductance of event \\(e\\) to be
 
