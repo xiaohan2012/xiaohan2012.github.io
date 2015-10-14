@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Labeled Dynamic Graph Summary: Problem Definition"
+title: "Labeled/Topical Dynamic Graph Summary: Problem Definition"
 date: 2015-10-12 14:44:00
 categories: crafting
 tags: graph-summary
