@@ -7,15 +7,13 @@ tags: graph-summary
 ---
 
 
-# General Notation
+# Problem Definition 1
 
 A *labeled dynamic graph* is defined as \\(G = (V, E) \\), where \\(V\\) is a set of \\(n\\) nodes and \\(E\\) is a set of \\(m\\) time-stamped and multiply-labeled interactions between pairs of nodes.
 
 $$ E = {(u_i, v_i, L_i, t_i)} $$
 
 with $$ i = 1 \ldots m $$ such that \\(u_i, v_i \in V \\), \\(L_i \subseteq \mathcal{L} \\) and \\(t_i \in \mathbb{R} \\), where \\(\mathcal{L}\\) is the global label set.
-
-# Problem Definition 1
 
 An *event* \\(e\\) is defined to be a list of vertices, a label and a time interval, \\( (W, l, [s, t]) \\).
 
