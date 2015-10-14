@@ -44,9 +44,9 @@ $$ t_{i,2} - t_{i,1} \le A $$
 and a set of other problem-specific constraints \\(\mathcal{C}\\)
 
 
-## Variants
+## Instantiation
 
-Under the above general definition, it's flexible to define different variants with different designing concerns.
+Under the above general definition, it's flexible to define different instantiations with different designing concerns.
 
 
 ### Maximizing interaction coverage
@@ -186,17 +186,21 @@ $$ t_{2}(e_i) - t_{1}(e_i) \le A $$
 and a set of other problem-specific constraints \\(\mathcal{C}\\)
 
 
-## Maximizing conductance under topical coherence constraint
+## Instantiation
+
+### Maximizing conductance under topical coherence constraint
 
 Our goal can be: finding structurally good cluster with good topical coherence.
 
 We can measure the structural quality of a subgraph using conductance
 
+Define the induced vertex set \\(V(e)\\) of event \\(e\\) to be the vertex that appears in at least one edge in \\(e\\).
+
 Define the conductance of event \\(e\\) to be
 
-$$ \phi(e) = \frac{\vert \{ (u, v, \alpha, t) \in E_{[t_1(e),t_2(e)]}  \vert  u \in W, v \not\in W \} \vert}{min(vol_{[t_1(e),t_2(e)]}(e), 2\vert E\vert - vol_{[t_1(e),t_2(e)]}(e))} $$
+$$ \phi(e) = \frac{\vert \{ (u, v, \alpha, t) \in E_{[t_1(e),t_2]}(e)  \vert  u \in V(e), v \not\in V(e) \} \vert}{min(vol_{[t_1(e),t_2(e)]}(e), 2\vert E\vert - vol_{[t_1(e),t_2(e)]}(e))} $$
 
-\\(vol_{[t_1,t_2]}(e)\\) is the total number of edges with at least on end point in \\(W\\) during time \\( [t_1,t_2] \\).
+\\(vol_{[t_1,t_2]}(e)\\) is the total number of edges with at least on end point in \\(V(e)\\) during time \\( [t_1,t_2] \\).
 
 We can measure topical coherence using mean of KL divergence.
 
@@ -206,7 +210,9 @@ Define topic coherence of \\(e\\) as
 
 $$ coherence(e) = \frac{1}{\vert e \vert} \sum\limits_{(u_i, v_i, \alpha_i, t_i) \in e} KL(\alpha_e, \alpha_i) $$
 
-The our problem becomes, maximizing
+where \\(KL(alpha_1, alpha_2)\\) is the KL-divergence.
+
+In this problem instantiation, quality function becomes
 
 $$ q(e) = conductance(e) $$
 
@@ -214,7 +220,13 @@ under the constraint
 
 $$ coherence(e) \ge B $$
 
-where \\(B\\) is threshold.
+where \\(B\\) is some coherence threshold.
+
+### Maximizing conductance and coherence
+
+
+Alternatively, we can maximize the two quatities together by defining some quality function that combines the both.
+
 
 ----------------------
 
