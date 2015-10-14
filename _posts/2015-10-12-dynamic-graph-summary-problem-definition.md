@@ -25,7 +25,7 @@ Define the *induced edge set* of event \\(e\\) to be \\( D(e) = \\{  r \in E \ve
 
 Define the *event size* \\( \vert e \vert = \vert  D(e) \vert \\)
 
-**General problem**:
+**Problem 1**:
 
 Given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the maximum time span for each event and a set of other hyperparameters, \\( \eta \\), find \\(K\\) events
 
@@ -39,17 +39,17 @@ $$ \sum\limits_{i=1 \ldots K} q(e_i) $$
 
 under the constraint
 
-$$ t_{i,2} - t_{i,1} \le A \text{ and } \vert W_i \vert \le B $$
+$$ t_{i,2} - t_{i,1} \le A $$
 
 and a set of other problem-specific constraints \\(\mathcal{C}\\)
 
 
-# Variants
+## Variants
 
 Under the above general definition, it's flexible to define different variants with different designing concerns.
 
 
-## Maximizing interaction coverage
+### Maximizing interaction coverage
 
 Our goal can be: cover as many interactions in \\(G = (V, E) \\) as possible. 
 
@@ -73,13 +73,13 @@ For example, several communities are talking about the same thing at the same ti
 
 If we only care about the label, it's not a problem. If we'd like to know the participants in the graph, it would be good to separate the event across communities.
 
-## Maximizing density
+### Maximizing density
 
 The above design does not capture dense subgraphs. In some cases, we might prefer dense interaction graphs. We can define:
 
 $$ q(e=(W, l, [t_1, t_2])) = \frac{2 \vert e \vert}{\vert W \vert} $$
 
-## Find dense-yet-relatively-large subgraphs
+### Find dense-yet-relatively-large subgraphs
 
 Maximizing density might be a bad choice under the following scenario:
 
@@ -99,7 +99,7 @@ $$ q(e=(W, l, [t_1, t_2])) = \alpha \frac{2 \vert e \vert}{\vert W \vert} + \bet
 
 where \\( \alpha, \beta \\) are hyperparameters.
 
-## Minimizing conductance
+### Minimizing conductance
 
 Condutance measures the connectivity of a subgraph to the rest of the whole graph and a good cluster often have low condutance. Intuitively, we want the induced graph of \\(e\\) to have low conductance.
 
@@ -111,14 +111,13 @@ Define the conductance of event \\(e\\) to be
 
 $$ \phi(e=(W, l, [t_1,t_2])) = \frac{\vert \{ (u, v, L, t) \in E_{[t_1,t_2]}  \vert  u \in W, v \not\in W \} \vert}{min(vol(e), 2\vert E\vert - vol(e))} $$
 
-\\(vol(e)\\) is the total number of edges with at least on end point in \\(W\\).
+\\(vol(e)\\) is the total number of edges with at least on end point in \\(W\\) during time \\([t_1,t_2]\\).
 
 Thus, we can define quality function
 
 $$ q(e) = - \phi(e) $$
 
-
-## Label purity/coherence
+### Label purity/coherence
 
 Ideally, we would like the interactions within an event to be about the similar topic. In case the event label is very general(like "paper" or "meeting"), it's very likely the event is not really an event. A series of very different "meeting" interaction might happen within the same period of time or discussion on several different papers could happen as well.
 
@@ -160,7 +159,62 @@ For short length text, we just give a almost uniform topic distribution.
 
 ## Problem Definition 2
 
-Let's redefine the problem. Define an event to be \\(e = (W, [t_1, t_2])\\)
+A *dynamic graph with topics* is defined as \\(G = (V, E, \beta) \\), where \\(V\\) is a set of \\(n\\) nodes and \\(E\\) is a set of \\(m\\) time-stamped and interactions between pairs of nodes. Each interaction is associated with a topic distribution \\( \alpha \\) with \\(L\\) topics. \\( \beta \\) is the topic-to-token probability. 
+
+$$ E = {(u_i, v_i, alpha_i, t_i)} $$
+
+with $$ i = 1 \ldots M $$ such that \\(u_i, v_i \in V \\), \\(alpha_i \in \mathbb{R}^{L}\\). \\( \beta \in \mathbb{R}^{(L, N)} \\), where \\(N\\) is the vocabulary size for the topic model.
+
+Define an event as a list of interactions, \\( e \subseteq E\\). The time span \\(t_1(e), t_2(e)\\) of event \\(e\\) is the minimum time span withinin which all interactions  in \\(e\\) happened.
+
+**Problem 2**:
+
+Given dynamic labeled graph \\(G = (V, E, \beta)\\), a budget \\(A\\) on the maximum time span for each event, find \\(K\\) events
+
+$$ e_i, i=1 \ldots K $$
+
+that maximizes
+
+$$ \sum\limits_{i=1 \ldots K} q(e_i) $$
+
+, where \\(q(e_i)  \\) is some *quality function*.
+
+under the constraint
+
+$$ t_{2}(e_i) - t_{1}(e_i) \le A $$
+
+and a set of other problem-specific constraints \\(\mathcal{C}\\)
+
+
+## Maximizing conductance under topical coherence constraint
+
+Our goal can be: finding structurally good cluster with good topical coherence.
+
+We can measure the structural quality of a subgraph using conductance
+
+Define the conductance of event \\(e\\) to be
+
+$$ \phi(e) = \frac{\vert \{ (u, v, \alpha, t) \in E_{[t_1(e),t_2(e)]}  \vert  u \in W, v \not\in W \} \vert}{min(vol_{[t_1(e),t_2(e)]}(e), 2\vert E\vert - vol_{[t_1(e),t_2(e)]}(e))} $$
+
+\\(vol_{[t_1,t_2]}(e)\\) is the total number of edges with at least on end point in \\(W\\) during time \\( [t_1,t_2] \\).
+
+We can measure topical coherence using mean of KL divergence.
+
+Given event \\(e\\), define *event topic distribution* to be the centroid of topic vectors of all interactions in \\(e\\), \\(\alpha_e = \frac{1}{\vert e \vert} \sum\limits_{(u_i, v_i, \alpha_i, t_i) \in e} \alpha_i \\)
+
+Define topic coherence of \\(e\\) as
+
+$$ coherence(e) = \frac{1}{\vert e \vert} \sum\limits_{(u_i, v_i, \alpha_i, t_i) \in e} KL(\alpha_e, \alpha_i) $$
+
+The our problem becomes, maximizing
+
+$$ q(e) = conductance(e) $$
+
+under the constraint
+
+$$ coherence(e) \ge B $$
+
+where \\(B\\) is threshold.
 
 ----------------------
 
