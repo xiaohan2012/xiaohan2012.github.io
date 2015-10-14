@@ -60,7 +60,7 @@ This goal can be translated into:
 
 $$ q(e) = \vert e \vert $$
 
-with another contraint
+with another constraint
 
 $$ \vert W_i \vert \le B, i = 1 \ldots K $$
 
@@ -82,7 +82,7 @@ $$ q(e=(W, l, [t_1, t_2])) = \frac{2 \vert e \vert}{\vert W \vert} $$
 
 Maximizing density might be a bad choice under the following scenario:
 
-During time \\( (t_1, t_2) \\), *A* discussed wtih *B* about "hangout", *B* then passed the message to *C* and discussed with *C* about "hangout" as well. Later, they hang out.
+During time \\( (t_1, t_2) \\), *A* discussed with *B* about "hangout", *B* then passed the message to *C* and discussed with *C* about "hangout" as well. Later, they hang out.
 
 Intuitively, we should have an event, \\(({A, B, C}, "hangout", [t_1, t_2]) \\)
 
@@ -100,7 +100,7 @@ where \\( \alpha, \beta \\) are hyperparameters.
 
 ### Minimizing conductance
 
-Condutance measures the connectivity of a subgraph to the rest of the whole graph and a good cluster often have low condutance. Intuitively, we want the induced graph of \\(e\\) to have low conductance.
+Conductance measures the connectivity of a subgraph to the rest of the whole graph and a good cluster often have low conductance. Intuitively, we want the induced graph of \\(e\\) to have low conductance.
 
 Given \\( G=(V, E) \\), define the edges within period \\([t_1, t_2]\\) to be
 
@@ -136,10 +136,10 @@ where \\(C\\) is some threshold.
 
 ## Problem with one-label requirement
 
-There are several potential issues with the requirment that one event can only have one label
+There are several potential issues with the requirement that one event can only have one label
 
 1. **Ambiguity of natural language**: 
-   In most cases, the label is some natural language phrase, which can be quite ambiguous. "paper" can mean totally different thing in different context(toilet paper? writing paper? academic paper?). Mneawhile, different phrases can mean the same thing(for example, "graph" and "network" in the data mining community)
+   In most cases, the label is some natural language phrase, which can be quite ambiguous. "paper" can mean totally different thing in different context(toilet paper? writing paper? academic paper?). Meanwhile, different phrases can mean the same thing(for example, "graph" and "network" in the data mining community)
 2. **Limited expressiveness**:
    The expressing power of one label can be limited. For example, we might have several events that are about "paper". And they all describe distinct topics. In that case, we are unable to capture the difference.
 3. **Sensitivity**:
@@ -168,7 +168,7 @@ with $$ i = 1 \ldots M $$ such that \\(u_i, v_i \in V \\), \\(\alpha_i \in \math
 
 Define an event as a list of interactions, \\( e \subseteq E\\).
 
-The time span \\(t_1(e), t_2(e)\\) of event \\(e\\) is the minimum time span withinin which all interactions  in \\(e\\) happened.
+The time span \\(t_1(e), t_2(e)\\) of event \\(e\\) is the minimum time span within which all interactions  in \\(e\\) happened.
 
 
 ## Problem Definition
@@ -230,5 +230,5 @@ where \\(B\\) is some coherence threshold.
 ### Maximizing conductance and coherence
 
 
-Alternatively, we can maximize the two quatities together by defining some quality function that combines the both.
+Alternatively, we can maximize the two quantities together by defining some quality function that combines the both.
 
