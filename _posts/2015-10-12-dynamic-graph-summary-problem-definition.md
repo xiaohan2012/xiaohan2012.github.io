@@ -161,9 +161,9 @@ For short length text, we just give a almost uniform topic distribution.
 
 A *dynamic graph with topics* is defined as \\(G = (V, E, \beta) \\), where \\(V\\) is a set of \\(n\\) nodes and \\(E\\) is a set of \\(m\\) time-stamped and interactions between pairs of nodes. Each interaction is associated with a topic distribution \\( \alpha \\) with \\(L\\) topics. \\( \beta \\) is the topic-to-token probability. 
 
-$$ E = {(u_i, v_i, alpha_i, t_i)} $$
+$$ E = {(u_i, v_i, \alpha_i, t_i)} $$
 
-with $$ i = 1 \ldots M $$ such that \\(u_i, v_i \in V \\), \\(alpha_i \in \mathbb{R}^{L}\\). \\( \beta \in \mathbb{R}^{(L, N)} \\), where \\(N\\) is the vocabulary size for the topic model.
+with $$ i = 1 \ldots M $$ such that \\(u_i, v_i \in V \\), \\(\alpha_i \in \mathbb{R}^{L}\\). \\( \beta \in \mathbb{R}^{(L, N)} \\), where \\(N\\) is the vocabulary size for the topic model.
 
 Define an event as a list of interactions, \\( e \subseteq E\\). The time span \\(t_1(e), t_2(e)\\) of event \\(e\\) is the minimum time span withinin which all interactions  in \\(e\\) happened.
 
@@ -210,7 +210,7 @@ Define topic coherence of \\(e\\) as
 
 $$ coherence(e) = \frac{1}{\vert e \vert} \sum\limits_{(u_i, v_i, \alpha_i, t_i) \in e} KL(\alpha_e, \alpha_i) $$
 
-where \\(KL(alpha_1, alpha_2)\\) is the KL-divergence.
+where \\(KL(\alpha_1, \alpha_2)\\) is the KL-divergence.
 
 In this problem instantiation, quality function becomes
 
