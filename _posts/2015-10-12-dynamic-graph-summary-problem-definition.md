@@ -9,23 +9,29 @@ tags: graph-summary
 
 # Problem Definition 1
 
-A *labeled dynamic graph* is defined as \\(G = (V, E) \\), where \\(V\\) is a set of \\(n\\) nodes and \\(E\\) is a set of \\(m\\) time-stamped and multiply-labeled interactions between pairs of nodes.
+## Notation
+
+A *labeled dynamic graph* is defined as \\(G = (V, E) \\), where \\(V\\) is a set of \\(n\\) nodes and \\(E\\) is a set of \\(M\\) time-stamped and multiply-labeled interactions between pairs of nodes.
 
 $$ E = {(u_i, v_i, L_i, t_i)} $$
 
 with $$ i = 1 \ldots m $$ such that \\(u_i, v_i \in V \\), \\(L_i \subseteq \mathcal{L} \\) and \\(t_i \in \mathbb{R} \\), where \\(\mathcal{L}\\) is the global label set.
 
-An *event* \\(e\\) is defined to be a list of vertices, a label and a time interval, \\( (W, l, [s, t]) \\).
+An *event* \\(e\\) is defined to be a list of vertices, a label and a time interval, \\( (W, l, [t_1, t_2]) \\).
 
-An event \\(e=(W, l, [t_1, t_2])\\) *covers* an edge \\(r=(u, v, L, t) \in E \\) if \\(l \in L \\),  \\(u, v \in W\\) and \\(t_1 \le t \le t_2 \\).
+An event \\(e=(W, l, [t_1, t_2])\\) *covers* an edge \\(r=(u, v, L, t) \in E \\)  if  \\(l \in L \\),  \\(u, v \in W\\) and \\(t_1 \le t \le t_2 \\).
 
 Define the *induced edge set* of event \\(e\\) to be \\( D(e) = \\{  r \in E \vert e \text{ covers } r \\} \\).
 
 Define the *event size* \\( \vert e \vert = \vert  D(e) \vert \\)
 
+## Problem Definition
+
 **Problem 1**:
 
-Given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the maximum time span for each event and a set of other hyperparameters, \\( \eta \\), find \\(K\\) events
+Given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the maximum time span for each event and a set of instantiation-specific hyperparameters, \\( \eta \\).
+
+Find \\(K\\) events
 
 $$ e_i = (W_i, l_i, [t_{i,1}, t_{i,2}]), i=1 \ldots K $$
 
@@ -33,27 +39,24 @@ that maximizes
 
 $$ \sum\limits_{i=1 \ldots K} q(e_i) $$
 
-, where \\(q(e_i)  \\) is some *quality function*.
+where \\(q(e_i)  \\) is some *quality function*.
 
 under the constraint
 
 $$ t_{i,2} - t_{i,1} \le A $$
 
-and a set of other problem-specific constraints \\(\mathcal{C}\\)
+and a set of other instantiation-specific constraints \\(\mathcal{C}\\)
 
 
 ## Instantiation
 
-Under the above general definition, it's flexible to define different instantiations with different designing concerns.
+Under the above general definition, it's flexible to define different instantiations with different design concerns.
 
+The following are some possible instantiations.
 
 ### Maximizing interaction coverage
 
 Our goal can be: cover as many interactions in \\(G = (V, E) \\) as possible. 
-
-An event \\(e=(W, l, [t_1, t_2])\\) *covers* an edge \\(r=(u, v, L, t) \in E \\) if \\(l \in L \\),  \\(u, v \in W\\) and \\(t_1 \le t \le t_2 \\).
-
-Define the *event size* \\( \vert e \vert = \vert \\{  r \in E \vert e \text{ covers } r \\} \vert \\)
 
 This goal can be translated into:
 
@@ -127,9 +130,11 @@ The more topically coherent, the lower \\(H(X_e)\\).
 
 We can add some topic coherence constraint:
 
-$$ H(X_e)  \le C $$, where \\(C\\) is some maximum threshold.
+$$ H(X_e)  \le C $$
 
-# Alternatives
+where \\(C\\) is some threshold.
+
+# Problem Definition 2
 
 ## Problem with one-label requirement
 
@@ -155,7 +160,7 @@ Besides better interpretability, topic modeling is a more well defined problem w
 For short length text, we just give a almost uniform topic distribution.
 
 
-## Problem Definition 2
+## Notation
 
 A *dynamic graph with topics* is defined as \\(G = (V, E, \beta) \\), where \\(V\\) is a set of \\(n\\) nodes and \\(E\\) is a set of \\(m\\) time-stamped and interactions between pairs of nodes. Each interaction is associated with a topic distribution \\( \alpha \\) with \\(L\\) topics. \\( \beta \\) is the topic-to-token probability. 
 
@@ -164,6 +169,9 @@ $$ E = {(u_i, v_i, \alpha_i, t_i)} $$
 with $$ i = 1 \ldots M $$ such that \\(u_i, v_i \in V \\), \\(\alpha_i \in \mathbb{R}^{L}\\). \\( \beta \in \mathbb{R}^{(L, N)} \\), where \\(N\\) is the vocabulary size for the topic model.
 
 Define an event as a list of interactions, \\( e \subseteq E\\). The time span \\(t_1(e), t_2(e)\\) of event \\(e\\) is the minimum time span withinin which all interactions  in \\(e\\) happened.
+
+
+## Problem Definition
 
 **Problem 2**:
 
@@ -182,7 +190,6 @@ under the constraint
 $$ t_{2}(e_i) - t_{1}(e_i) \le A $$
 
 and a set of other problem-specific constraints \\(\mathcal{C}\\)
-
 
 ## Instantiation
 
@@ -212,7 +219,7 @@ where \\(KL(\alpha_1, \alpha_2)\\) is the KL-divergence.
 
 In this problem instantiation, quality function becomes
 
-$$ q(e) = conductance(e) $$
+$$ q(e) = - \phi(e) $$
 
 under the constraint
 
