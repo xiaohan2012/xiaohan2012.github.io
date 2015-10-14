@@ -138,13 +138,13 @@ $$ H(X_e)  \le C $$, where \\(C\\) is some maximum threshold.
 
 There are several potential issues with the requirment that one event can only have one label
 
-1. Ambiguity of natural language
+1. **Ambiguity of natural language**: 
    In most cases, the label is some natural language phrase, which can be quite ambiguous. "paper" can mean totally different thing in different context(toilet paper? writing paper? academic paper?). Mneawhile, different phrases can mean the same thing(for example, "graph" and "network" in the data mining community)
-2. Limited expressiveness of one-label
+2. **Limited expressiveness**:
    The expressing power of one label can be limited. For example, we might have several events that are about "paper". And they all describe distinct topics. In that case, we are unable to capture the difference.
-3. Sensitivity to keyword extraction result
+3. **Sensitivity**:
    In order to have good result, we first need to have good keywords extracted. Extracting good keywords is not a easy task which depends both on the tool itself as well as the domain of the documents.
-4. Difficulty for short length text
+4. **Difficulty for short length text**:
    For some document, which is quite short like "OK", "Thanks". Extracting keyword doesn't make sense.
 
 ## Topic model
