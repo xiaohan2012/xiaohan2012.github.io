@@ -106,7 +106,7 @@ Given \\( G=(V, E) \\), define the edges within period \\([t_1, t_2]\\) to be
 
 $$ E_{[t_1,t_2]} = \{ (u, v, L, t) \in E \vert t_1 \le t \le t_2 \} $$
 
-Define the conductance of event \\(e\\) to be
+Refering to the [conductance definition(page 5)](https://d396qusza40orc.cloudfront.net/mmds/lecture_slides/week3_what_makes%20a_good_cluster.pdf), we can define the conductance of event \\(e\\) to be
 
 $$ \phi(e=(W, l, [t_1,t_2])) = \frac{\vert \{ (u, v, L, t) \in E_{[t_1,t_2]}  \vert  u \in W, v \not\in W \} \vert}{min(vol(e), 2\vert E\vert - vol(e))} $$
 
