@@ -21,7 +21,9 @@ An *event* \\(e\\) is defined to be a list of vertices, a label and a time inter
 
 An event \\(e=(W, l, [t_1, t_2])\\) *covers* an edge \\(r=(u, v, L, t) \in E \\) if \\(l \in L \\),  \\(u, v \in W\\) and \\(t_1 \le t \le t_2 \\).
 
-Define the *event size* \\( \vert e \vert = \vert \\{  r \in E \vert e \text{ covers } r \\} \vert \\)
+Define the *induced edge set* of event \\(e\\) to be \\( D(e) = \\{  r \in E \vert e \text{ covers } r \\} \\).
+
+Define the *event size* \\( \vert e \vert = \vert  D(e) \vert \\)
 
 **General problem**:
 
@@ -71,7 +73,6 @@ For example, several communities are talking about the same thing at the same ti
 
 If we only care about the label, it's not a problem. If we'd like to know the participants in the graph, it would be good to separate the event across communities.
 
-
 ## Maximizing density
 
 The above design does not capture dense subgraphs. In some cases, we might prefer dense interaction graphs. We can define:
@@ -97,6 +98,25 @@ Or weighted sum of the two quantities:
 $$ q(e=(W, l, [t_1, t_2])) = \alpha \frac{2 \vert e \vert}{\vert W \vert} + \beta \log \vert W \vert $$
 
 where \\( \alpha, \beta \\) are hyperparameters.
+
+## Minimizing conductance
+
+Condutance measures the connectivity of a subgraph to the rest of the whole graph and a good cluster often have low condutance. Intuitively, we want the induced graph of \\(e\\) to have low conductance.
+
+Given \\( G=(V, E) \\), define the edges within period \\([t_1, t_2]\\) to be
+
+$$ E_{[t_1,t_2]} = {(u, v, L, t) \in E \vert t_1 \le t \le t_2} $$
+
+Define the conductance of event \\(e\\) to be
+
+$$ \phi(e=(W, l, [t_1,t_2])) = \frac{\vert \{ (u, v, L, t) \in E_{[t_1,t_2]}  \vert  u \in W, v \not\in W \} \vert}{min(vol(e), 2\vert E\vert - vol(e))} $$
+
+\\(vol(e)\\) is the total number of edges with at least on end point in \\(W\\).
+
+Thus, we can define quality function
+
+$$ q(e) = - \phi(e) $$
+
 
 ## Label purity/coherence
 
