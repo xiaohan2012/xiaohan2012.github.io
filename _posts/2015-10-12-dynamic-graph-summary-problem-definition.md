@@ -6,6 +6,12 @@ categories: crafting
 tags: graph-summary
 ---
 
+# Introduction
+
+Two general problem definitions are formed for two types of dynamic graphs:
+
+- Labeled dynamic graph: where each edge is associated with one or more labels
+- Topical dynamic graph: where each edge is associated with a topic proportion
 
 # Problem Definition 1
 
