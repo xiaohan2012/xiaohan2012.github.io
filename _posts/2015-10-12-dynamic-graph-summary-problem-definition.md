@@ -11,7 +11,7 @@ tags: graph-summary
 
 ## Notation
 
-A *labeled dynamic graph* is defined as \\(G = (V, E) \\), where \\(V\\) is a set of \\(n\\) nodes and \\(E\\) is a set of \\(M\\) time-stamped and multiply-labeled interactions between pairs of nodes.
+A *labeled dynamic graph* is defined as \\(G = (V, E) \\), where \\(V\\) is a set of \\(N\\) nodes and \\(E\\) is a set of \\(M\\) time-stamped and multiply-labeled interactions between pairs of nodes.
 
 $$ E = {(u_i, v_i, L_i, t_i)} $$
 
@@ -26,8 +26,6 @@ Define the *induced edge set* of event \\(e\\) to be \\( D(e) = \\{  r \in E \ve
 Define the *event size* \\( \vert e \vert = \vert  D(e) \vert \\)
 
 ## Problem Definition
-
-**Problem 1**:
 
 Given a labeled dynamic graph \\(G = (V, E) \\), a budget \\(A\\) on the maximum time span for each event and a set of instantiation-specific hyperparameters, \\( \eta \\).
 
@@ -162,13 +160,15 @@ For short length text, we just give a almost uniform topic distribution.
 
 ## Notation
 
-A *dynamic graph with topics* is defined as \\(G = (V, E, \beta) \\), where \\(V\\) is a set of \\(n\\) nodes and \\(E\\) is a set of \\(m\\) time-stamped and interactions between pairs of nodes. Each interaction is associated with a topic distribution \\( \alpha \\) with \\(L\\) topics. \\( \beta \\) is the topic-to-token probability. 
+A *dynamic graph with topics* is defined as \\(G = (V, E, \beta) \\), where \\(V\\) is a set of \\(N\\) nodes and \\(E\\) is a set of \\(M\\) time-stamped and interactions between pairs of nodes. Each interaction is associated with a topic distribution \\( \alpha \\) with \\(L\\) topics. \\( \beta \\) is the global topic-to-token probability. 
 
 $$ E = {(u_i, v_i, \alpha_i, t_i)} $$
 
-with $$ i = 1 \ldots M $$ such that \\(u_i, v_i \in V \\), \\(\alpha_i \in \mathbb{R}^{L}\\). \\( \beta \in \mathbb{R}^{(L, N)} \\), where \\(N\\) is the vocabulary size for the topic model.
+with $$ i = 1 \ldots M $$ such that \\(u_i, v_i \in V \\), \\(\alpha_i \in \mathbb{R}^{L}\\). \\( \beta \in \mathbb{R}^{L \times W} \\), where \\(W\\) is the vocabulary size for the topic model.
 
-Define an event as a list of interactions, \\( e \subseteq E\\). The time span \\(t_1(e), t_2(e)\\) of event \\(e\\) is the minimum time span withinin which all interactions  in \\(e\\) happened.
+Define an event as a list of interactions, \\( e \subseteq E\\).
+
+The time span \\(t_1(e), t_2(e)\\) of event \\(e\\) is the minimum time span withinin which all interactions  in \\(e\\) happened.
 
 
 ## Problem Definition
@@ -183,7 +183,7 @@ that maximizes
 
 $$ \sum\limits_{i=1 \ldots K} q(e_i) $$
 
-, where \\(q(e_i)  \\) is some *quality function*.
+where \\(q(e_i)  \\) is some *quality function*.
 
 under the constraint
 
@@ -203,11 +203,11 @@ Define the induced vertex set \\(V(e)\\) of event \\(e\\) to be the vertex that 
 
 Define the conductance of event \\(e\\) to be
 
-$$ \phi(e) = \frac{\vert \{ (u, v, \alpha, t) \in E_{[t_1(e),t_2]}(e)  \vert  u \in V(e), v \not\in V(e) \} \vert}{min(vol_{[t_1(e),t_2(e)]}(e), 2\vert E\vert - vol_{[t_1(e),t_2(e)]}(e))} $$
+$$ \phi(e) = \frac{\vert \{ (u, v, \alpha, t) \in E_{[t_1(e),t_2(e)]}  \vert  u \in V(e), v \not\in V(e) \} \vert}{min(vol_{[t_1(e),t_2(e)]}(e), 2\vert E\vert - vol_{[t_1(e),t_2(e)]}(e))} $$
 
 \\(vol_{[t_1,t_2]}(e)\\) is the total number of edges with at least on end point in \\(V(e)\\) during time \\( [t_1,t_2] \\).
 
-We can measure topical coherence using mean of KL divergence.
+We can measure topical coherence using KL divergence.
 
 Given event \\(e\\), define *event topic distribution* to be the centroid of topic vectors of all interactions in \\(e\\), \\(\alpha_e = \frac{1}{\vert e \vert} \sum\limits_{(u_i, v_i, \alpha_i, t_i) \in e} \alpha_i \\)
 
@@ -215,7 +215,7 @@ Define topic coherence of \\(e\\) as
 
 $$ coherence(e) = \frac{1}{\vert e \vert} \sum\limits_{(u_i, v_i, \alpha_i, t_i) \in e} KL(\alpha_e, \alpha_i) $$
 
-where \\(KL(\alpha_1, \alpha_2)\\) is the KL-divergence.
+where \\(KL(\alpha_1, \alpha_2)\\) is the KL-divergence between two multinomial distribution, \\(\ alpha_1 \\) and \\( \alpha_2 \\).
 
 In this problem instantiation, quality function becomes
 
@@ -232,19 +232,3 @@ where \\(B\\) is some coherence threshold.
 
 Alternatively, we can maximize the two quatities together by defining some quality function that combines the both.
 
-
-----------------------
-
-
-**Proposal**: Is it possible that we contrain all edges in some event to share at least one label?
-
-Is it possible that edges that are in some logical event do not share label? For example, one set of edges are about "hangout" without "picnic" and another set edges are about "picnic" without "hangout", but they are talking about the same thing? 
-
-Under the above proposal, the keyword quality matters(ideally, we would like both edge set to share some label) or as an alternative, we allow multiple labels for each event. 
-
-Problems with keyword: hard to extract keywords for some social network interactions. For example, Facebook chat. Because text in some interactions are too short(such as "Thanks", "ok") for the keyword extractor to extract anything meaningful. To address this issue, one might merge the tiny interactions into a bigger and more meaniningful one(merging information within one day as a bigger one?)
-
-
-What are the other dataset that we can use?
-
-- Transaction network: \\(A\\) and \\(B\\) traded some good \\(X\\) at time \\(t\\)
