@@ -75,3 +75,32 @@ Human brain is essentially processing many kinds of streaming data(sound, light,
 Why sliding window?
 
 The Aalto summer internship question of 2014 summer.
+
+## Bloom filter
+
+Web crawler: throws away the URLs that have been crawled before.
+
+How to test if one URL has been crawled before?
+
+Bloom filter characteristics:
+
+- always correct about claiming some URLs to be "unseen"(100% precision)
+- might drop some "unseen" URLs(< 100% recall)
+
+Consists of an bit array(initially zero) and a list of hash functions.
+
+For each stream element, compute the hash values. If at least one of the corresponding positions in the bit array is zero, the element is claimed unseen. Otherwise, it's seen. After that, set the corresponding bits in the array to 1.
+
+Questions:
+
+- Choices for the hash function? How many functions? 
+- Why it works? 100% precision and <100% recall?
+
+
+Performance:
+
+Probability of some bit remaining zero: \\(p_0 = \exp (-d/t)\\), where \\(t\\) is the number of bits in the bit array and \\(d\\) is the number of bits inserted so far.
+
+Density of 1s: \\(p_1 = 1 - p_0 \\). Probability of claiming "seen": \\(p_1^{\text{#hash_functions}}\\)
+
+
