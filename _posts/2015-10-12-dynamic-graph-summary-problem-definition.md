@@ -138,6 +138,13 @@ $$ H(X_e)  \le C $$
 
 where \\(C\\) is some threshold.
 
+### Weighting nodes
+
+We might give different weights to different vertices, as some person(like project manager or CEO) produce more impact than the others. Thus, when designing the quality function, we might want to maximize the weight sum of the vertices. Or we can have a minimum threshold for the weight sum for each event so that "trivial" event are ignored.
+
+Weight can be calculated using Page Rank for example. The simplest way is to apply Page Rank on the static communication graph. However, one option is apply Page Rank on the dynamic graph so the weight is time-varying.
+
+
 # Problem Definition 2
 
 ## Problem with one-label requirement
@@ -178,8 +185,6 @@ The time span \\(t_1(e), t_2(e)\\) of event \\(e\\) is the minimum time span wit
 
 
 ## Problem Definition
-
-**Problem 2**:
 
 Given dynamic labeled graph \\(G = (V, E, \beta)\\), a budget \\(A\\) on the maximum time span for each event, find \\(K\\) events
 
