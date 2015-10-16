@@ -106,15 +106,19 @@ Density of 1s: \\(p_1 = 1 - p_0 \\). Probability of claiming "seen": \\(p_1^{\te
 
 ## Sampling a stream
 
-Stream data arrive too rapidly.
+Stream data arrive too rapidly so we opt to sampling the stream elements.
 
 Sampling requirement:
 
 1. Unbiased sampling
 2. Preserve the answer to the query
 
-Problem by Google: calcualte the fraction of unique search query(asked only once)
+Task from Google: calcualte the fraction of unique search query(asked only once in a given period of time, say one month)
 
-Problem with sampling by position: an over-estimate of the result as a query appearing twice in the whole stream may appear only once in the sampled stream.
+Problem with sampling by position: an over-estimate of the result. For example, a query appearing twice in the whole stream may appear only once in the sampled stream. Thus, we have an over-estimate.
+
+Sampling by value: a hash function that receives an stream element as input and output one of N buckets.
+
+We store all queries that hash to 0, for example and discard those otherwise. In this way, queries of the same value are hashed to the same bucket. Thus, we will not over-estimate the frequency of any given query that hashes to the 0th bucket.
 
 
