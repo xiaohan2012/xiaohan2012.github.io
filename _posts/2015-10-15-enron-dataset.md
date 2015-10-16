@@ -9,11 +9,10 @@ tags: email-network enron
 
 # Different data versions
 
-- [MySQL dump](http://www.ahschulz.de/enron-email-data/): a "repaired" version which supports MySQL 5 instead of MySQL 4.
-- [Avroizing the Enron Emails](http://hortonworks.com/blog/the-data-lifecycle-part-one-avroizing-the-enron-emails/): using Pig and Avro and pointer to the MySQL dump
-- [UC Berkeley Enron Email Analysis](http://bailando.sims.berkeley.edu/enron_email.html)
+- [UC Berkeley Enron Email Analysis](http://bailando.sims.berkeley.edu/enron_email.html): perferred(from academic source)
+- [MySQL dump from some personal blog](http://www.ahschulz.de/enron-email-data/): a "repaired" version which supports MySQL 5 instead of MySQL 4.
 - [Enron by Joel Pfeiffer from Purdue](https://www.cs.purdue.edu/homes/jpfeiff/enron.html)
-
+- [Avroizing the Enron Emails](http://hortonworks.com/blog/the-data-lifecycle-part-one-avroizing-the-enron-emails/): using Pig and Avro and pointer to the MySQL dump(**cannot be downloaded**)
 
 # Papers on Enron
 
@@ -30,6 +29,12 @@ tags: email-network enron
 ### Enron story
 
 Illegal accounting and business practices hidden by the auditors until it went public.
+
+Several important events:
+
+- Dec 2000: Skilling took over the position of CEO from Lay
+- Aug 2001: Skilling resigned and Lay named as CEO and COO again
+- Dec 2001: Enron filed for bankrupcy
 
 ### Related work
 
@@ -58,48 +63,44 @@ Figure 2: three vertical lines(events) and the number of emails across time.
 
 [ORA](http://www.casos.cs.cmu.edu/projects/ora/) is a dynamic network analysis toolkit for assessing and comparing complex network data that changes over time.
 
-- Number of *stong components* reached its peak during the crisis.
-- *Disparity*(measured by betweenness and degree centralization) in employee’s communication control raised and reached its peak in December 2001, This indicates a more diverse communication network.
-- Number of email instances *received* per rank show similar patterns, while for *sent*, different patterns for different ranks(senioir management sent the most emails)
-- Different rank group show different *upward/downward/lateral* communication patterns across time.
+- Number of *stong components* reached its peak during the crisis(P13 - P14, Figure 3)
+- *Disparity*(measured by betweenness and degree centralization) in employee’s communication control raised and reached its peak in December 2001, This indicates a more diverse communication network.(P - P14 - P15, Figure 4)
+- Number of email instances *received* per rank show similar patterns(P16 Figure 7), while for *sent*, different patterns for different ranks(senioir management sent the most emails)(P17 Figure 8)
+- Different rank group show different *upward/downward/lateral* communication patterns across time(P220 and onwards)
 
-
-The data is not publicly available!
+Though the data is not publicly available, there are still some interesting insights on the dataset.
 
 ## [Email Surveillance Using Non-negative Matrix Factorization](http://link.springer.com/article/10.1007%2Fs10588-005-5380-5)
-
 
 Some temporal topic finding(copied from the paper):
 
 The year(2001) began with California Governor Gray Davis calling for an investigation of Enron in light of the 2000 California Energy crisis and it was an ongoing topic throughout the year.
 To a lesser degree, the discussion and legal battles involving the Dabhol Power Company were also consistently present throughout 2001.
 
-Some illustration:
+Some illustration at P14.
 
-![](/assets/images/graph-summary/enron-temporal-topic.png)
+# Specific issues about email network
 
-# Questions
-
-Corporate email network might be different than the traditional communication network, which is often peer-to-peer.
+Email network might be different than the traditional communication network, which is often peer-to-peer.
 
 Some potential issues
 
-- In corporate email network, one email can be sent to multiple recipients(can be hundreds, some notification, for example) and most of the recipients do not reply. When modeling topics of a event/subgraph, one message should be only considered once
-- When the communication is one-directional(the recipient did not respond), should we consider it an interaction? Or should it correspond to an edge? Can we ignore notification/broadcast emails(emails with low response rate)?
-- News feeds can potentially contaminate the topics
+- In corporate email network, one email can be sent to multiple recipients(can be hundreds, notification, for example) and most of the recipients do not reply. If we consider such directed graph, the number of edges will be much more than that of the graph where an edge is established only when some reply/interaction message is made. How is "edge" defined in our problem?
+- News feeds can potentially contaminate the topics. But it's fine. People rarely reply to it and we can ignore those emails without any reply.
 
 # Expected output characteristics
 
-The Output of the dynamic graph summary algorithm should have the following characteristics:
+The output of the dynamic graph summary algorithm on the Enron dataset should have the following characteristics:
 
 - Fewer events before the crisis than the crisis period
 - Event tend to be related to investiation, bankrupcy during the crisis period
 - Event graph tend to be more diverse during the crisis period
-
 
 # More dataset
 
 Besides the email network, we can analyze the following network:
 
 1. Company-company-news network: we can collect public news data(from [Bloomberg](http://www.bloomberg.com/europe), for example) between different companies across different time periods and discover what happens between them at different temporal position. 
-2. Q&A network
+2. Q&A network like *stackoverflow.com* or *quora.com*: they are a little different. Unlike email, the question post does not have a target.
+
+

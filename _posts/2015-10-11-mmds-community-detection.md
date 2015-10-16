@@ -104,3 +104,17 @@ Probability of some bit remaining zero: \\(p_0 = \exp (-d/t)\\), where \\(t\\) i
 Density of 1s: \\(p_1 = 1 - p_0 \\). Probability of claiming "seen": \\(p_1^{\text{#hash_functions}}\\)
 
 
+## Sampling a stream
+
+Stream data arrive too rapidly.
+
+Sampling requirement:
+
+1. Unbiased sampling
+2. Preserve the answer to the query
+
+Problem by Google: calcualte the fraction of unique search query(asked only once)
+
+Problem with sampling by position: an over-estimate of the result as a query appearing twice in the whole stream may appear only once in the sampled stream.
+
+
