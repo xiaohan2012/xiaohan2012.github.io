@@ -16,7 +16,10 @@ There are not "the" Enron dataset. Several options I found online:
 - [UC Berkeley Enron Email Analysis](http://bailando.sims.berkeley.edu/enron_email.html): preferred(from academic source)
 - [MySQL dump from some personal blog](http://www.ahschulz.de/enron-email-data/): a "repaired" version which supports MySQL 5 instead of MySQL 4.
 - [Enron by Joel Pfeiffer from Purdue](https://www.cs.purdue.edu/homes/jpfeiff/enron.html)
+- [A more comprehensive resource summary on Enron](http://enrondata.org/content/data/)
 - [Avroizing the Enron Emails](http://hortonworks.com/blog/the-data-lifecycle-part-one-avroizing-the-enron-emails/): using Pig and Avro and pointer to the MySQL dump(**cannot be downloaded**)
+
+I would prefer [the version by Jitesh Shetty and Jafar Adibi(**link broken**)](http://www.isi.edu/~adibi/Enron/Enron.htm). Reason given in *Summary of Enron dataset* section.
 
 # Papers on Enron
 
@@ -83,7 +86,15 @@ To a lesser degree, the discussion and legal battles involving the Dabhol Power 
 
 Some illustration at P14.
 
-# Summary characteristics of Enron dataset
+# Summary of Enron dataset
+
+Different versions of Enron dataset:
+
+- Original dataset contains duplicate, junks, blank emails and many email addresses and messages than the following "fixed" version.
+- Shetty and Adibi attempted to fix those problems. Resulting in 151 people and 252,759 emails.
+- In the Diesner paper, people are linked instead of email addresses, resulting in a graph of 557 users.
+
+Some analysis on the dataset show:
 
 - Fewer events before the crisis than the crisis period
 - Event tend to be related to investigation, bankruptcy during the crisis period
