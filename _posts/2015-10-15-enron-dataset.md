@@ -5,7 +5,9 @@ date: 2015-10-15 12:57:44
 categories: dataset
 tags: email-network enron
 ---
+# Introduction
 
+A more detailed introduction on Enron dataset is given referred to several research papers. Besides, links to various versions of Enron dataset is given as well as some random thoughts on the dynamic graph summary topic.
 
 # Different data versions
 
