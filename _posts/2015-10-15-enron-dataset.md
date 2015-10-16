@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Enronc Dataset"
+title: "Enron Dataset"
 date: 2015-10-15 12:57:44
 categories: dataset
 tags: email-network enron
@@ -9,7 +9,9 @@ tags: email-network enron
 
 # Different data versions
 
-- [UC Berkeley Enron Email Analysis](http://bailando.sims.berkeley.edu/enron_email.html): perferred(from academic source)
+There are not "the" Enron dataset. Several options I found online:
+
+- [UC Berkeley Enron Email Analysis](http://bailando.sims.berkeley.edu/enron_email.html): preferred(from academic source)
 - [MySQL dump from some personal blog](http://www.ahschulz.de/enron-email-data/): a "repaired" version which supports MySQL 5 instead of MySQL 4.
 - [Enron by Joel Pfeiffer from Purdue](https://www.cs.purdue.edu/homes/jpfeiff/enron.html)
 - [Avroizing the Enron Emails](http://hortonworks.com/blog/the-data-lifecycle-part-one-avroizing-the-enron-emails/): using Pig and Avro and pointer to the MySQL dump(**cannot be downloaded**)
@@ -22,19 +24,19 @@ tags: email-network enron
 - Some simple statistics
   - Number of emails per user
   - Email number across time(in 2011, many more emails than before)
-  - More diverse communication(beyond the potitional network) happened in 2001
+  - More diverse communication(beyond the positional network) happened in 2001
 
 ## [Communication Networks from the Enron Email Corpus “It's Always About the People. Enron is no Different”](http://link.springer.com/article/10.1007/s10588-005-5377-0)
 
 ### Enron story
 
-Illegal accounting and business practices hidden by the auditors until it went public.
+Illegal accounting and business practice hidden by the auditors until it went public.
 
 Several important events:
 
 - Dec 2000: Skilling took over the position of CEO from Lay
 - Aug 2001: Skilling resigned and Lay named as CEO and COO again
-- Dec 2001: Enron filed for bankrupcy
+- Dec 2001: Enron filed for bankruptcy
 
 ### Related work
 
@@ -63,9 +65,9 @@ Figure 2: three vertical lines(events) and the number of emails across time.
 
 [ORA](http://www.casos.cs.cmu.edu/projects/ora/) is a dynamic network analysis toolkit for assessing and comparing complex network data that changes over time.
 
-- Number of *stong components* reached its peak during the crisis(P13 - P14, Figure 3)
+- Number of *strong components* reached its peak during the crisis(P13 - P14, Figure 3)
 - *Disparity*(measured by betweenness and degree centralization) in employee’s communication control raised and reached its peak in December 2001, This indicates a more diverse communication network.(P - P14 - P15, Figure 4)
-- Number of email instances *received* per rank show similar patterns(P16 Figure 7), while for *sent*, different patterns for different ranks(senioir management sent the most emails)(P17 Figure 8)
+- Number of email instances *received* per rank show similar patterns(P16 Figure 7), while for *sent*, different patterns for different ranks(senior management sent the most emails)(P17 Figure 8)
 - Different rank group show different *upward/downward/lateral* communication patterns across time(P220 and onwards)
 
 Though the data is not publicly available, there are still some interesting insights on the dataset.
@@ -79,6 +81,16 @@ To a lesser degree, the discussion and legal battles involving the Dabhol Power 
 
 Some illustration at P14.
 
+# Summary characteristics of Enron dataset
+
+- Fewer events before the crisis than the crisis period
+- Event tend to be related to investigation, bankruptcy during the crisis period
+- Event graph tend to be more diverse during the crisis period
+
+We can expect the output of the dynamic graph summary algorithm on the Enron dataset to show the above characteristics.
+
+
+
 # Specific issues about email network
 
 Email network might be different than the traditional communication network, which is often peer-to-peer.
@@ -87,14 +99,6 @@ Some potential issues
 
 - In corporate email network, one email can be sent to multiple recipients(can be hundreds, notification, for example) and most of the recipients do not reply. If we consider such directed graph, the number of edges will be much more than that of the graph where an edge is established only when some reply/interaction message is made. How is "edge" defined in our problem?
 - News feeds can potentially contaminate the topics. But it's fine. People rarely reply to it and we can ignore those emails without any reply.
-
-# Expected output characteristics
-
-The output of the dynamic graph summary algorithm on the Enron dataset should have the following characteristics:
-
-- Fewer events before the crisis than the crisis period
-- Event tend to be related to investiation, bankrupcy during the crisis period
-- Event graph tend to be more diverse during the crisis period
 
 # More dataset
 
