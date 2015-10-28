@@ -28,9 +28,9 @@ $$ \sum \vert E(T_i) \vert $$
 is maximized under the constraint that
 
 1. \\( coherence(T_i) > A \\)
-2. \\( user\_purity(T_i) > B \\)
+2. \\( user\\_purity(T_i) > B \\)
 
-\\( user\_purity(T_i) \\) is the entropy function. It contrains that the majority of the interaction is carried out only by a few individuals in \\(T_i\\).
+\\( user\\_purity(T_i) \\) is the entropy function. It contrains that the majority of the interaction is carried out only by a few individuals in \\(T_i\\).
 
 ## Assumptions
 
