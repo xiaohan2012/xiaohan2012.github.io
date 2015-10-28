@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Dynamic topical graph summary: problem definition(2)"
+title: "Dynamic Topical Graph Summary: Problem Definition(2)"
 date: 2015-10-27 17:07:31
 categories: crafting
 tags: graph-summary
@@ -9,7 +9,7 @@ tags: graph-summary
 
 # Problem Definition 1
 
-Given the event graph, we induce a new graph where the nodes are the interactions and there is an directed edge from interaction \\((u_1, v_2, \alpha_1, t_1)\\) to \\((u_2, v_2, \alpha_2, t_2)\\) if \\(u_1 = u_2 \\) or \\(v_2 = u_2\\).
+Given the event graph, we induce a new graph where the nodes are the interactions and there is an directed edge from interaction \\((u_1, v_1, \alpha_1, t_1)\\) to \\((u_2, v_2, \alpha_2, t_2)\\) if \\(u_1 = u_2 \\) or \\(v_2 = u_2\\).
 
 Then the original interaction graph, \\(G\\) is converted into a tree, \\(T\\).
 
@@ -28,9 +28,9 @@ $$ \sum \vert E(T_i) \vert $$
 is maximized under the constraint that
 
 1. \\( coherence(T_i) > A \\)
-2. \\( user_purity(T_i) > B \\)
+2. \\( user\_purity(T_i) > B \\)
 
-\\( user_purity(T_i) \\) is the entropy function. It contrains that the majority of the interaction is carried out only by a few individuals in \\(T_i\\).
+\\( user\_purity(T_i) \\) is the entropy function. It contrains that the majority of the interaction is carried out only by a few individuals in \\(T_i\\).
 
 ## Assumptions
 
