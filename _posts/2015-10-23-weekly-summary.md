@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "title"
+title: "Weekly Summary, Oct, 23, 2015"
 date: 2015-10-23 16:57:27
-categories: cat
-tags: kw
+categories: weekly-summary
+tags: weekly-summary
 ---
 
 
