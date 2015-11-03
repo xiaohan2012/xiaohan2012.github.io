@@ -42,15 +42,51 @@ Use Wikipedia articles to train the classifier. Positive(negative) examples: ter
 
 Features include: max/mean link probability, max/mean of relatedness, disambiguation confidence(result from DA), generality(article depth in the Wikipedia concept tree), position and spread.
 
-# [Robust Disambiguation of Named Entities in Text](http://aclweb.org/anthology/D/D11/D11-1072.pdf)
+# [Hoffart 2011, Robust Disambiguation of Named Entities in Text](http://aclweb.org/anthology/D/D11/D11-1072.pdf)
 
-short text. collectively DA as a graph problem. robustness by selectively using components.
+## Objective
 
-prior, similarity, coherence
+$$ argmax\limits_{e_{1 \ldots k}} \alpha \sum\limits_{i=1\ldotsk} prior(m_i, e_i) + \beta \sum\limits_{i=1\ldotsk} sim(cxt(m_i), cxt(e_i)) + \gamma coh(e_1 \ldots e_k) $$
 
-A football game between "Manchester" and "Barcelona" that takes place in "Madrid".
+s.t.
+
+$$ \alpha + \beta + \gamma = 1$$
+
+$$ e_i \in cnd(m_i) $$
+
+- Use Stanford NER to detect noun phrases
+- Prior probability for entity: "Kashmir" refers to Kashmir (the region) in 90.91% of all occurrences.
+- Similarity between mention and entity. **Keyphrases** of entity as the bridge between entity and mention.
+  - keyphrases of entity, \\( KP(e) \\): anchor text that links to it and titles of articles that link to it.
+  - each word in keyphrase has a score/weight with the entity, can be PMI or IDF
+  - for each keyphrase, \\(q\\)(which partially matches the context), a score, \\(score(q)\\) is calculated based on the "cover" of the keyphrase in the mention context. Definition in paper. How the cover is computed(shortest window of words that contains a maximal number of words of the keyphrase)?
+  - \\( simscore(m, e) = \sum\limits_{p \in KP(e)} score(q)\\)
+  - syntax-based similarity: more in paper(Thater10)
+- Coherence score among a set of entities: the coherence score between a pair of entities uses "relatedness" in (Milne08)
+
+## Graph problem
+
+The above optimization problem can be converted to a graph problem. The graph consists:
+
+- two types of nodes: mention and entity weighted by similarity between mention and entity or *optionally* combined with the popularity prior.
+- two types of edges: mention-entity and entity-entity
+
+Dense subgraph detection(**Wow!**): find the *dense* subgraph that covers all mention nodes and for each mention node, there is an edge to one entity.
+
+*density* definition: minimum of weighted degree among all its nodes(total weight of all incident edges of a node). To cope the long-tail problem(less prominent and sparsely-connected entities)
+
+NP-hard prblem. Approximate algorithm:
+
+- prune entites that are remotely related to mentions(resulting in a smaller graph)
+- iterately remove the edge that has the least weighted degree without violating the structure constraint. Track the best subgraph
+- return the best subgraph
 
 
-coherence graph problem:
+## Robustness tests
 
-compute a subgraph with maximum density(?)
+Cope with short text and thematically heterogeneous.
+
+**prior test**: For short text, the result can be dominated by a few false alternatives with relatedly high prior(say, <= 90%). In that case, we ignore it. This is checked for each mention. **Key idea**: for short text, context might matter more than prior(fixed).
+**coherence test**: for each mention, if the disagreement between prior and similarity is big, we use coherence to solve the conflict. Otherwise, we'd better ignore it because if the text is thematically heterogeneous, coherence score(low) will damage.
+
+Very clever.
