@@ -6,11 +6,15 @@ categories: review
 tags: entity-linking
 ---
 
+# Resources
+
 [WSDM 2014](https://www.dropbox.com/sh/ekzqc3mdk4qkdlw/Egdq-WfUa7#)
 
 - Entity Linking
 - Entity Retrieval
 
+[Wikification and Beyond](http://nlp.cs.rpi.edu/paper/wikificationtutorial.pdf)
+[Reading list by Heng Ji](http://nlp.cs.rpi.edu/kbp/2014/elreading.html)
 
 
 # [Milne 2008, Learning to Link with Wikipedia](http://www.cs.waikato.ac.nz/~ihw/papers/08-DNM-IHW-LearningToLinkWithWikipedia.pdf)
