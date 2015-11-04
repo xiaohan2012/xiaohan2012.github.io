@@ -94,3 +94,65 @@ Cope with short text and thematically heterogeneous.
 **coherence test**: for each mention, if the disagreement between prior and similarity is big, we use coherence to solve the conflict. Otherwise, we'd better ignore it because if the text is thematically heterogeneous, coherence score(low) will damage.
 
 Very clever.
+
+
+# [Ratinov 2011, Local and Global Algorithms for Disambiguation to Wikipedia](http://web.eecs.umich.edu/~mrander/pubs/RatinovDoRo.pdf)
+
+Prons and cons of local and global approach.
+
+## Objective:
+
+$$ \Gamma^* \approx argmax\limits_{\Gamma} \sum\limits_{i=1}^N [ \phi(m_i, t_i) + \sum\limits_{t_j \in \Gamma^'} \psi(t_i, t_j)]$$
+
+where \\(\Gamma^'\\) is the disambiguation context, an approximation to \\(\Gamma^*)\\
+
+$$ \phi(m, t)  = \sum\limits_i w_i \phi_i(m, t)$$
+
+where \\(\phi_i(m, t)\\) is a feature and \\(w_i\\) a weight to be learned from bootstrap data(how?)
+
+## GLOW algorithm
+
+Give document and mentions(in contrast to Haffort 2011, where mentions are detected)
+
+1. Augment with other linkable mentions
+2. Candidate generation for the augmented mention set
+3. Ranker: find the best disambiguated entity for each mention
+4. Linker: map some mention-entity pair to *null* to improve the objective function value.
+
+### Mention augmentation + candidate generation
+
+NER+chunking noun phrases with its substrings. If appears as Wikipedia anchor texts, then it's a mention.
+
+For each mention, top-K entities(from Wikipedia data) is used as candidate. \\(P(t \vert m)\\) and \\(P(t)\\) as local features.
+
+### Ranker
+
+Disambiguation context(a set of mapped entities that we are confident about
+): use some classifier to decide. Essentially, strike a balance between aggressive(taking all NEs) and conservative(taking all unambiguous).
+
+Features: max/avg of NGD(Milne 2008) and PMI on inlink/**outlink**  to \\(\Gamma^'\\)
+
+### Linker
+
+Include all Ranker features, plus:
+
+- confidence of second best entity \\(t^'\\)
+- percentage that \\(m\\) is linked in Wikipedia
+- 
+
+### Learning feature weights
+
+Like Milne 2008, use Wikipedia links as positive training examples and those candidates not matching the mention as negative ones.
+
+Ranker and Linker are trained separately.
+
+## Comment
+
+- Compared to Haffort 2011, this approach is relatively local as we select the entity for each mention independently.
+- Why Linker step improves the objective function value,?
+- Similar to Milne 2008, it follows the LG-DA-MD order. The improvement is incorporating the entity-entity relationships and more features.
+
+
+# [TAGME: On-the-fly Annotation of Short Text Fragments(by Wikipedia Entities)](http://www.di.unipi.it/~ferragin/cikm2010.pdf)
+
+# [A Framework for Benchmarking Entity-Annotation Systems](http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/40749.pdf)
