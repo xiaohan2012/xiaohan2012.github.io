@@ -104,7 +104,7 @@ Prons and cons of local and global approach.
 
 $$ \Gamma^{*} \approx argmax_{\Gamma} \sum\limits_{i=1}^N [ \phi(m_i, t_i) + \sum\limits_{t_j \in \Gamma^{'}} \psi(t_i, t_j)] $$
 
-where \\(\Gamma^{'}\\) is the disambiguation context, an approximation to \\(\Gamma^{*})\\
+where \\(\Gamma^{'}\\) is the disambiguation context, an approximation to \\( \Gamma^{*} \\)
 
 $$ \phi(m, t)  = \sum\limits_i w_i \phi_i(m, t)$$
 
@@ -130,13 +130,13 @@ For each mention, top-K entities(from Wikipedia data) is used as candidate. \\(P
 Disambiguation context(a set of mapped entities that we are confident about
 ): use some classifier to decide. Essentially, strike a balance between aggressive(taking all NEs) and conservative(taking all unambiguous).
 
-Features: **max/avg** of NGD(Milne 2008) and PMI on inlink/**outlink**  to \\(\Gamma^{'}\\)
+Features: **max/avg** of NGD(Milne 2008) and PMI on inlink/**outlink**  to \\( \Gamma^{'} \\)
 
 ### Linker
 
 Include all Ranker features, plus:
 
-- confidence of second best entity \\(t^'\\)
+- confidence of second best entity \\(t^{'}\\)
 - percentage that \\(m\\) is linked in Wikipedia
 - entropy of \\(P(t \vert m)\\): **why?**
 
