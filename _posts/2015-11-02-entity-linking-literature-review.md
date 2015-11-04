@@ -50,7 +50,7 @@ Features include: max/mean link probability, max/mean of relatedness, disambigua
 
 ## Objective
 
-$$ argmax\limits_{e_{1 \ldots k}} \alpha \sum\limits_{i=1\ldotsk} prior(m_i, e_i) + \beta \sum\limits_{i=1\ldotsk} sim(cxt(m_i), cxt(e_i)) + \gamma coh(e_1 \ldots e_k) $$
+$$ argmax_{e_{1 \ldots k}} \alpha \sum\limits_{i=1\ldots k} prior(m_i, e_i) + \beta \sum\limits_{i=1\ldots k} sim(cxt(m_i), cxt(e_i)) + \gamma coh(e_1 \ldots e_k) $$
 
 s.t.
 
@@ -90,8 +90,8 @@ NP-hard prblem. Approximate algorithm:
 
 Cope with short text and thematically heterogeneous.
 
-**prior test**: For short text, the result can be dominated by a few false alternatives with relatedly high prior(say, <= 90%). In that case, we ignore it. This is checked for each mention. **Key idea**: for short text, context might matter more than prior(fixed).
-**coherence test**: for each mention, if the disagreement between prior and similarity is big, we use coherence to solve the conflict. Otherwise, we'd better ignore it because if the text is thematically heterogeneous, coherence score(low) will damage.
+- **prior test**: For short text, the result can be dominated by a few false alternatives with relatedly high prior(say, <= 90%). In that case, we ignore it. This is checked for each mention. **Key idea**: for short text, context might matter more than prior(fixed).
+- **coherence test**: for each mention, if the disagreement between prior and similarity is big, we use coherence to solve the conflict. Otherwise, we'd better ignore it because if the text is thematically heterogeneous, coherence score(low) will damage.
 
 Very clever.
 
@@ -102,9 +102,9 @@ Prons and cons of local and global approach.
 
 ## Objective:
 
-$$ \Gamma^* \approx argmax\limits_{\Gamma} \sum\limits_{i=1}^N [ \phi(m_i, t_i) + \sum\limits_{t_j \in \Gamma^'} \psi(t_i, t_j)]$$
+$$ \Gamma^{*} \approx argmax_{\Gamma} \sum\limits_{i=1}^N [ \phi(m_i, t_i) + \sum\limits_{t_j \in \Gamma^{'}} \psi(t_i, t_j)] $$
 
-where \\(\Gamma^'\\) is the disambiguation context, an approximation to \\(\Gamma^*)\\
+where \\(\Gamma^{'}\\) is the disambiguation context, an approximation to \\(\Gamma^{*})\\
 
 $$ \phi(m, t)  = \sum\limits_i w_i \phi_i(m, t)$$
 
@@ -130,7 +130,7 @@ For each mention, top-K entities(from Wikipedia data) is used as candidate. \\(P
 Disambiguation context(a set of mapped entities that we are confident about
 ): use some classifier to decide. Essentially, strike a balance between aggressive(taking all NEs) and conservative(taking all unambiguous).
 
-Features: max/avg of NGD(Milne 2008) and PMI on inlink/**outlink**  to \\(\Gamma^'\\)
+Features: **max/avg** of NGD(Milne 2008) and PMI on inlink/**outlink**  to \\(\Gamma^{'}\\)
 
 ### Linker
 
@@ -138,7 +138,7 @@ Include all Ranker features, plus:
 
 - confidence of second best entity \\(t^'\\)
 - percentage that \\(m\\) is linked in Wikipedia
-- 
+- entropy of \\(P(t \vert m)\\): **why?**
 
 ### Learning feature weights
 
@@ -149,7 +149,7 @@ Ranker and Linker are trained separately.
 ## Comment
 
 - Compared to Haffort 2011, this approach is relatively local as we select the entity for each mention independently. However, it uses richer set of features and tuned the feature weights by learning from Wikipedia. **Is it possible to combine the global inference from Haffort 2011 and richer features from here?**
-- Why Linker step improves the objective function value,?
+- Why Linker step improves the objective function value?
 - Similar to Milne 2008, it follows the LG-DA-MD order. The improvement is incorporating the entity-entity relationships and more features.
 
 
