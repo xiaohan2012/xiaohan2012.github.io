@@ -148,7 +148,7 @@ Ranker and Linker are trained separately.
 
 ## Comment
 
-- Compared to Haffort 2011, this approach is relatively local as we select the entity for each mention independently.
+- Compared to Haffort 2011, this approach is relatively local as we select the entity for each mention independently. However, it uses richer set of features and tuned the feature weights by learning from Wikipedia. **Is it possible to combine the global inference from Haffort 2011 and richer features from here?**
 - Why Linker step improves the objective function value,?
 - Similar to Milne 2008, it follows the LG-DA-MD order. The improvement is incorporating the entity-entity relationships and more features.
 
