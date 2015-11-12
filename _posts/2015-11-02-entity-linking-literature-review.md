@@ -171,4 +171,44 @@ Ranker and Linker are trained separately.
 
 # [TAGME: On-the-fly Annotation of Short Text Fragments(by Wikipedia Entities)](http://www.di.unipi.it/~ferragin/cikm2010.pdf)
 
+Speed is a big concern.
+
+## DA
+Detect all linkable anchors(mentions), \\(\mathcal{A}\\), for each anchor, \\(a\\) and a candidate sense, \\(p_a\\), define the vote from another anchor \\(b\\) as:
+
+$$ vote_b(p_a) = \frac{\sum\limits_{p_b \in Pb(b)} rel(p_b, p_a) P( p_b \vert b)}{\vert Pb(b) \vert} $$
+
+where \\(P( p_b \vert b)\\) is *commonness*.
+
+Note when \\(b\\) is unambiguous, \\(vote_b(p_a) = rel(p_b, p_a) \\). In contrast to Milne 2008, **all** mentions are used. Might be the reason it's good for short text.
+
+*Goodness* of \\(a \rightarrow p_a) is \\( rel_a(p_a) = \sum\limits_{b \in \mathcal{A}} vote_b(p_a)\\).
+
+Each mention is DA independently.
+
+And two methods:
+
+- DA by classifier: a classifier using two features \\(rel_a(p_a)\\) and \\(P(p_a \vert a)\\) and pick the one with the highest probability
+- DA by threshold: obtain the top \\(k\\) senses ranked by \\(rel_a(p_a)\\) and select the one with the highest commoness, \\(P(p_a \vert a)\\)
+
+For speed, low commonness(below a specified threshold) senses are removed.
+
+## LD
+
+Two features for anchor \\(a\\):
+
+- link probability \\(lp(a)\\)
+- cohernece(average relatedness) \\( \frac{1}{\vert \mathcal{A} \vert - 1} \sum\limits_{b \in \mathcal{A} \\ a} rel(p_a, p_b) \\)
+
+Two ways to combine and get a score:
+
+- average
+- linear regression
+
+One we have the score, use some threshold \\(\rho_{NA}). If below the threshold, it's *NA*.
+
+## Comments
+
+- Compared to Milne 2008, it uses all anchors as the context. Meanwhile, it uses fewer features for the decision problems.
+
 # [A Framework for Benchmarking Entity-Annotation Systems](http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/40749.pdf)
