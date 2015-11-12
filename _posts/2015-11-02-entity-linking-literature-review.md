@@ -40,7 +40,7 @@ Training data: links in Wikipedia articles as positive.
 
 More details:
 
-- Context term's relatedness: \\(r(t, s) = \frac{1}{|C|-1} \sum\limits_{s^{'} \in C \\ s} rel(s, s^{'})\\), where \\(t\\) is the term, \\(s\\) is the sense and \\(C\\) is the context terms.
+- Context term's relatedness: \\( r(t, s) = \frac{1}{\vert C \vert-1} \sum\limits_{s^{'} \in C \\ s} rel(s, s^{'}) \\), where \\(t\\) is the term, \\(s\\) is the sense and \\(C\\) is the context terms.
 - Context term's link probability \\(lp(t)\\): probability that \\(t\\) is linked to some sense
 
 Context term's weight \\(w(t, s) = (r(t, s) + lp(t)) / 2\\)
@@ -104,6 +104,9 @@ Cope with short text and thematically heterogeneous.
 
 Very clever.
 
+## Question
+
+1. How this methods deal with short text?
 
 # [Ratinov 2011, Local and Global Algorithms for Disambiguation to Wikipedia](http://web.eecs.umich.edu/~mrander/pubs/RatinovDoRo.pdf)
 
