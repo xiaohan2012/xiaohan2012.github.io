@@ -32,11 +32,20 @@ Can be effectively for lone text but not necessarily short ones, in which contex
 
 A binary classifier with three features, whose input is a term and a Wikipedia article and output the probability that the term should be disambiguated as such. Three features are used:
 
-  - commonness(popularity)
-  - weighted sum of relatedness(to its context terms)
-  - quality of context: sum of second feature
+  - commonness(popularity): probability that term \\(t\\) linked to sense \\(s\\)
+  - weighted average of relatedness(to its context(unambiguous) terms)
+  - quality of context: sum of context terms' weight
 
 Training data: links in Wikipedia articles as positive.
+
+More details:
+
+- Context term's relatedness: \\(r(t, s) = \frac{1}{|C|-1} \sum\limits_{s^{'} \in C \\ s} rel(s, s^{'})\\), where \\(t\\) is the term, \\(s\\) is the sense and \\(C\\) is the context terms.
+- Context term's link probability \\(lp(t)\\): probability that \\(t\\) is linked to some sense
+
+Context term's weight \\(w(t, s) = (r(t, s) + lp(t)) / 2\\)
+
+The second feature \\(f(t, s) = \frac{1}{Z} \sum\limits_{(s^{'}, t^{'}) \in C} rel(s, s^{'}) w(t^{'}, s^{'})\\), where \\(Z\\) is \\(\sum w(t^{'}, s^{'})\\).
 
 ## LD
 
