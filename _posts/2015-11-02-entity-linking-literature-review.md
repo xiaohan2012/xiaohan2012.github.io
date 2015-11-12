@@ -55,6 +55,10 @@ Use Wikipedia articles to train the classifier. Positive(negative) examples: ter
 
 Features include: max/mean link probability, max/mean of relatedness, disambiguation confidence(result from DA), generality(article depth in the Wikipedia concept tree), position and spread.
 
+## Comments
+
+- This method may not suitable for short text as it relies on unambiguous terms to determine some feature values. 
+
 # [Hoffart 2011, Robust Disambiguation of Named Entities in Text](http://aclweb.org/anthology/D/D11/D11-1072.pdf)
 
 ## Objective
@@ -104,7 +108,7 @@ Cope with short text and thematically heterogeneous.
 
 Very clever.
 
-## Question
+## Comments
 
 1. How this methods deal with short text?
 
