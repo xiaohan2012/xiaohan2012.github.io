@@ -182,7 +182,7 @@ where \\(P( p_b \vert b)\\) is *commonness*.
 
 Note when \\(b\\) is unambiguous, \\(vote_b(p_a) = rel(p_b, p_a) \\). In contrast to Milne 2008, **all** mentions are used. Might be the reason it's good for short text.
 
-*Goodness* of \\(a \rightarrow p_a) is \\( rel_a(p_a) = \sum\limits_{b \in \mathcal{A}} vote_b(p_a)\\).
+*Goodness* of \\(a \rightarrow p_a \\) is \\( rel_a(p_a) = \sum\limits_{b \in \mathcal{A}} vote_b(p_a)\\).
 
 Each mention is DA independently.
 
@@ -205,7 +205,7 @@ Two ways to combine and get a score:
 - average
 - linear regression
 
-One we have the score, use some threshold \\(\rho_{NA}). If below the threshold, it's *NA*.
+One we have the score, use some threshold \\(\rho_{NA}\\). If below the threshold, it's *NA*.
 
 ## Comments
 
