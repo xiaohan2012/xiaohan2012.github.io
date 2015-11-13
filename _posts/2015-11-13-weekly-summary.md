@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Weekly Summary, Oct, 31, 2015"
+title: "Weekly Summary, Nov, 13, 2015"
 date: 2015-11-13 15:54:38
 categories: weekly-summary
 tags: weekly-summary
