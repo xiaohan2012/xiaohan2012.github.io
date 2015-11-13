@@ -173,6 +173,10 @@ Ranker and Linker are trained separately.
 
 Speed is a big concern.
 
+## Mention detection
+
+Mentions are detected by matching the text to Wikipedia anchors extracted apriori. This decision might be concerned with speed.
+
 ## DA
 Detect all linkable anchors(mentions), \\(\mathcal{A}\\), for each anchor, \\(a\\) and a candidate sense, \\(p_a\\), define the vote from another anchor \\(b\\) as:
 
@@ -212,3 +216,67 @@ One we have the score, use some threshold \\(\rho_{NA}\\). If below the threshol
 - Compared to Milne 2008, it uses all anchors as the context. Meanwhile, it uses fewer features for the decision problems.
 
 # [A Framework for Benchmarking Entity-Annotation Systems](http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/40749.pdf)
+
+## Coping with different scopes/problems in differnt papers
+
+Different tools for different problems(see the list of problems in original paper). And different datasets are for different problems. We need to a way to uniformly evaluate those tools.
+
+Certain problems(easier ones) *reduces* to other problems(harder ones). For example, *Annotation to Wikipedia* reduces *Scored Annotation to Wikipedia(Sa2W)*. This means the solution for the easier problem can be inferred from that for the harder problem efficiently. This means the dataset for one problem can be used for other problems that it reduces to or is reduced from.
+
+Five tools coping the hardest problem(*Sa2W*) are chosen.
+
+## Evaluation measures
+
+### Two side measures
+
+Annotation = mention + entity. One anotation is correct if both parts are correct.
+
+However, challenges:
+
+- Semantic: similar pages/entities(*Barrack Obama* and *President of United States of America*), which can all be potentially correct. This makes the definition of a correct match difficult.
+- Syntactic: mention string, "President Barrack Obama" and "Barrack Obama" probably mean the same thing.
+
+We define a binary function \\(M(x^{'}, x)\\) on two Wikipedia articles that determines whether they are "correct match" or not. It may not be a exact string matching procedure.
+
+We use *micro and macro precision/recall/F1* over the input texts(a text can contain multiple mentions).
+
+*Definition of \\(M\\)* for different problems:
+
+Some issues: entities output by some system might be the redirect page(alias page). A non-redirect page can have multiple redirect pages. We use a *dereference* function \\(d\\) to determine the real entity. 
+
+- For *Concept to Wikipedia(C2W)*: \\(M(e_1, e_2) = d(e_1) = d(e_2)\\).
+- For *Disambiguation to Wikipedia(D2W)*: \\(M(e_1, e_2) = d(e_1) = d(e_2)\\).
+- For *Annotation to Wikipedia(A2W)*: weak match: \\(M((a_1), a_2) = a_1 \text{ overlaps with } a_2 \land d(a_1.e) = d(a_2.2)\\), strong match: replace overlap with \\(a_1.mention = a_2.mention\\)(exact string matching)
+
+### One side measure
+
+
+We evaluate mention detection and disambiguation **separetely**.
+
+Mention evaluation: checking overlap only. fuzzy somehow.
+
+### Similarity between systems(across documents/datasets)
+
+Nice to know.
+
+Measure the similarity based on the output.
+
+More details in paper.
+
+
+## Results
+
+Huom: *AIDA-CoNNL* and *AQUAINT* annotate only a subset of the mentions.
+
+In general, AIDA precision is impressive, however recall is not as good.
+
+Mention detection: best F1, ~70%. AIDA's precision high (~90%), low recall(~40%). TAGME mention detection recall is impressive(78%). It uses distilled anchor corpus.
+Entity match: AIDA's precision is impressive.
+
+Speed: AIDA is slow(maybe due to NER process) while TAGME is  fast.
+
+## Comment
+
+- AIDA sucks at mention detection(low recal). Its general precision is impressive
+- TAGME is good at mention detection(high recall). It uses distilled anchor corpus. Can we augment AIDA with that?
+
