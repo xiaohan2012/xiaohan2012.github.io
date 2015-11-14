@@ -10,7 +10,7 @@ tags: entity-linking
 
 [WSDM 2014](https://www.dropbox.com/sh/ekzqc3mdk4qkdlw/Egdq-WfUa7#)
 
-- Entity Linking
+- Entity Linking(smmary&comparison on Page 86 of 2nd slide)
 - Entity Retrieval
 
 [Wikification and Beyond](http://nlp.cs.rpi.edu/paper/wikificationtutorial.pdf)
@@ -280,3 +280,42 @@ Speed: AIDA is slow(maybe due to NER process) while TAGME is  fast.
 - AIDA sucks at mention detection(low recal). Its general precision is impressive
 - TAGME is good at mention detection(high recall). It uses distilled anchor corpus. Can we augment AIDA with that?
 
+# [Han 2011, Collective Entity Linking in Web Text: A Graph-Based Method](http://nlpr-web.ia.ac.cn/cip/ZhaoJunPublications/paper/SIGIR2011.NED.pdf)
+
+## Referent graph
+
+Construct a mention-entity graph:
+
+- Mention to entity edge weight is defined by *compatibility*,\\(CP(m, e) = \frac{m \dot e}{\vert m \vert \vert e\vert}\\), where \\(m, e\\) are context vectors for mention and entity respectively.
+- Entity-entity edge is weighted by *relatedness* in Milne 2008.
+
+The above is quite similar to Haffort, 2011.
+
+## Collective inference
+
+Using *Personalized Page Rank* to derive the "evidence" score for each entity. 
+
+Three variables:
+
+- initial importance vector: \\(s\\), one value for each object(mention + entity). Initially, entries for entities are 0 and for mentions are derived from TfIdf.
+- Eveidence vector: \\(r\\). One entry for each object
+- propagation matrix \\(T\\): defines two types of propagation with proagation ratio defined as followed
+  - Evidence propagation ratio from \\(m\\) to  \\(e\\): normalizied compability on the candidate entities
+  - Evidence propagation ratio from \\(e_1\\) to \\(e_2\\): normalized relatedness over neighboring entities.
+
+Propagation method:
+
+$$ r^{t+1} = (1-\lambda) \times T \times r^{t} + \lambda \times s$$
+
+Closed form is in the paper.
+
+
+Final result: 
+
+- Entity decision: \\(m.E = argmax_e CP(m, e) \times r(e))
+- Posterior importance of mention: \\(Importance_{post}(m) = importance(m) \times r(m.E)\\). Can be used for ranking
+
+## Comment:
+
+- Compared to AIDA, a different way for joint inference, random walk
+- Experiment datasets are quite limited
