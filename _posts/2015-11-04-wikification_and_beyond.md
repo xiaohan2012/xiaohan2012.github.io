@@ -30,12 +30,23 @@ Ranking entities: commoness, graph-based(centrality, PageRank), context-similari
 
 # [Chen, 2011, Collaborative Ranking: A Case Study on Entity Linking](http://nlp.cs.rpi.edu/paper/clranking.pdf)
 
-Covers mention expansion: NBA -> Nation Basket Association. Reported: Medical Domain: 33% of abbreviations are ambiguous.
+Focuses on the *candidate entity ranking* part. Candidate generation uses method from another paper.
 
-Weighted finite transducer.
+Basic idea: query expansion and ensemble learning.
 
+A query is triplet of *(query_id, name string, context document)*.
 
-Entity linking on YAGO which has richer semnatics for relations.
+Two levels of collaborations(**a cool figure** in paper).
+
+- Query-level: query expansion using similar queries
+- Ranker-level: different ranker for final score prediction
+
+Easter egg: three learning approaches for learning to rank: 1) pointwise, 2) pairwise 3), listwise. Need to read more.
+
+Side notes:
+
+- Weighted finite transducer(for acronyms, such as NBA).
+- Entity linking on YAGO which has richer semnatics for relations.
 
 # [Cassidy, 2012, Analysis and Enhancement of Wikification for Microblogs with Context Expansion](http://www.anthology.aclweb.org/C/C12/C12-1028.pdf)
 
