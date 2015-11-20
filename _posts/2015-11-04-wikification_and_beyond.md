@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "title"
+title: "Resource: Wikification and Beyond"
 date: 2015-11-04 18:28:22
-categories: cat
-tags: kw
+categories: resource
+tags: wkificiation entity-linking resource
 ---
 
 # Mention detection
