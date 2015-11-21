@@ -312,7 +312,7 @@ Closed form is in the paper.
 
 Final result: 
 
-- Entity decision: \\(m.E = argmax_e CP(m, e) \times r(e))
+- Entity decision: \\( m.E = argmax_e CP(m, e) \times r(e) \\)
 - Posterior importance of mention: \\(Importance_{post}(m) = importance(m) \times r(m.E)\\). Can be used for ranking
 
 ## Comment:
