@@ -19,7 +19,8 @@ tags: weekly-summary
 # Todo:
 
 - Clustering is also an alternative(similar to the above)
-  - can we apply that?
+
+- can we apply that?
     - Yes, for only the messages in the events, we cluster them into *K* clusters and compare.
   - evaluation?
     - for dataset without ground truth: [silhouette-coefficient](http://scikit-learn.org/stable/modules/clustering.html#silhouette-coefficient)
@@ -30,7 +31,7 @@ tags: weekly-summary
 	- some [API market place](https://market.mashape.com/)
 	- [text summarization](http://textsummarization.net/)
 	- [autosummarizer](http://autosummarizer.com/index.php)
-	- [textanalysis](https://market.mashape.com/textanalysis/text-summarization#): credit required
+	- [textanalysis](https://market.mashape.com/textanalysis/text-summarization#): credit card required
 	- [getting started with text summarization](http://textminingonline.com/getting-started-with-the-automatic-text-summarization-api-on-mashape): with more lnks to open source tools
   - evaluation: human inspection
 - Check out graph summarization and text summarization
@@ -41,16 +42,17 @@ tags: weekly-summary
 	- SMS network
 	- cooperation&coauthorship network
 	- we are not constrained to text, we want just *vectors*. How about image/video/audio?
-	- Some social network dataset repository to check
+	- Some social network dataset repository to check(**TODO**)
 	  - [SNAP](https://snap.stanford.edu/data/web-flickr.html)
 	  - [blog post from kdnuggets](http://www.kdnuggets.com/2014/08/interesting-social-media-datasets.html+)
 	  - [G7 - Yahoo! Property and Instant Messenger Data use for a Sample of Users, v.1.0 (4.3 Gb)](http://webscope.sandbox.yahoo.com/catalog.php?datatype=g): is their text content there?
 	- the TimeCrunch algorithm can be used to select the K important subgraphs
+- Consider Gianmarko's proposed paper on coping with the semantic drift problem
 - Can graph partitioning algorithm be applied here?
   - how is it evaluated?
 - Model it as K-MST problem
   - Indirect summarization as we can limit the node coverage parameter to a small integer so that a few messages are selected as the event
-- Consider Gienmarko's proposed paper on coping with the semantic drift problem
+- What is the graph structure like for each event?
 - Evaluation for the topics
 - More interpretable summarization
   - Limit the number of messages in each event to be small?
@@ -58,9 +60,6 @@ tags: weekly-summary
 - Another question: why use vectors to represent the text? Not keywords?
 
 Then let's consider performance
-
-
-
 
 [TimeCrunch: dynamic graph summiarzation](https://www.cs.cmu.edu/~neilshah/research/papers/TimeCrunch.KDD.2015.pdf)
 
@@ -100,3 +99,14 @@ What is useful:
   - we optimize coverage by maximizing # of uniquely covered nodes
 - Can we demonstrate how the events are connected? Instead of a linear display.
   - the paper uses connectivity to connect the chains  
+
+
+New finding:
+
+- hierarchical structure(zoom in/out)
+- timeline to describe the event
+- synthetic data
+- manual comparing topic distribution on background and event messages
+- check causal relationship between nodes
+- add types of edge, time stamp
+- information propagation patterns of event trees
