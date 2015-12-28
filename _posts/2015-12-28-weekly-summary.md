@@ -34,6 +34,7 @@ tags: weekly-summary
 - Encourage other types of interactions by adding weight, for example, adding importance to "forward" type
 - Run minimum spanning tree instead of Dijkstra
 - Fix the bug in the decomposed graph
-    
-    
+- Better visualization of the event    
+- Search texts on link prediction to model the interaction link score
+
 The summary should be done immediately after the dicussion...
