@@ -3,9 +3,9 @@ layout: default
 ---
 
 <div class="lead pretty-links">
-  Hi! this is just a sample **intro text**. You would normally put your [full name](about/) here and say something *smart* about yourself.
+  I am a PhD student in the [Data Mining Group](http://research.ics.aalto.fi/dmg/index.shtml) at [Aalto University](http://www.aalto.fi/en/), Finland.
+  
+  My main research interests are *Graph Mining* and *Machine Learning*. 
 
-  This could also be the good place to say were you are coming from, what you [do for a living](work/) and maybe what you are [interested in](projects/). You might also be [writing](articles/) about stuff.
-
-  But after all this is your site and I'm just a **placeholder text** so what would i know about some *home page content*.
+  Check out my [projects](projects/) and [blog articles](articles/).
 </div>

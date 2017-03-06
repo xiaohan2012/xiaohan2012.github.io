@@ -9,3 +9,7 @@ Thumbs.db
 .rvmrc
 
 *.*~
+
+_site
+
+.sass-cache/

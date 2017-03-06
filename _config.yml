@@ -1,22 +1,21 @@
 # The main config file for your Jekyll template
 
 # Site settings
-title: Jackal               # used for the html title of every page
+title: Han Xiao               # used for the html title of every page
 desc: >
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  I am a PhD student in Computer Science at Aalto University.
+  My main research interests are Graph Mining and Machine Learning. 
 
-url: http://jackal.com      # put your website hosting url here
+url: http://xiaohan2012.github.io      # put your website hosting url here
 baseurl: ''                 # the subpath of your site, e.g. /blog
 permalink: /:year/:title/   # how should we display posts url
 
 # Meta settings
-email: jackal@gmail.com
-author: The Jackal
-twitter_username: clenemt
-github_username: clenemt
-github_source: jackal
+email: han.xiao@aalto.fi
+author: Han Xiao
+twitter_username: xiaohan2012
+github_username: xiaohan2012
+# github_source: jackal
 
 # Put your ga tracking code below
 google_analytics: 'UA-XXXXXXXX-X'
@@ -35,9 +34,6 @@ navigation:
   - title: Projects
     url: /projects/
     desc: Stuffs I like to do
-  - title: Work
-    url: /work/
-    desc: Stuffs I hate to do
   - title: About
     url: /about/
     desc: Learn about me
@@ -67,3 +63,4 @@ exclude:
 gems:
   - jekyll-paginate
 
+highlighter: rouge
