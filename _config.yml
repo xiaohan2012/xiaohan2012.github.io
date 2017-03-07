@@ -49,8 +49,10 @@ defaults:
 
 # Markdown parser settings
 markdown: kramdown
+highlighter: rouge
 kramdown:
   input: GFM
+  syntax_highlighter: rouge
   hard_wrap: false          # you can change this if you feel like it
   parse_block_html: true    # allow parsing html inside markdown
 
@@ -63,4 +65,3 @@ exclude:
 gems:
   - jekyll-paginate
 
-highlighter: rouge

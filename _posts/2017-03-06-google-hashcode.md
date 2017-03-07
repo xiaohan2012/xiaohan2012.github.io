@@ -1,6 +1,6 @@
 ---
 title: Google Hashcode 2017 -- Streaming Videos
-desc: My participation experience.
+desc: My solution and lessons learned.
 ---
 
 ## What is Google Hashcode?
@@ -38,7 +38,7 @@ So I reflected upon this "sorting" idea, which led me to using heap.
 However, the build-in implementation [heapq](https://docs.python.org/2/library/heapq.html) does not perform efficient priority key update. 
 So I turned out implementing my own based on [Introduction to Algorithms, Third Edition](https://mitpress.mit.edu/books/introduction-algorithms): 
 
-{% highlight python %}
+``` python
 import math
 from copy import copy
 
@@ -138,13 +138,13 @@ class heap():
             self.increase_key(e, k)
         elif old_k > k:
             self.decrease_key(e, k)
-{% endhighlight %}
+```
 
 ## My solution: code
 
 ### Parsing input + preprocessing 
 
-{% highlight python %}
+```python
 
 from collections import defaultdict
 from tqdm import tqdm
@@ -200,12 +200,12 @@ for c in tqdm(range(C)):
 
 cv_heap = build_heap(imps, cv_pairs)  # the important (cache, video) heap
 
-{% endhighlight%}
+```
 
 
 ### Main algorithm
 
-{% highlight python %}
+``` python
 
 def main(vc2reqs, v2size, latency, cv_heap, debug=False):
 
@@ -267,7 +267,7 @@ def main(vc2reqs, v2size, latency, cv_heap, debug=False):
     return c2v
 
 c2v = main(vc2reqs, v2size, latency, cv_heap, debug=False)
-{% endhighlight%}
+```
 
 ## Received points and ranking
 
@@ -285,12 +285,6 @@ whereas the top teams scored ~2650000.
 Still a long way to go!
 
 PS: for the Online Qualification Round, my team did not perform very well (around ~1980000 points).
-
-{% highlight ruby %}
-def foo
-  puts 'foo'
-  end
-{% endhighlight %}
   
 ## Possible improvement
 
