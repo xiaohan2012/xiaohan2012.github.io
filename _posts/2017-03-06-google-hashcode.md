@@ -9,6 +9,8 @@ In short, a programming competition that focuses on *one* *real-life engineering
 
 This is my first participation of this event :)
 
+---
+
 ## Task: Streaming Videos
 
 Quoting from the [problem statement](https://hashcode.withgoogle.com/2017/tasks/hashcode2017_qualification_task.pdf), 
@@ -17,6 +19,7 @@ the general task is:
 Given a description of cache servers,
 network endpoints and videos, along with predicted requests for individual videos, decide **which videos to put in which cache server** in order to minimize the average waiting time (latency) for all requests.
 
+---
 
 ## My solution: greedy approach
 
@@ -140,6 +143,8 @@ class heap():
             self.decrease_key(e, k)
 ```
 
+---
+
 ## My solution: code
 
 ### Parsing input + preprocessing 
@@ -205,6 +210,8 @@ cv_heap = build_heap(imps, cv_pairs)  # the important (cache, video) heap
 
 ### Main algorithm
 
+The greedy algorithm:
+
 ``` python
 
 def main(vc2reqs, v2size, latency, cv_heap, debug=False):
@@ -269,6 +276,7 @@ def main(vc2reqs, v2size, latency, cv_heap, debug=False):
 c2v = main(vc2reqs, v2size, latency, cv_heap, debug=False)
 ```
 
+---
 ## Received points and ranking
 
 The points I got for each dataset (Extended Round):
@@ -285,10 +293,15 @@ whereas the top teams scored ~2650000.
 Still a long way to go!
 
 PS: for the Online Qualification Round, my team did not perform very well (around ~1980000 points).
-  
-## Possible improvement
 
-- How to formulate the problem differently? 
+---
+
+## Future questions
+
+- How to formulate the problem differently?
+- How did those top-ranked teams solve this problem?
+
+---
 
 ## Lessons learned
 
