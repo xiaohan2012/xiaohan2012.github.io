@@ -11,5 +11,5 @@ permalink: /about/
   
   My main research interests include *Graph Mining* and *Machine Learning*. 
 
-  Check out my [projects](projects/) and [blog articles](articles/).
+  Check out my [projects](/projects/) and [blog articles](/articles/).
 </div>
