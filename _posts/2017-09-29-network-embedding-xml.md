@@ -94,7 +94,8 @@ I consider *precision at k* as it's more appropriate for this task that accuracy
 
 ## experiment result
 
-**data science**:
+### data science
+
 
 |       | *fastxml* |    *cnn* | *cnn+deepwalk* |
 |-------|-----------|----------|----------------|
@@ -103,7 +104,9 @@ I consider *precision at k* as it's more appropriate for this task that accuracy
 | *p@5* |      0.15 | **0.29** | 0.28           |
 
 
-**emacs**:
+
+
+### emacs
 
 |       | *fastxml* |    *cnn* | *cnn+deepwalk* |
 |-------|-----------|----------|----------------|
@@ -111,7 +114,8 @@ I consider *precision at k* as it's more appropriate for this task that accuracy
 | *p@3* |      0.10 |     0.30 | 0.30           |
 | *p@5* |      0.07 |     0.20 | 0.20           |
 
-**software engineering**:
+
+### software engineering
 
 
 |       | *fastxml* |    *cnn* | *cnn+deepwalk* |
@@ -129,11 +133,11 @@ embedding does not help as much can be demonstrated in the following figure:
 
 first is the training performance figure for CNN, where the x-axis is the training step and y is the p@1 score.
 
-![]({{site.url}}/assets/xml1/p1-kimcnn.png)
+![]({{site.url}}/assets/xml/p1-kimcnn.png)
 
 second is the similar figure but for cnn+deepwalk
 
-![]({{site.url}}/assets/xml1/p1-combined.png)
+![]({{site.url}}/assets/xml/p1-combined.png)
 
 as we can see training score flactuates quite violently.
 I think this is a sign that emebdding interferes the supervised training part. 
