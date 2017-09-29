@@ -3,6 +3,11 @@ title: multi-label classification using deep learning and graph embedding
 desc: my first attempt to combine deep learning and graph embedding
 ---
 
+# for those impatient
+
+- [code](https://github.com/xiaohan2012/network_embedding)
+- [descriptive slides](https://github.com/xiaohan2012/network_embedding/raw/master/project-slides.pdf)
+
 # project motivation
 
 I want to build multi-label topic classifier for documents. 
