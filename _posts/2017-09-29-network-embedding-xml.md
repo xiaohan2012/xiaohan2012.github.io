@@ -1,5 +1,5 @@
 ---
-title: multi-label classification using deep learning and graph embedding
+title: "Multi-label Classification using Deep Learning and Graph Embedding"
 desc: my first attempt to combine deep learning and graph embedding
 ---
 
