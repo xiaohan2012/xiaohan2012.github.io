@@ -1,6 +1,6 @@
 ---
-title: Mini hackathon: Sparse Local Embeddings for Extreme Multi-label Classification
-desc: took one day off for fun
+title: "Mini hackathon: Sparse Local Embeddings for Extreme Multi-label Classification"
+desc: "took one day off for fun"
 ---
 
 
