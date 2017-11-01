@@ -1,5 +1,5 @@
 ---
-title: Google Hashcode 2017 -- Streaming Videos
+title: "Google Hashcode 2017: Streaming Videos"
 desc: My solution and lessons learned.
 ---
 
