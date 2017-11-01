@@ -14,6 +14,8 @@ why am I doing this?
 
 because doing PhD requires me reading a lot of papers, while leaving little time for coding, which is a lot of fun to me.
 
+too much reading and little coding makes me a dull boy (i'm not saying reading is not fun). 
+
 plus, coding up the methods in my favourite papers help me learn better about the methodologies.
 
 # project description

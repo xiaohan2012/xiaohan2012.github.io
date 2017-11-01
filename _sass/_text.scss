@@ -90,7 +90,7 @@ pre {
 
 blockquote {
   margin: $spacer 0 $spacer $spacer;
-  font-size: .85em;
+  font-size: 1em;
   line-height: 1.6;
 }
 
@@ -98,7 +98,7 @@ blockquote {
 @include mq-up(md) {
   blockquote {
     margin: $spacer2 0 $spacer2 $spacer2;
-    font-size: .85em;
+    font-size: 1em;
     line-height: 1.8;
   }
 }
