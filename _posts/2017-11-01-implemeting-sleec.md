@@ -77,12 +77,12 @@ i suspect the worse performance is due to the lack of `l1` norm. so one plan is 
 
 # source code
 
-- https://github.com/xiaohan2012/sleec_python
+- [sleec](https://github.com/xiaohan2012/sleec_python)
 
 some statistics:
 
 I managed to code up the method using far fewer code than the code from the author
 
 - the paper author wrote **4861** lines of matlab code and **3924** of cpp code
-- I wrote liens of **248** python code by using existing software packages
+- I wrote **248** lines of python code by using existing software packages
 
