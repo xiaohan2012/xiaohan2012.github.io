@@ -73,10 +73,20 @@ I tested on *bibtex* dataset and evaluated using precision at k (p@k):
 
 scores in the parenthesis are from the papers
 
-## next steps
+**update (2017-11-08)**
 
-i suspect the worse performance is due to the lack of `l1` norm. so one plan is to add `l1`.
+- embedding is replaced by `VX` instead of `Z`
+- added tensorflow version that adds l1 penalty on `VX` as well
+- [kNN predicion with weight](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm)
+- parameter tuning on elacstic net and tensorflow version
+- for bibtex, achieved p1 (0.6215), p3 (0.3716) and p5 (0.2697)
 
+~2% increase from the first round
+
+however, just noticed that the dataset does not include validation set.
+
+so the result is not very reliable. 
+    
 # source code
 
 - [sleec](https://github.com/xiaohan2012/sleec_python)
@@ -86,5 +96,5 @@ some statistics:
 I managed to code up the method using far fewer code than the code from the author
 
 - the paper author wrote **4861** lines of matlab code and **3924** of cpp code
-- I wrote **248** lines of python code by using existing software packages
+- I wrote **316** lines of python code by using existing software packages
 
