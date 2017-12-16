@@ -19,6 +19,7 @@ During the process, I gained some hand-on experience on:
 - keras basics, [defining custom loss function](https://github.com/keras-team/keras/issues/369), [defining custom callback](https://keras.io/callbacks/), [autoencoder basics and implementing it in keras](https://blog.keras.io/building-autoencoders-in-keras.html)
 - hyper-parameter tuning: grid search
 - tensorboard visualization/exploration, [one good example](https://github.com/anujshah1003/Tensorboard-own-image-data-image-features-embedding-visualization/blob/master/own-data-embedding-visualization.py)
+- the code is hosted in [github](https://github.com/xiaohan2012/sdne-keras)
 
 # The algorithm
 
