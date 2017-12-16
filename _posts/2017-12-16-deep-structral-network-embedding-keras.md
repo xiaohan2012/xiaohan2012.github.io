@@ -1,6 +1,6 @@
 ---
 title: "Deep Structral Network Embedding (KDD 2016) in Keras "
-desc: ""
+desc: "Deep learning on graphs"
 ---
 
 # Motivation
@@ -327,7 +327,7 @@ You can [play with the embedding using tensorboard](http://projector.tensorflow.
 
 An example is:
 
-![](/assets/img/20newsgroup_viz.png)
+![](/assets/img/sdne/20newsgroup_viz.png)
 
 Unfortunately, I cannot reproduce the very separated clusters described in the paper.
 
@@ -339,7 +339,7 @@ In this task, we hide some edges of the graph for validation and test and train 
 
 The hyperparameters are:
 
-- `l2_param=1e-31
+- `l2_param=1e-31`
 - `alpha=2`
 - `epochs=200`
 
@@ -366,9 +366,9 @@ You can also [play with the embedding using tensorboard](http://projector.tensor
 
 Some examples of the visualizations are:
 
-![](/assets/imgs/deep-learning.png)
+![](/assets/img/sdne/deep-learning.png)
 
-![](/assets/imgs/nlp.png)
+![](/assets/img/sdne/nlp.png)
 
-![](/assets/imgs/search-engine.png)
+![](/assets/img/sdne/search-engine.png)
 
