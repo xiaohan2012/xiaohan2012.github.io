@@ -183,9 +183,10 @@ class SDNE():
         
         reconstruction_loss = build_reconstruction_loss(beta)
 
-        self.model.compile(optimizer='adadelta',
-                           loss=[reconstruction_loss, reconstruction_loss, edge_wise_loss],
-                           loss_weights=[1, 1, alpha])
+        self.model.compile(
+	    optimizer='adadelta',
+            loss=[reconstruction_loss, reconstruction_loss, edge_wise_loss],
+            loss_weights=[1, 1, alpha])
                            
         self.encoder = Model(input_a, encoded_a)
 
