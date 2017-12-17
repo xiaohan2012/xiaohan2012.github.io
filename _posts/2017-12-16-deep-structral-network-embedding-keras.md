@@ -1,22 +1,22 @@
 ---
-title: "Deep Structral Network Embedding (KDD 2016) in Keras "
+title: "Deep Structural Network Embedding (KDD 2016) in Keras "
 desc: "Deep learning on graphs"
 ---
 
 # Motivation
 
-In this project, I implemented the algorithm in [Deep Structral Network Embedding (KDD 2016)](http://www.kdd.org/kdd2016/subtopic/view/structural-deep-network-embedding) using [Keras](http://keras.io/)
+In this project, I implemented the algorithm in [Deep Structural Network Embedding (KDD 2016)](http://www.kdd.org/kdd2016/subtopic/view/structural-deep-network-embedding) using [Keras](http://keras.io/)
 
 The algorithm in the paper actually blew my mind because:
 
-1. it uses autoencoder for representation learning in an interesting way
+1. it uses auto-encoder for representation learning in an interesting way
 2. the experiment result really demonstrates its superiority
 
 To see how it works in reality, I set out to implement it by myself. 
 
 During the process, I gained some hand-on experience on:
 
-- keras basics, [defining custom loss function](https://github.com/keras-team/keras/issues/369), [defining custom callback](https://keras.io/callbacks/), [autoencoder basics and implementing it in keras](https://blog.keras.io/building-autoencoders-in-keras.html)
+- Keras's basics, [defining custom loss function](https://github.com/keras-team/keras/issues/369), [defining custom callback](https://keras.io/callbacks/), [auto-encoder basics and implementing it in keras](https://blog.keras.io/building-autoencoders-in-keras.html)
 - hyper-parameter tuning: grid search
 - tensorboard visualization/exploration, [one good example](https://github.com/anujshah1003/Tensorboard-own-image-data-image-features-embedding-visualization/blob/master/own-data-embedding-visualization.py)
 - the code is hosted in [github](https://github.com/xiaohan2012/sdne-keras)
@@ -30,9 +30,9 @@ Firstly, the algorithm's goal is to learn low dimensional embedding for each nod
 Then for this goal, the loss function captures two aspects:
 
 1. neighboring nodes should have embeddings close to each other ("1st order proximity" referred in the paper)
-2. each's embedding should be able to predict its neighboring nodes ("2nd order proximity" referred in the paper )
+2. each node's embedding should be able to predict its neighboring nodes ("2nd order proximity" referred in the paper )
 
-The autoencoder comes into play for 2nd order proximity. 
+The auto-encoder comes into play for 2nd order proximity. 
 
 # The algorithm implemented in Keras
 
@@ -63,7 +63,7 @@ def build_reconstruction_loss(beta):
         weight = true_y * (beta - 1) + 1
 
         weighted_diff = diff * weight
-        return K.mean(K.sum(weighted_diff, axis=1))  # mean sqaure error
+        return K.mean(K.sum(weighted_diff, axis=1))  # mean square error
     return reconstruction_loss
 
 
@@ -72,7 +72,7 @@ def edge_wise_loss(true_y, embedding_diff):
     """
     # true_y supposed to be None
     # we don't use it
-    return K.mean(K.sum(K.square(embedding_diff), axis=1))  # mean sqaure error
+    return K.mean(K.sum(K.square(embedding_diff), axis=1))  # mean square error
 ```
 
 Then the main algorithm
@@ -348,10 +348,22 @@ Performance is reported in terms of precision@k.
 
 Performance over epochs on validation data:
 
-![]()
+![](assets/img/sdne/link_prediction_train.png)
 
-Finally, the performance for the test data:
+Using the above, I decided to terminate the training after 200 epochs,
+The performance for the test data is
 
+- **1.0**: *1.0*
+- **5.0**: *1.0*
+- **50.0**: *1.0*
+- **100.0**: *1.0*
+- **150.0**: *1.0*
+- **250.0**: *0.996*
+- **400.0**: *0.995*
+- **500.0**: *0.976*
+- **5000.0**: *0.1448*
+
+(Note that the `k` values we use here are half of the `k` values used in the paper. This is because the paper states that the `grqc` data contains 28980 edges however, the graph actually has 14490 edges (half!). So I divided the `k` values by 2)
 
 ## visualizing Stackexchange tags
 
@@ -360,8 +372,8 @@ Out of curiosity, I created a dataset of the tags at [Stackexchange datascience]
 The dataset is created as follows:
 
 - download the data using [data.stackexchange.com](https://data.stackexchange.com/datascience/queries)
-- extract the labels fo each question
-- build the cocurrence graph using [coconut (a tool created by me)](): frequency is normalized by log function
+- extract the labels of each question
+- build the cooccurence graph using [coconut (a tool created by me)](https://github.com/xiaohan2012/coconut): frequency is normalized by log function
 
 You can also [play with the embedding using tensorboard](http://projector.tensorflow.org/?config=https://gist.githubusercontent.com/xiaohan2012/5c533ae2d4c67918c3648a23363307c6/raw/a23dd0b1540b3675d211e5f6db4ffdb969de202d/datascience-tensorboard-config)
 
