@@ -348,20 +348,20 @@ Performance is reported in terms of precision@k.
 
 Performance over epochs on validation data:
 
-![](assets/img/sdne/link_prediction_train.png)
+![](/assets/img/sdne/link_prediction_train.png)
 
 Using the above, I decided to terminate the training after 200 epochs,
 The performance for the test data is
 
-- **1.0**: *1.0*
-- **5.0**: *1.0*
-- **50.0**: *1.0*
-- **100.0**: *1.0*
-- **150.0**: *1.0*
-- **250.0**: *0.996*
-- **400.0**: *0.995*
-- **500.0**: *0.976*
-- **5000.0**: *0.1448*
+- **p@1**: *1.0*
+- **p@5**: *1.0*
+- **p@50**: *1.0*
+- **p@100**: *1.0*
+- **p@150**: *1.0*
+- **p@250**: *0.996*
+- **p@400**: *0.995*
+- **p@500**: *0.976*
+- **p@5000**: *0.1448*
 
 (Note that the `k` values we use here are half of the `k` values used in the paper. This is because the paper states that the `grqc` data contains 28980 edges however, the graph actually has 14490 edges (half!). So I divided the `k` values by 2)
 
