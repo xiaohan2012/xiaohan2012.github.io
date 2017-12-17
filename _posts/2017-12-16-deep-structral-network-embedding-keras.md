@@ -379,9 +379,15 @@ You can also [play with the embedding using tensorboard](http://projector.tensor
 
 Some examples of the visualizations are:
 
+**"deep-learning"**
+
 ![](/assets/img/sdne/deep-learning.png)
 
+**"nlp"**
+
 ![](/assets/img/sdne/nlp.png)
+
+**"search-engine"**
 
 ![](/assets/img/sdne/search-engine.png)
 
