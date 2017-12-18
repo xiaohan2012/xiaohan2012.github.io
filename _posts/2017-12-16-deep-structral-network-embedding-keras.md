@@ -341,7 +341,7 @@ In this task, we hide some edges of the graph for validation and test and train 
 
 The hyperparameters are:
 
-- `l2_param=1e-31`
+- `l2_param=1e-3`
 - `alpha=2`
 - `epochs=200`
 
