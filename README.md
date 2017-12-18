@@ -1,3 +1,8 @@
+# todo
+
+- [ ] add comment box
+- [ ] 
+
 # Jackal ![](https://img.shields.io/npm/l/express.svg?maxAge=2592000?style=flat-square)
 Jackal is a very lightweight theme for Jekyll.  
 Feel free to fork, change, modify and re-use it.
