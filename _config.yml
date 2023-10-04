@@ -11,9 +11,9 @@ baseurl: ''                 # the subpath of your site, e.g. /blog
 permalink: /:year/:title/   # how should we display posts url
 
 # Meta settings
-email: han.xiao@aalto.fi
+email: xiaohan2012@gmail.com
 author: Han Xiao
-twitter_username: xiaohan2012
+# twitter_username: xiaohan2012
 github_username: xiaohan2012
 # github_source: jackal
 
