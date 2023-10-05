@@ -19,7 +19,7 @@ Previously, I worked on approximation algorithms, combinatorial sampling, and la
 
 ## Selected publications
 
-- "Concise and interpretable multi-label rule sets" *KAIS* (2023) and ICDM (2022) [[long version](https://link.springer.com/article/10.1007/s10115-023-01930-6), [short version](https://arxiv.org/pdf/2210.01533.pdf), [code](https://github.com/DiverseMultiLabelClassificationRules/CORSET))]
+- "Concise and interpretable multi-label rule sets" *KAIS* (2023) and ICDM (2022) [[long version](https://drive.google.com/file/d/1s7rbm_N9f-olBhFMxpfv-un8BVBuClOc/view?usp=sharing), [short version](https://arxiv.org/pdf/2210.01533.pdf), [code](https://github.com/DiverseMultiLabelClassificationRules/CORSET))]
   - with Martino Ciaperoni and Aris Gionis
 - "Searching for polarization in signed graphs: a local spectral approach" *WebConf* (2020) [[paper](https://arxiv.org/pdf/2001.09410.pdf), [code](https://github.com/xiaohan2012/signed-local-community)]
   - with Bruno Ordozgoiti and Aristides Gionis 
