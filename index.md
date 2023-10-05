@@ -6,7 +6,9 @@ layout: default
 <div class="lead pretty-links">
 My name is Han Xiao. 
 
-I enjoy working on algorithms and data science. I'm also Emacs lover.
+I enjoy working on algorithms and data science-related problems. 
+
+I'm also Emacs lover.
 
 
 </div>
