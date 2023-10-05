@@ -7,7 +7,7 @@ permalink: /about/
 ---
 
 <div class="lead pretty-links">
-I currently work as a Data Scientist at Unity Technologies. 
+My name is Han Xiao. I currently work as a Data Scientist at Unity Technologies. 
 
 Before that, I was a postdoc researcher at Aalto University in Finland between 2021 and 2022, working on interpretable machine learning.
 
