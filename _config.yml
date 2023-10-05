@@ -30,6 +30,8 @@ paginate_path: "/articles/page:num/"  # link scheme for articles, should be letf
 navigation:
   - title: Research
     url: /research/
+  - title: Articles
+    url: /articles/
   - title: About me
     url: /about/
 
