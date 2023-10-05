@@ -2,7 +2,7 @@
 
 # Site settings
 title: Han Xiao               # used for the html title of every page
-desc: I am Han, an algorithm and data science lower
+desc: I am Han, an algorithm and data science lover
 
 url: http://xiaohan2012.github.io      # put your website hosting url here
 baseurl: ''                 # the subpath of your site, e.g. /blog
