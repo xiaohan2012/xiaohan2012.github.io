@@ -30,16 +30,10 @@ paginate_path: "/articles/page:num/"  # link scheme for articles, should be letf
 navigation:
   - title: Research
     url: /research/
-    desc:   
-  # - title: Articles
-  #   url: /articles/
-  #   desc: 
-  # - title: Projects
-  #   url: /projects/
-  #   desc: 
+  - title: CV
+    url: /cv/
   - title: About me
     url: /about/
-    desc: 
 
 # Used by Jekyll to recognize what is a post and what is a page
 defaults:
