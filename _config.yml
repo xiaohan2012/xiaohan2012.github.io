@@ -3,8 +3,8 @@
 # Site settings
 title: Han Xiao               # used for the html title of every page
 desc: >
-  I am a PhD student in Computer Science at Aalto University.
-  My main research interests are Graph Mining and Machine Learning. 
+  # I am a PhD student in Computer Science at Aalto University.
+  # My main research interests are Graph Mining and Machine Learning. 
 
 url: http://xiaohan2012.github.io      # put your website hosting url here
 baseurl: ''                 # the subpath of your site, e.g. /blog
@@ -28,6 +28,9 @@ paginate_path: "/articles/page:num/"  # link scheme for articles, should be letf
 # Used to define the navigation menu items
 # > Title is the tile of the navigation item, url the url and desc is the tooltip
 navigation:
+  - title: Research
+    url: /research/
+    desc:   
   - title: Articles
     url: /articles/
     desc: 
