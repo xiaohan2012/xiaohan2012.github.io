@@ -31,12 +31,12 @@ navigation:
   - title: Research
     url: /research/
     desc:   
-  - title: Articles
-    url: /articles/
-    desc: 
-  - title: Projects
-    url: /projects/
-    desc: 
+  # - title: Articles
+  #   url: /articles/
+  #   desc: 
+  # - title: Projects
+  #   url: /projects/
+  #   desc: 
   - title: About me
     url: /about/
     desc: 
