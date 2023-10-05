@@ -8,7 +8,9 @@ permalink: /research/
 
 <div class="lead pretty-links">
 
-My current research interest is interpretable machine learning. In general, I love working with algorithms. Previously, I worked on approximation algorithms, data mining, and extreme multi-label classification.
+My current research interest is interpretable machine learning. In general, I love working with algorithms. 
+
+Previously, I worked on approximation algorithms, combinatorial sampling, and large-scale multi-label classification.
 
 ## Tutorials
 
