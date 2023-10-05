@@ -301,4 +301,4 @@ PS: for the Online Qualification Round, my team did not perform very well (aroun
 
 - My coding/algorithmic thinking skills are still to be improved. 
 - C/C++ is a good language to pick-up as I found Python is really slow (runs almost 1 hour for the large datasets).
-- I am not a good team player. I should have communicated more with my teammates. 
+- I am not a good team player (yet). I need to improve my collaboration skills.
