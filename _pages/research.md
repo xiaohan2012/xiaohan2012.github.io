@@ -12,11 +12,11 @@ My current research interest is interpretable machine learning. In general, I lo
 
 ## Publications
 
-- "Concise and interpretable multi-label rule sets" (journal version) **KAIS** (2023) [[paper](https://link.springer.com/article/10.1007/s10115-023-01930-6), [code](https://github.com/DiverseMultiLabelClassificationRules/CORSET))]
+- "Concise and interpretable multi-label rule sets" (journal version) *KAIS* (2023) [[paper](https://link.springer.com/article/10.1007/s10115-023-01930-6), [code](https://github.com/DiverseMultiLabelClassificationRules/CORSET))]
   - with Martino Ciaperoni and Aris Gionis
-- "Concise and interpretable multi-label rule sets" (conference version) **ICDM** (2022) [[paper](https://arxiv.org/pdf/2210.01533.pdf)]
+- "Concise and interpretable multi-label rule sets" (conference version) *ICDM* (2022) [[paper](https://arxiv.org/pdf/2210.01533.pdf)]
   - with Martino Ciaperoni and Aris Gionis 
-- "Estimating the effects of public health measures by SEIR (MH) model of COVID-19 epidemic in local geographic areas" **Frontiers in Public Health** (2021) [[paper](https://pubmed.ncbi.nlm.nih.gov/35059370/)]
+- "Estimating the effects of public health measures by SEIR (MH) model of COVID-19 epidemic in local geographic areas" *Frontiers in Public Health* (2021) [[paper](https://pubmed.ncbi.nlm.nih.gov/35059370/)]
   - with Tianyi Qiu and  Vladimir Brusic 
 - "Searching for polarization in signed graphs: a local spectral approach" *WebConf* (2020) [[paper](https://arxiv.org/pdf/2001.09410.pdf), [code](https://github.com/xiaohan2012/signed-local-community)]
   - with Bruno Ordozgoiti and Aristides Gionis 
