@@ -20,6 +20,6 @@ To know more about me, please refer to:
 
 - [Google Scholar](https://scholar.google.fi/citations?user=lUh4VVUAAAAJ&hl=fi)
 - [LinkedIn](https://www.linkedin.com/in/han-xiao-7499a840/)
-- [CV](https://drive.google.com/file/d/1ulfFdY_GDi9G07lA51b744sAFY6izetX/view?usp=sharing)
+- [CV](https://drive.google.com/file/d/1K3sCFCT8ABx0uC007fviUnXWjLdOoZkx/view?usp=sharing)
 
 </div>
