@@ -14,7 +14,7 @@ I excel at presenting technical works to general audiences, delivering presentat
 
 I have a keen interest in the green transition and have been actively expanding my knowledge base on related topics. Above all, I aspire to create positive changes for our planet and societies.
 
-Currently, I am working on machine learning and recommender system at Unity Technologies, Finland. Prior to this, I was a post-doctoral researcher at Aalto University in 2021, following the completion of my PhD degree from Aalto in 2020.
+Currently, I am a data scientist at [Upright](https://www.uprightproject.com/).
 
 
 </div>

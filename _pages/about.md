@@ -7,9 +7,9 @@ permalink: /about/
 ---
 
 <div class="lead pretty-links">
-My name is Han Xiao. I currently work as a Data Scientist at Unity Technologies. 
+My name is Han Xiao. I am a data scientist at [Upright](https://www.uprightproject.com/). Before that, I was at [Unity Ads](https://unity.com/products/unity-ads) between 2022 and 2024..
 
-Before that, I was a postdoc researcher at Aalto University in Finland between 2021 and 2022, working on interpretable machine learning.
+In addition, I was a postdoc researcher at Aalto University in Finland between 2021 and 2022, working on interpretable machine learning.
 
 I obtained my PhD degree from Aalto University in 2020 autumn. My supervisor was [Aris Gionis](https://www.kth.se/profile/argioni).
 We worked on approximation algorithms with their applications in misinformation, online polarization, and fairness ([thesis link](https://aaltodoc.aalto.fi/handle/123456789/46243))
