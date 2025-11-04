@@ -6,6 +6,9 @@ title: "Optimizing PyTorch CUDA performance: a 90% speedup journey"
 
 In this blog post, I will talk about how I achieved a 90% speedup in PyTorch CUDA training through a case study of a research project called [STGym](https://github.com/xiaohan2012/stgym).
 
+* TOC
+{:toc}
+
 ## STGym overview
 
 [STGym](https://github.com/xiaohan2012/stgym) is a machine learning framework for spatial transcriptomics analysis using graph neural networks.
