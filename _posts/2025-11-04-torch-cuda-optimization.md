@@ -6,6 +6,9 @@ title: "Optimizing PyTorch CUDA performance: a 90% speedup journey"
 
 In this blog post, I will talk about how I achieved a 90% speedup in PyTorch CUDA training through a case study of a research project called [STGym](https://github.com/xiaohan2012/stgym).
 
+
+## Table of contents
+
 * TOC
 {:toc}
 
@@ -91,7 +94,8 @@ roc_auc = roc_auc_score(true.cpu(), pred.cpu())
 
 Before describing the solution, let's first look at the PyTorch profiler output and reveal the major bottleneck.
 
-#### Understanding PyTorch profiler output
+
+**Understanding PyTorch profiler output**
 
 PyTorch's profiler and the torch-lightening wrapper provide detailed timing information. To set it up:
 
@@ -144,7 +148,7 @@ Here's how to interpret the key metrics/columns:
 - **Total CPU/CUDA**: Time including all nested operations  
 - **Self CPU %**: Percentage of total profiling time spent in this operation
 
-#### Bottleneck identification
+**Bottleneck identification**
 
 From the above, the profiler revealed that `aten::copy_` and `Memcpy HtoD (Pageable -> Device)` were consuming disproportionate time:
 
@@ -161,7 +165,7 @@ Memcpy HtoD (Pageable -> Device)                   0.000us     6.541s
 
 These indicated excessive data movement between CPU and GPU memory.
 
-#### Root cause and addressing the bottle neck
+**Root cause and addressing the bottle neck**
 
 Functions were explicitly moving tensors to devices even when tensors were already on the correct device.
 
@@ -205,7 +209,8 @@ d_diag = torch.sparse_coo_tensor(
 
 Before proceeding, it is useful to discuss the asynchronous execution property of torch CUDA
 
-#### Understanding CUDA asynchronous execution
+
+**Understanding CUDA asynchronous execution**
 
 CUDA operations are asynchronous by default, meaning the CPU can continue executing while GPU computes:
 
@@ -227,7 +232,7 @@ print(f"Time before sync: {pre_sync_time:.4f}s")  # ~0.08s
 print(f"Time after sync: {total_time:.4f}s")      # ~1.8s
 ```
 
-#### `.item()` forces synchronization 
+**`.item()` forces synchronization**
 
 **Problem**: Using `.item()` forces synchronization between GPU and CPU, blocking asynchronous execution.
 
@@ -255,19 +260,19 @@ torch.full((K * B,), 1.0, device=device) / sqrt_K  # No .item() call
 
 ## What was tried that didn't work well
 
-### 1. `torch.autograd.set_detect_anomaly(False)`
+**1. `torch.autograd.set_detect_anomaly(False)`**
 
 **What it does**: Disables gradient anomaly detection, which adds computational overhead for debugging purposes.
 
 **Result**: No significant performance improvement. Not sure why.
 
-### 2. `set_float32_matmul_precision('medium')`
+**2. `set_float32_matmul_precision('medium')`**
 
 **What it does**: Reduces precision of matrix multiplication operations to potentially speed up computation at the cost of numerical accuracy.
 
 **Result**: No significant improvement for this workload. The precision-performance tradeoff didn't provide meaningful benefits in our benchmark setup.
 
-### 3. Increasing `num_workers > 1`
+**3. Increasing `num_workers > 1`**
 
 **What it does**: Uses multiple CPU processes for data loading to parallelize data preprocessing and reduce I/O bottlenecks.
 
@@ -281,7 +286,7 @@ data_loader:
 
 **Why it failed**: For this workload, the overhead of inter-process communication exceeded the benefits of parallel data loading. The dataset was small enough that single-process loading was more efficient.
 
-### 4. Setting `inplace=True` for activation functions
+**4. Setting `inplace=True` for activation functions**
 
 **What it does**: Modifies tensors in-place rather than creating new tensors, potentially saving memory and reducing allocation overhead.
 
@@ -298,7 +303,7 @@ x = F.selu(x, inplace=True)
 
 ## Summary
 
-### Performance results
+**Performance results**
 
 The optimization journey delivered remarkable improvements:
 
@@ -308,7 +313,7 @@ The optimization journey delivered remarkable improvements:
 | **CPU time**                | 54.5s  | 5.6s  | **90% reduction** |
 | **CUDA time**               | 10.9s  | 3.0s  | **73% reduction** |
 
-### Useful optimization principles
+**Useful optimization principles**
 
 From this journey, I have learned the following useful optimization principles:
 
