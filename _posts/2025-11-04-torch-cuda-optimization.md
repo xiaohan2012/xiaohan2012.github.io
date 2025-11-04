@@ -74,11 +74,11 @@ roc_auc = roc_auc_score(true.cpu(), pred.cpu())
 
 **Performance impact**:
 
-| Metric                      | Before  | After   | Improvement    |
-|-----------------------------|---------|---------|----------------|
-| **Training time per epoch** | 21s     | 19s     | 9.5% reduction |
-| **Self CPU time**           | 54.476s | 47.090s | 7s reduction   |
-| **Self CUDA time**          | 10.877s | 10.906s | Minimal change |
+| Metric                      | Before | After | Improvement    |
+|-----------------------------|--------|-------|----------------|
+| **Training time per epoch** | 21s    | 19s   | 9.5% reduction |
+| **Self CPU time**           | 54.5s  | 47.1s | 7s reduction   |
+| **Self CUDA time**          | 10.9s  | 10.9s | Minimal change |
 
 **Key insight**: Minimize GPU-CPU data transfers by keeping tensors on GPU as long as possible.
 
@@ -188,11 +188,11 @@ d_diag = torch.sparse_coo_tensor(
 
 **Performance impact**:
 
-| Metric                      | Before  | After  | Improvement        |
-|-----------------------------|---------|--------|--------------------|
-| **Training time per epoch** | 20s     | 2s     | **90% reduction!** |
-| **Self CPU time**           | 50.292s | 6.998s | 86% reduction      |
-| **Self CUDA time**          | 11.900s | 3.941s | 67% reduction      |
+| Metric                      | Before | After | Improvement        |
+|-----------------------------|--------|-------|--------------------|
+| **Training time per epoch** | 20s    | 2s    | **90% reduction!** |
+| **Self CPU time**           | 50.3s  | 7.0s  | 86% reduction      |
+| **Self CUDA time**          | 11.9s  | 3.9s  | 67% reduction      |
 
 **Key insight**: This was the most impactful optimization. Redundant device transfers create massive overhead, especially for sparse tensors with complex internal structures.
 
@@ -242,10 +242,10 @@ torch.full((K * B,), 1.0, device=device) / sqrt_K  # No .item() call
 
 **Performance impact**:
 
-| Metric              | Before  | After   | Improvement     |
-|---------------------|---------|---------|-----------------|
-| **Self CPU time**   | 5.639s  | 5.633s  | Marginal change |
-| **Self CUDA time**  | 2.954s  | 2.958s  | Minimal change  |
+| Metric              | Before | After | Improvement     |
+|---------------------|--------|-------|-----------------|
+| **Self CPU time**   | 5.6s   | 5.6s  | Marginal change |
+| **Self CUDA time**  | 3.0s   | 3.0s  | Minimal change  |
 
 **Key insight**: Even small synchronization points can impact performance. Avoid `.item()`, unnecessary `.cpu()` calls, and print statements in training loops.
 
@@ -299,11 +299,11 @@ x = F.selu(x, inplace=True)
 
 The optimization journey delivered remarkable improvements:
 
-| Metric                      | Before  | After  | Improvement       |
-|-----------------------------|---------|--------|-------------------|
-| **Training time per epoch** | 21s     | 2s     | **90% reduction** |
-| **CPU time**                | 54.476s | 5.633s | **90% reduction** |
-| **CUDA time**               | 10.877s | 2.958s | **73% reduction** |
+| Metric                      | Before | After | Improvement       |
+|-----------------------------|--------|-------|-------------------|
+| **Training time per epoch** | 21s    | 2s    | **90% reduction** |
+| **CPU time**                | 54.5s  | 5.6s  | **90% reduction** |
+| **CUDA time**               | 10.9s  | 3.0s  | **73% reduction** |
 
 ### Useful optimization principles
 
