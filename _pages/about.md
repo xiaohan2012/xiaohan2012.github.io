@@ -7,7 +7,7 @@ permalink: /about/
 ---
 
 <div class="lead pretty-links">
-My name is Han Xiao. I am a data scientist at [Upright](https://www.uprightproject.com/). Before that, I was at [Unity Ads](https://unity.com/products/unity-ads) between 2022 and 2024..
+My name is Han Xiao. I am a data scientist at [Cambri](https://www.cambri.io/). Before that, I was at [Upright](https://www.uprightproject.com/) and [Unity Ads](https://unity.com/products/unity-ads).
 
 In addition, I was a postdoc researcher at Aalto University in Finland between 2021 and 2022, working on interpretable machine learning.
 

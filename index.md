@@ -14,7 +14,7 @@ I excel at presenting technical works to general audiences, delivering presentat
 
 I have a keen interest in the green transition and have been actively expanding my knowledge base on related topics. Above all, I aspire to create positive changes for our planet and societies.
 
-Currently, I am a data scientist at [Upright](https://www.uprightproject.com/).
+Currently, I am a data scientist at [Cambri](https://www.cambri.io/).
 
 
 </div>
