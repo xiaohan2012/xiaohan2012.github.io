@@ -1,5 +1,5 @@
 ---
-title: "Deep Structural Network Embedding (KDD 2016) in Keras "
+title: "Deep Structural Network Embedding (KDD 2016) in Keras"
 desc: "Deep learning on graphs"
 ---
 
