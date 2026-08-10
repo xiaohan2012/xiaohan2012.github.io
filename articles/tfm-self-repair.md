@@ -91,7 +91,7 @@ Moreover, the compensation is proportional. Regressing \\(CE\\) on \\(DE\\) acro
 Both produce a drop at depth \\(m+1\\), where \\(a_m\\) is simply absent from the residual stream, and both produce a recovery by depth \\(L\\). Figure 4 draws the two worlds with the same curve, because the curve is the same.
 
 ![Two mechanisms, one trajectory](/assets/img/tfm-self-repair/two-worlds.png)
-*Figure 4: active repair and passive redundancy produce identical decoded-performance trajectories. They differ in whether the downstream layers change what they write, which the trajectory does not show.*
+*Figure 4: one trajectory, two readings. Active repair and passive redundancy differ in whether the downstream layers change what they write, which the trajectory does not show.*
 
 Therefore the trajectory criterion cannot decide between them. The reason is structural: repair is by definition a claim about the downstream *reaction*, and to establish a reaction one needs a counterfactual in which the reaction is prevented. Measuring at more depths samples the same ablated forward pass more finely; it never constructs a pass in which the downstream layers are held fixed. In other words, the design contains no term in which downstream reaction is blocked, and a measurement without such a term cannot identify the reaction's contribution. Note that this is an identifiability argument and not a statistical one — more models, more datasets, or more depths do not help.
 
@@ -160,7 +160,7 @@ Figure 9 is our main result: the direct effect against the total effect for all 
 ![DE versus TE for four TFMs](/assets/img/tfm-self-repair/de-te-scatter.png)
 *Figure 9: direct effect against total effect, margin coordinate, four TFMs. The dashed line is \\(y = x\\), i.e., no downstream reaction. The below-diagonal cloud of Figure 2 is absent.*
 
-We read the figure against the key of Section 2, with one region added: points with \\(DE \approx 0\\) but large \\(|TE|\\) are *indirectly important*, i.e., they build features that later layers consume. We observe three things. First, the late layers of every model sit on the diagonal with \\(DE > 0\\): they write the decision directly and nothing compensates for them. Second, the remaining layers form a vertical band at \\(DE \approx 0\\), which means most layers do not write the decision directly. Third, and centrally, the below-diagonal repair cloud of Figure 2 does not appear. The mean compensation effect is \\(+0.09\\) for LimiX-2M, \\(+0.01\\) for Mitra, \\(-0.08\\) for TabICL and \\(+0.00\\) for TabFM, in units where the clean final margin is \\(1\\).
+We read the figure against the key of Section 2, with one region added: points with \\(DE \approx 0\\) but large \\(\lvert TE \rvert\\) are *indirectly important*, i.e., they build features that later layers consume. We observe three things. First, the late layers of every model sit on the diagonal with \\(DE > 0\\): they write the decision directly and nothing compensates for them. Second, the remaining layers form a vertical band at \\(DE \approx 0\\), which means most layers do not write the decision directly. Third, and centrally, the below-diagonal repair cloud of Figure 2 does not appear. The mean compensation effect is \\(+0.09\\) for LimiX-2M, \\(+0.01\\) for Mitra, \\(-0.08\\) for TabICL and \\(+0.00\\) for TabFM, in units where the clean final margin is \\(1\\).
 
 We report the fraction of points in each region, using a threshold of \\(0.1\\) on the margin.
 
@@ -185,7 +185,7 @@ We check the null at a finer resolution, against the compensation law, and again
 ![Per-row compensation effect](/assets/img/tfm-self-repair/per-row-ce-hist.png)
 *Figure 10: distribution of the per-row compensation effect. All four models are unimodal at zero.*
 
-The per-row distributions are unimodal at zero in all four models, neither bimodal nor right-skewed, which rules out both alternatives. Restricting to rows with \\(|DE| > 0.1\sigma\\), the below-diagonal share ranges from 23% to 58% across models, i.e., close to a coin flip, and the only signal that is stable across tables is negative \\(CE\\) in TabICL — amplification, which is the opposite of repair.
+The per-row distributions are unimodal at zero in all four models, neither bimodal nor right-skewed, which rules out both alternatives. Restricting to rows with \\(\lvert DE \rvert > 0.1\sigma\\), the below-diagonal share ranges from 23% to 58% across models, i.e., close to a coin flip, and the only signal that is stable across tables is negative \\(CE\\) in TabICL — amplification, which is the opposite of repair.
 
 **The compensation law.** We repeat the analysis of McGrath et al. by regressing \\(CE\\) on \\(DE\\) across the 15 tasks, separately for each layer, and reporting the layer at which \\(R^2\\) peaks.
 
