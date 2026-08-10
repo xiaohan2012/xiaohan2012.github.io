@@ -85,8 +85,8 @@ Moreover, the compensation is proportional. Regressing \\(CE\\) on \\(DE\\) acro
 
 **The criterion is not identifying.** We now state the main argument, which is independent of the two choices above. Consider what happens under each mechanism when layer \\(m\\) is skipped, and write \\(a_\ell\\) for the value layer \\(\ell\\) writes into the residual stream in the clean pass and \\(a'_\ell\\) for what it writes in the ablated pass.
 
-- Under **active repair**, the downstream layers respond to the missing write, so \\(a'_\ell \neq a_\ell\\) for \\(\ell > m\\), and the recovery is produced by that response.
-- Under **passive redundancy**, the downstream layers write exactly what they always write, \\(a'_\ell = a_\ell\\), and the recovery occurs because the information carried by \\(a_m\\) is duplicated in the residual stream and in the input table, which remains in context.
+- Under **active repair**, the downstream layers respond to the missing write, so $$a'_\ell \neq a_\ell$$ for $$\ell > m$$, and the recovery is produced by that response.
+- Under **passive redundancy**, the downstream layers write exactly what they always write, $$a'_\ell = a_\ell$$, and the recovery occurs because the information carried by \\(a_m\\) is duplicated in the residual stream and in the input table, which remains in context.
 
 Both produce a drop at depth \\(m+1\\), where \\(a_m\\) is simply absent from the residual stream, and both produce a recovery by depth \\(L\\). Figure 4 draws the two worlds with the same curve, because the curve is the same.
 
