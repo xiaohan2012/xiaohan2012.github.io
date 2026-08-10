@@ -37,39 +37,43 @@ Mechanistic interpretability rests on a simple inference. We ablate a component,
 ## 2. Self-repair: definition and prior quantification
 {: #definition}
 
-**Intuition.** The intuition behind self-repair is that a network is not a fixed pipeline but a system that reacts to its own damage. When a component is removed, the components downstream of it see a different residual stream, and they may respond by writing something different from what they would have written otherwise. Self-repair is the case in which that response pushes the output back towards its undamaged value. Note that the definition is a statement about the downstream *reaction*, not about the output: an output that barely moves is compatible with a strong reaction and with no reaction at all.
+**Intuition.** The intuition behind self-repair is that a network is not a fixed pipeline but a system that reacts to its own damage. When a component is removed, the components downstream of it see a different residual stream, and they may respond by writing something different from what they would have written otherwise. Self-repair is the case in which that response pushes the output back towards its undamaged value. Note that the definition is a statement about the downstream *reaction*, not about the output: an output that barely moves is compatible with a strong reaction (e.g., active repair) and with no reaction at all (e.g., passive redundancy).
 
-**Formalism.** We treat the network as a causal model in which \\(A\\) denotes the component under study, \\(B\\) denotes everything downstream of it, and \\(y\\) denotes the output read from the final decoder. Let \\(\tilde{a}\\) be the value we substitute for \\(A\\)'s output. We define three effects, which differ only in what we allow to react.
+**Formalism.** The network can be viewed as a causal model [[6](#ref-6)] in which \\(A\\) denotes the component under study (e.g., a layer or an attention head), \\(B\\) denotes everything downstream of it, and \\(y\\) denotes a scalar read off the final decoder that measures how strongly the model favours the correct class; we fix the choice in Section 4. We refer to the unablated forward pass as the *clean* pass — the **Original** panel of Figure 1 — and to the value a component takes in it as its *clean* value. Let \\(\tilde{a}\\) be the value we substitute for \\(A\\)'s output, written \\(a'\\) in the figure. We define three effects, illustrated in the remaining three panels, which differ only in what we allow to react.
 
 - The **total effect** \\(TE\\) is the change in \\(y\\) when we set \\(A = \tilde{a}\\) and let \\(B\\) react freely.
 - The **direct effect** \\(DE\\) is the change in \\(y\\) when we set \\(A = \tilde{a}\\) and simultaneously freeze \\(B\\) at its clean values, so that only the path \\(A \to y\\) carries the intervention.
 - The **indirect effect** \\(IE\\) is the change in \\(y\\) when we leave \\(A\\) clean and set \\(B\\) to the values it would take under the intervention, so that only the path \\(A \to B \to y\\) carries it.
 
 ![Total, direct, and indirect effects](/assets/img/tfm-self-repair/hydra-te-de-ie.png)
-*Figure 1: the three effects differ only in which nodes are pinned to their clean values. Reproduced from McGrath et al. [[1](#ref-1)].*
+*Figure 1: **Original** is the clean pass, in which \\(a\\) and \\(b\\) take their clean values. The three effects differ only in which nodes the intervention reaches: \\(do(A = a')\\) substitutes \\(A\\)'s output, and \\(do(B = b)\\) pins \\(B\\) to its clean value so that the intervention cannot travel through it. Taken from [[1](#ref-1)].*
 
-The three are related by \\(TE = DE + IE\\). Following McGrath et al. [[1](#ref-1)] we define the **compensation effect**
+The three are related by \\(TE = DE + IE\\). Following [[1](#ref-1)] we define the **compensation effect**
 
 $$CE = DE - TE = -IE ,$$
 
 and we say that a component *self-repairs* if \\(CE > 0\\), i.e., if the damage that reaches the output is smaller than the damage the component's own contribution would predict. Note that \\(CE < 0\\) means the downstream reaction amplifies the loss and \\(CE = 0\\) means the downstream layers are passive.
 
-**Why both quantities are needed.** It is easy to see that neither effect alone identifies self-repair. Consider a toy network with two components, \\(a\\) and \\(b\\), writing into a shared stream read at the output, and consider three worlds.
+**Why both \\(TE\\) and \\(DE\\) are needed.** It is easy to see that neither effect alone identifies self-repair. Consider a toy network with two components, \\(A\\) and \\(B\\), writing values \\(a\\) and \\(b\\) into a shared stream read at the output as \\(y = a + b\\), and consider three worlds. All three produce the same clean output, \\(y = 1\\), so nothing distinguishes them until we intervene; the intervention is \\(do(A = 0)\\).
 
-| world | \\(a\\) writes | \\(b\\)'s rule | clean \\(y\\) | \\(DE\\) | \\(TE\\) | \\(CE\\) |
-|---|---|---|---|---|---|---|
-| ① redundant | \\(0\\) | \\(b = 1\\) always | \\(1\\) | \\(0\\) | \\(0\\) | \\(0\\) |
-| ② repaired | \\(1\\) | \\(b = 1 - a\\) | \\(1\\) | \\(1\\) | \\(0\\) | \\(1\\) |
-| ③ load-bearing | \\(1\\) | \\(b = 0\\) always | \\(1\\) | \\(1\\) | \\(1\\) | \\(0\\) |
+| world | \\(A\\) writes | \\(B\\)'s rule | \\(DE\\) | \\(TE\\) | \\(CE\\) |
+|---|---|---|---|---|---|
+| ① redundant | \\(0\\) | \\(b = 1\\) always | \\(0\\) | \\(0\\) | \\(0\\) |
+| ② repaired | \\(1\\) | \\(b = 1 - a\\) | \\(1\\) | \\(0\\) | \\(1\\) |
+| ③ load-bearing | \\(1\\) | \\(b = 0\\) always | \\(1\\) | \\(1\\) | \\(0\\) |
 
-The total effect takes the values \\(0, 0, 1\\) and therefore cannot separate ① from ②; the direct effect takes the values \\(0, 1, 1\\) and therefore cannot separate ② from ③. Only the gap, \\(CE = 0, 1, 0\\), isolates the repaired world. We use this table as the reading key for the remainder of the paper.
+*Table 1: three worlds that are indistinguishable at the clean output. Only \\(CE\\) takes a different value in each of the three, so only \\(CE\\) identifies the repaired one.*
 
-**Quantification in language models.** McGrath et al. [[1](#ref-1)] evaluate a 7B-parameter Chinchilla model on 1209 factual-recall prompts, ablating one attention layer at a time. They obtain \\(DE\\) by unembedding the layer's own output directly, and \\(TE\\) by ablating the layer and reading the final logits. Figure 2 shows their central result: the point cloud of \\((DE, TE)\\) pairs sits predominantly *below* the diagonal \\(y = x\\), i.e., \\(TE \ll DE\\) for a large fraction of (layer, prompt) pairs. This is the decoupling that the naive ablation account does not predict, and it is the empirical signature of \\(CE > 0\\).
+The total effect is \\(0\\) in both ① and ②, and therefore cannot separate them; the direct effect is \\(1\\) in both ② and ③, and therefore cannot separate those. Only the gap separates all three, since \\(CE\\) is non-zero in ② and zero in ① and ③. We use this table as the reading key for the remainder of the paper.
+
+**Quantification in language models.** McGrath et al. [[1](#ref-1)] evaluate a 7B-parameter Chinchilla model on 1209 factual-recall prompts, ablating one attention layer at a time. They obtain \\(DE\\) by unembedding the layer's own output directly, and \\(TE\\) by ablating the layer and reading the final logits. Figure 2 shows their central result: the point cloud of \\((DE, TE)\\) pairs sits predominantly *below* the diagonal \\(y = x\\), i.e., \\(TE < DE\\) for a large fraction of (layer, prompt) pairs. This is the decoupling that the naive ablation account does not predict, and it is the empirical signature of \\(CE > 0\\).
 
 ![Hydra scatter: TE versus DE](/assets/img/tfm-self-repair/hydra-ref-scatter.png)
-*Figure 2: direct effect against total effect in a language model. Mass below the diagonal is the signature of self-repair. Reproduced from McGrath et al. [[1](#ref-1)].*
+*Figure 2: direct effect against total effect in a language model. One point is one (layer, prompt) pair, coloured by layer depth. Mass below the diagonal is the signature of self-repair. Taken from Figure 2c of [[1](#ref-1)].*
 
-Moreover, the compensation is proportional. Regressing \\(CE\\) on \\(DE\\) across prompts, layer by layer, McGrath et al. find a tight linear relation in the middle and late layers, peaking at layer 23 with \\(R^2 = 0.92\\) and slope \\(0.69\\). The two numbers carry distinct information: the \\(R^2\\) says the compensation is systematic, i.e., how much is lost predicts how much is restored, and the slope says it is partial, i.e., about 70% of the direct contribution is restored. We adopt both as our reference, since a scattered relation would indicate coincidence rather than a mechanism.
+Moreover, the compensation is proportional. Regressing \\(CE\\) on \\(DE\\) across prompts, layer by layer, they find a tight linear relation in the middle and late layers, peaking at layer 23 with \\(R^2 = 0.92\\) and slope \\(0.69\\) (Figures 4b and 4d of [[1](#ref-1)]).[^hydrafit] We adopt both as our reference, since a scattered relation would indicate coincidence rather than a mechanism.
+
+[^hydrafit]: The two numbers carry distinct information. The \\(R^2\\) says the compensation is systematic, i.e., how much is lost predicts how much is restored. The slope says it is partial, i.e., about 70% of the direct contribution is restored and the remaining 30% survives to the output.
 
 ## 3. Self-repair in TFMs: the prior claim and what it identifies
 {: #prior-claim}
@@ -83,10 +87,10 @@ Moreover, the compensation is proportional. Regressing \\(CE\\) on \\(DE\\) acro
 
 **Two measurement choices.** Before the main argument, we note two choices that make the phenomenon harder to see, both of which we revisit in Section 4. First, performance is measured by AUC. AUC is rank-based and saturates: once an early layer separates the classes, later layers can sharpen or suppress the true class without moving the metric, so a flat AUC curve is uninformative about what the late layers do. Second, layers are removed by skipping, which is a form of zero ablation. Zero ablation sets a component's contribution to a value the network never encounters during training, which takes the residual stream off-distribution and does not preserve its norm; the resulting perturbation is large but not representative.
 
-**The criterion is not identifying.** We now state the main argument, which is independent of the two choices above. Consider what happens under each mechanism when layer \\(m\\) is skipped, and write \\(a_\ell\\) for the value layer \\(\ell\\) writes into the residual stream in the clean pass and \\(a'_\ell\\) for what it writes in the ablated pass.
+**The criterion is not identifying.** We now state the main argument, which is independent of the two choices above. Consider what happens under each mechanism when layer \\(m\\) is skipped, and write \\(a_\ell\\) for the value layer \\(\ell\\) writes into the residual stream in the clean pass and \\(\hat{a}_\ell\\) for what it writes in the ablated pass.
 
-- Under **active repair**, the downstream layers respond to the missing write, so $$a'_\ell \neq a_\ell$$ for $$\ell > m$$, and the recovery is produced by that response.
-- Under **passive redundancy**, the downstream layers write exactly what they always write, $$a'_\ell = a_\ell$$, and the recovery occurs because the information carried by \\(a_m\\) is duplicated in the residual stream and in the input table, which remains in context.
+- Under **active repair**, the downstream layers respond to the missing write, so $$\hat{a}_\ell \neq a_\ell$$ for $$\ell > m$$, and the recovery is produced by that response.
+- Under **passive redundancy**, the downstream layers write exactly what they always write, $$\hat{a}_\ell = a_\ell$$, and the recovery occurs because the information carried by \\(a_m\\) is duplicated in the residual stream and in the input table, which remains in context.
 
 Both produce a drop at depth \\(m+1\\), where \\(a_m\\) is simply absent from the residual stream, and both produce a recovery by depth \\(L\\). Figure 4 draws the two worlds with the same curve, because the curve is the same.
 
@@ -171,6 +175,8 @@ We report the fraction of points in each region, using a threshold of \\(0.1\\) 
 | TabICL-v2 | 41% | 40% | 13% | 0% | 5% |
 | TabFM | 78% | 10% | 7% | 1% | 1% |
 
+*Table 2: share of (layer, task) pairs in each region of Figure 9, margin coordinate, threshold \\(0.1\\). The repaired region holds 0–11% in every model.*
+
 Two observations follow. First, the repaired region holds 0–11% of the points in every model, which is the quantitative form of the null. Second, the layers with \\(DE \approx 0\\) split in a model-dependent way: TabFM is dominated by genuine redundancy (78% at the origin), whereas in LimiX-2M most such layers are indirectly important (53%), i.e., replacing their write with a donor's does damage the output even though they do not write the decision themselves. Note that "indirectly important" is a substantive finding and not an artifact of noise, because the substitution is a role-matched donor write: if an arbitrary donor still damages the output, the specific computation of that layer is not interchangeable.
 
 In the interest of reporting the strongest evidence against our conclusion, we note that 65% of LimiX-2M points and 64% of Mitra points lie below the diagonal. Taken alone this would suggest a weak repair tendency. However, the location of the median is not the criterion of Section 4: the associated magnitudes are \\(+0.09\\) and \\(+0.01\\) against a clean final margin of \\(1\\), and the second requirement — a proportional compensation law — fails, as we show next.
@@ -196,6 +202,8 @@ The per-row distributions are unimodal at zero in all four models, neither bimod
 | TabICL-v2 | L10 | \\(-0.41\\) | **0.58** |
 | TabFM | L18 | \\(-0.08\\) | 0.04 |
 | *Chinchilla 7B [[1](#ref-1)]* | *L23* | *\\(+0.69\\)* | *0.92* |
+
+*Table 3: per-layer regression of \\(CE\\) on \\(DE\\) across the 15 tasks, reported at the layer where \\(R^2\\) peaks. The last row is the language-model reference. No TFM layer combines a high \\(R^2\\) with a slope in \\((0, 1)\\).*
 
 ![Per-layer CE against DE](/assets/img/tfm-self-repair/compensation-fit.png)
 *Figure 11: per-layer regression of the compensation effect on the direct effect. No layer reproduces the language-model relation.*
@@ -245,6 +253,8 @@ All code, the ablation sweeps, and the scripts that regenerate every figure in t
 <span id="ref-4"></span>[4] J. Miller, B. Chughtai, L. Sharkey. *Transformer Circuit Faithfulness Metrics are not Robust.* [arXiv:2407.08734](https://arxiv.org/abs/2407.08734), 2024.
 
 <span id="ref-5"></span>[5] A. R. Balef, M. Koshil, K. Eggensperger. *Is One Layer Enough? Understanding Inference Dynamics in Tabular Foundation Models.* [arXiv:2605.06510](https://arxiv.org/abs/2605.06510), 2026.
+
+<span id="ref-6"></span>[6] J. Pearl. *Direct and Indirect Effects.* Proceedings of the 17th Conference on Uncertainty in Artificial Intelligence (UAI), 2001.
 
 ---
 
