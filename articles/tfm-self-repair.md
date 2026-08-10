@@ -28,7 +28,7 @@ Mechanistic interpretability rests on a simple inference. We ablate a component,
 
 **The gap.** Self-repair has been quantified only in language models. Balef et al. [[5](#ref-5)] give the first mechanistic study of layerwise dynamics in TFMs and report that it occurs in the middle and late layers of most of them. However, their criterion is the shape of a trajectory: after skipping a layer they decode at every subsequent depth and read a drop followed by a recovery of ROC AUC as evidence of repair. That reading presupposes a mechanism we call *active repair*, in which the downstream layers respond to the missing write. A second mechanism, *passive redundancy*, produces the same trajectory: if the information written by the skipped layer is *duplicated* elsewhere, the downstream layers recover the output without changing what they write.
 
-**Our goal.** We study whether TFMs exhibit self-repair in the causal sense in which it is defined for language models. Balef et al. explicitly pose the right dichotomy — redundancy or repair — but adopt a criterion that both alternatives satisfy. We resolve the dichotomy with a quantity their design does not contain: *the direct effect* [[1](#ref-1)], measured via path patching [[2](#ref-2)]. In summary, we make the following contributions relative to [[5](#ref-5)].
+**Our goal.** We study whether TFMs exhibit self-repair in the causal sense in which it is defined for language models, i.e., as a change in what the downstream layers compute. Balef et al. define it by its outcome, i.e., the decoded performance recovers after an ablation, and that definition is satisfied by redundancy as well as by repair. Balef et al. explicitly pose the right dichotomy — redundancy or repair — but adopt a criterion that both alternatives satisfy. We resolve the dichotomy with a quantity their design does not contain: *the direct effect* [[1](#ref-1)], measured via path patching [[2](#ref-2)]. In summary, we make the following contributions relative to [[5](#ref-5)].
 
 - We show that the trajectory criterion cannot establish self-repair: no measurement taken on the ablated forward pass alone separates active repair from passive redundancy.
 - We propose a measurement for TFMs built from three ingredients: (i) the direct effect via path patching; (ii) a logit-based measure in place of ROC AUC; and (iii) resample ablation in place of zero ablation.
@@ -78,7 +78,7 @@ Moreover, the compensation is proportional. Regressing \\(CE\\) on \\(DE\\) acro
 ## 3. Self-repair in TFMs: the prior claim and what it identifies
 {: #prior-claim}
 
-We proceed in four steps: (i) what Balef et al. do and what they conclude; (ii) the main argument, that their criterion cannot identify self-repair, which is a matter of logic and not of measurement; (iii) two measurement choices that make the phenomenon harder to see; and (iv) what we do not dispute.
+We proceed in three steps: (i) what Balef et al. do and what they conclude; (ii) the main argument, that their criterion cannot identify self-repair, which is a matter of logic and not of measurement; and (iii) two measurement choices that make the phenomenon harder to see.
 
 ### 3.1 What Balef et al. [[5](#ref-5)] do
 {: #prior-experiment}
@@ -101,12 +101,16 @@ Figure 3 shows our reproduction of this experiment. Skipping an early layer prod
 {: #identifiability}
 
 
-We now state the main argument, which is independent of how performance is measured. Let the network have \\(L\\) layers and let \\(m\\) be the layer that is skipped. For any layer \\(\ell\\), write \\(a_\ell\\) for the value it writes into the residual stream in the clean pass and \\(\hat{a}_\ell\\) for what it writes in the ablated pass.
+Their criterion defines self-repair by its outcome; ours is about the mechanism. The distinction matters because only the mechanistic one carries the consequence for ablation-based attribution: under active repair an ablated layer with a large direct effect looks unimportant, whereas under passive redundancy it is unimportant. We now state the main argument, which is independent of how performance is measured. Let the network have \\(L\\) layers and let \\(m\\) be the layer that is skipped. For any layer \\(\ell\\), write \\(a_\ell\\) for the value it writes into the residual stream in the clean pass and \\(\hat{a}_\ell\\) for what it writes in the ablated pass.
 
 - Under **active repair**, the downstream layers respond to the missing write, so $$\hat{a}_\ell \neq a_\ell$$ for $$\ell > m$$, and the recovery is produced by that response.
 - Under **passive redundancy**, the downstream layers write exactly what they always write, $$\hat{a}_\ell = a_\ell$$, and the recovery occurs because the information carried by \\(a_m\\) is duplicated in the residual stream and in the input table, which remains in context.
 
-Both produce a drop at depth \\(m+1\\), where \\(a_m\\) is simply absent from the residual stream, and both produce a recovery by depth \\(L\\). The two mechanisms therefore draw the same curve, and every curve in Figure 3 admits both readings. Therefore the trajectory criterion cannot decide between them. The reason is structural: repair is by definition a claim about the downstream *reaction*, and to establish a reaction one needs a counterfactual in which the reaction is prevented. Measuring at more depths samples the same ablated forward pass more finely; it never constructs a pass in which the downstream writes are pinned to their clean values. In other words, the design contains no term in which downstream reaction is blocked, and a measurement without such a term cannot identify the reaction's contribution. Note that this is an identifiability argument and not a statistical one — more models, more datasets, or more depths do not help.
+Both produce a drop at depth \\(m+1\\), where \\(a_m\\) is simply absent from the residual stream, and both produce a recovery by depth \\(L\\). The two mechanisms draw the same curve, and every curve in Figure 3 admits both readings.
+
+Therefore the trajectory criterion cannot decide between them. The reason is structural: repair is by definition a claim about the downstream *reaction*, and to establish a reaction one needs a counterfactual in which the reaction is prevented (corresponding to the direct effect in Figure 1). 
+Measuring at more depths never constructs a pass in which the downstream writes are pinned to their clean values. 
+The design contains no such term, and a measurement without it cannot identify the reaction's contribution, no matter how many models or datasets it is run on.  Note that this leaves the main result of Balef et al. intact: their looped single-layer model, which matches full depth with 20% of the parameters, rests on the layers computing overlapping things, not on repair.
 
 ### 3.3 Two measurement choices
 {: #measurement}
@@ -115,11 +119,6 @@ Two further choices make the phenomenon harder to see, independently of the argu
 
 - First, performance is measured by ROC AUC, which is rank-based and saturates: once an early layer separates the classes, later layers can sharpen or suppress the true class without moving the metric, so a flat ROC AUC curve is uninformative about what the late layers do. 
 - Second, layers are removed by skipping, which is a form of zero ablation. Zero ablation sets a component's contribution to a value the network never encounters during training, which takes the residual stream off-distribution and does not preserve its norm; the resulting perturbation is large but not representative.
-
-### 3.4 What we do not dispute
-{: #not-disputed}
-
-The conclusion Balef et al. draw alongside the repair claim — that the layers overlap in functionality — holds in both worlds, and their evidence supports it. Their headline result, substantial depthwise redundancy and a looped single-layer model that reaches comparable performance with 20% of the parameters, rests on that overlap and is untouched by the present analysis. Indeed, our finding points in the same direction as theirs. What we revise is the mechanism: Balef et al. explicitly pose the right dichotomy — redundancy or repair — but adopt a criterion that both alternatives satisfy, and we resolve it with a quantity their design does not contain.
 
 ## 4. Measuring the direct effect in TFMs
 {: #method}
