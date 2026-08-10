@@ -26,13 +26,13 @@ Mechanistic interpretability rests on a simple inference. We ablate a component,
 
 **Tabular foundation models.** Tabular foundation models are transformers that solve a supervised tabular task by in-context learning: a single forward pass consumes the entire table — the labelled support rows together with the unlabelled query rows — and emits predictions for the queries, with no gradient step and no task-specific fitting. One property matters for everything that follows: the input table remains in context for the whole forward pass.
 
-**The gap.** Self-repair has been quantified only in language models. Balef et al. [[5](#ref-5)] give the first large-scale mechanistic study of layerwise dynamics in TFMs, and they raise the question explicitly, noting that "as subsequent layers can compensate for removing earlier layers, we must consider this for ablation-based interpretability". They report that self-repair occurs in the middle and late layers of most TFMs they study. However, their criterion is the shape of a trajectory: they skip a layer, decode the residual stream at every subsequent depth, and read a drop followed by a recovery as evidence of repair. However, a second mechanism produces the same trajectory: if the information written by the skipped layer is duplicated elsewhere, the downstream layers recover the output without changing what they write. We refer to the first mechanism as *active repair* and to the second as *passive redundancy*.
+**The gap.** Self-repair has been quantified only in language models. Balef et al. [[5](#ref-5)] give the first mechanistic study of layerwise dynamics in TFMs and report that it occurs in the middle and late layers of most of them. However, their criterion is the shape of a trajectory: after skipping a layer they decode at every subsequent depth and read a drop followed by a recovery of ROC AUC as evidence of repair. That reading presupposes a mechanism we call *active repair*, in which the downstream layers respond to the missing write. A second mechanism, *passive redundancy*, produces the same trajectory: if the information written by the skipped layer is *duplicated* elsewhere, the downstream layers recover the output without changing what they write.
 
-**In this paper we study** whether TFMs exhibit self-repair in the causal sense in which it is defined for language models. Balef et al. explicitly pose the right dichotomy — redundancy or repair — but adopt a criterion that both alternatives satisfy. We resolve the dichotomy with a quantity their design does not contain: the direct effect, obtained by holding the downstream layers fixed. In summary, we make the following contributions.
+**Our goal.** We study whether TFMs exhibit self-repair in the causal sense in which it is defined for language models. Balef et al. explicitly pose the right dichotomy — redundancy or repair — but adopt a criterion that both alternatives satisfy. We resolve the dichotomy with a quantity their design does not contain: *the direct effect* [[1](#ref-1)], measured via path patching [[2](#ref-2)]. In summary, we make the following contributions relative to [[5](#ref-5)].
 
-- We show that the trajectory criterion is not identifying: no measurement taken on the ablated forward pass alone separates active repair from passive redundancy. This is a property of the design, not of the sample size.
-- We propose a measurement for TFMs built from three ingredients: (i) the direct effect via path patching, read through the model's own decoder; (ii) a logit margin in place of AUC; and (iii) resample ablation in place of zero ablation.
-- We report that the compensation effect is approximately zero across four TFMs and 15 tasks, at two resolutions (layer and row), and that the proportional compensation law found in language models does not hold. We conclude that the recovery reported for TFMs is passive redundancy.
+- We show that the trajectory criterion cannot establish self-repair: no measurement taken on the ablated forward pass alone separates active repair from passive redundancy.
+- We propose a measurement for TFMs built from three ingredients: (i) the direct effect via path patching; (ii) a logit-based measure in place of ROC AUC; and (iii) resample ablation in place of zero ablation.
+- Based on the proposed measurement and on results for four TFMs and 15 tasks, we draw a different conclusion from that of [[5](#ref-5)]: the performance recovery reported for TFMs is passive redundancy.
 
 ## 2. Self-repair: definition and prior quantification
 {: #definition}
@@ -46,7 +46,7 @@ Mechanistic interpretability rests on a simple inference. We ablate a component,
 - The **indirect effect** \\(IE\\) is the change in \\(y\\) when we leave \\(A\\) clean and set \\(B\\) to the values it would take under the intervention, so that only the path \\(A \to B \to y\\) carries it.
 
 ![Total, direct, and indirect effects](/assets/img/tfm-self-repair/hydra-te-de-ie.png)
-*Figure 1: the three effects differ only in which nodes are held fixed. Reproduced from McGrath et al. [[1](#ref-1)].*
+*Figure 1: the three effects differ only in which nodes are pinned to their clean values. Reproduced from McGrath et al. [[1](#ref-1)].*
 
 The three are related by \\(TE = DE + IE\\). Following McGrath et al. [[1](#ref-1)] we define the **compensation effect**
 
@@ -93,7 +93,7 @@ Both produce a drop at depth \\(m+1\\), where \\(a_m\\) is simply absent from th
 ![Two mechanisms, one trajectory](/assets/img/tfm-self-repair/two-worlds.png)
 *Figure 4: one trajectory, two readings. Active repair and passive redundancy differ in whether the downstream layers change what they write, which the trajectory does not show.*
 
-Therefore the trajectory criterion cannot decide between them. The reason is structural: repair is by definition a claim about the downstream *reaction*, and to establish a reaction one needs a counterfactual in which the reaction is prevented. Measuring at more depths samples the same ablated forward pass more finely; it never constructs a pass in which the downstream layers are held fixed. In other words, the design contains no term in which downstream reaction is blocked, and a measurement without such a term cannot identify the reaction's contribution. Note that this is an identifiability argument and not a statistical one — more models, more datasets, or more depths do not help.
+Therefore the trajectory criterion cannot decide between them. The reason is structural: repair is by definition a claim about the downstream *reaction*, and to establish a reaction one needs a counterfactual in which the reaction is prevented. Measuring at more depths samples the same ablated forward pass more finely; it never constructs a pass in which the downstream writes are pinned to their clean values. In other words, the design contains no term in which downstream reaction is blocked, and a measurement without such a term cannot identify the reaction's contribution. Note that this is an identifiability argument and not a statistical one — more models, more datasets, or more depths do not help.
 
 The same objection applies to the appendix analysis of Balef et al., which plots the change in final performance against the change immediately after the ablated layer and reads a large immediate drop with no final change as self-repair. The axes are reminiscent of Figure 2, but the horizontal one is a decodability reading taken at depth \\(m+1\\) with a fine-tuned probe, not a direct effect. The two come apart because (i) what a probe extracts need not be what the native decoder uses, (ii) the drop and the recovery are read by two different probes, \\(D_{m+1}\\) and \\(D_L\\), so the ends of the comparison are not on one scale, and (iii) a large immediate drop is exactly what passive redundancy predicts.
 
@@ -104,14 +104,14 @@ The same objection applies to the appendix analysis of Balef et al., which plots
 
 Our measurement has three ingredients. The first supplies the missing counterfactual; the other two make the resulting quantities readable.
 
-**Ingredient 1: the direct effect via path patching.** The main idea is as follows. To learn what layer \\(m\\) contributes on its own, we run the model once on the clean table, record every layer's write, and then construct the output the model *would* have produced if layer \\(m\\) had written something else and no other layer had noticed. Formally, let \\(r_\ell\\) denote the residual stream after layer \\(\ell\\) and \\(a_m = r_m - r_{m-1}\\) the write of layer \\(m\\). Substituting a donor write \\(\tilde{a}_m\\) while freezing every downstream layer at its clean value gives
+**Ingredient 1: the direct effect via path patching.** The main idea is as follows. To learn what layer \\(m\\) contributes on its own, we run the model once on the clean table, record every layer's write, and then construct the output the model *would* have produced if layer \\(m\\) had written something else and no other layer had noticed. Formally, let \\(r_\ell\\) denote the residual stream after layer \\(\ell\\) and \\(a_m = r_m - r_{m-1}\\) the write of layer \\(m\\). Substituting a donor write \\(\tilde{a}_m\\) while reusing every downstream write \\(a_\ell\\), \\(\ell > m\\), at its clean value — that is, not recomputing it on the perturbed residual — gives
 
 $$r_L^{DE}(m) = r_L^{\text{clean}} - a_m + \tilde{a}_m ,$$
 
 which we then push through the model's **native** decoder, recomputing the final LayerNorm statistics on the patched residual. The total effect is obtained from the same substitution with the downstream layers free to react, i.e., by re-running the forward pass, and read through the same native decoder. Figure 5 contrasts the two.
 
 ![Clean, TE and DE](/assets/img/tfm-self-repair/path-patching.png)
-*Figure 5: the clean pass, the total effect, and the direct effect. The direct effect requires no second forward pass, since freezing the downstream layers reduces to arithmetic on the recorded residual.*
+*Figure 5: the clean pass, the total effect, and the direct effect. The direct effect requires no second forward pass, since reusing the recorded downstream writes reduces to arithmetic on the clean residual.*
 
 Two properties matter. First, \\(DE\\) and \\(TE\\) are read on the same ruler, the model's own decoder, which is what makes their difference interpretable. Second, we deliberately do not use a logit lens as a stand-in for \\(DE\\): reading a fixed direction \\(\hat{u}^\top a_m\\) out of the write gives a belief trajectory rather than a contribution meter, and it is not faithful under the final LayerNorm, whose scale depends on the norm of the residual it receives.
 
