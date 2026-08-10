@@ -22,11 +22,11 @@ date: 2026-08-10
 ## 1. Introduction
 {: #introduction}
 
-Mechanistic interpretability rests on a simple inference. We ablate a component, we observe how much the output degrades, and we attribute the degradation to the component's function. The inference is only valid if the rest of the network is a passive spectator. Self-repair is the phenomenon that breaks this assumption: after a component is removed, downstream components change what they compute and restore part of the lost output. The consequence is that ablation-based importance systematically underestimates the components that matter most. This has been documented repeatedly in language models [1, 2, 3, 4].
+Mechanistic interpretability rests on a simple inference. We ablate a component, we observe how much the output degrades, and we attribute the degradation to the component's function. The inference is only valid if the rest of the network is a passive spectator. Self-repair is the phenomenon that breaks this assumption: after a component is removed, downstream components change what they compute and restore part of the lost output. The consequence is that ablation-based importance systematically underestimates the components that matter most. This has been documented repeatedly in language models [[1](#ref-1), [2](#ref-2), [3](#ref-3), [4](#ref-4)].
 
 **Tabular foundation models.** Tabular foundation models are transformers that solve a supervised tabular task by in-context learning: a single forward pass consumes the entire table — the labelled support rows together with the unlabelled query rows — and emits predictions for the queries, with no gradient step and no task-specific fitting. One property matters for everything that follows: the input table remains in context for the whole forward pass.
 
-**The gap.** Self-repair has been quantified only in language models. Balef et al. [5] give the first large-scale mechanistic study of layerwise dynamics in TFMs, and they raise the question explicitly, noting that "as subsequent layers can compensate for removing earlier layers, we must consider this for ablation-based interpretability". They report that self-repair occurs in the middle and late layers of most TFMs they study. However, their criterion is the shape of a trajectory: they skip a layer, decode the residual stream at every subsequent depth, and read a drop followed by a recovery as evidence of repair. However, a second mechanism produces the same trajectory: if the information written by the skipped layer is duplicated elsewhere, the downstream layers recover the output without changing what they write. We refer to the first mechanism as *active repair* and to the second as *passive redundancy*.
+**The gap.** Self-repair has been quantified only in language models. Balef et al. [[5](#ref-5)] give the first large-scale mechanistic study of layerwise dynamics in TFMs, and they raise the question explicitly, noting that "as subsequent layers can compensate for removing earlier layers, we must consider this for ablation-based interpretability". They report that self-repair occurs in the middle and late layers of most TFMs they study. However, their criterion is the shape of a trajectory: they skip a layer, decode the residual stream at every subsequent depth, and read a drop followed by a recovery as evidence of repair. However, a second mechanism produces the same trajectory: if the information written by the skipped layer is duplicated elsewhere, the downstream layers recover the output without changing what they write. We refer to the first mechanism as *active repair* and to the second as *passive redundancy*.
 
 **In this paper we study** whether TFMs exhibit self-repair in the causal sense in which it is defined for language models. Balef et al. explicitly pose the right dichotomy — redundancy or repair — but adopt a criterion that both alternatives satisfy. We resolve the dichotomy with a quantity their design does not contain: the direct effect, obtained by holding the downstream layers fixed. In summary, we make the following contributions.
 
@@ -46,9 +46,9 @@ Mechanistic interpretability rests on a simple inference. We ablate a component,
 - The **indirect effect** \\(IE\\) is the change in \\(y\\) when we leave \\(A\\) clean and set \\(B\\) to the values it would take under the intervention, so that only the path \\(A \to B \to y\\) carries it.
 
 ![Total, direct, and indirect effects](/assets/img/tfm-self-repair/hydra-te-de-ie.png)
-*Figure 1: the three effects differ only in which nodes are held fixed. Reproduced from McGrath et al. [1].*
+*Figure 1: the three effects differ only in which nodes are held fixed. Reproduced from McGrath et al. [[1](#ref-1)].*
 
-The three are related by \\(TE = DE + IE\\). Following McGrath et al. [1] we define the **compensation effect**
+The three are related by \\(TE = DE + IE\\). Following McGrath et al. [[1](#ref-1)] we define the **compensation effect**
 
 $$CE = DE - TE = -IE ,$$
 
@@ -64,20 +64,20 @@ and we say that a component *self-repairs* if \\(CE > 0\\), i.e., if the damage 
 
 The total effect takes the values \\(0, 0, 1\\) and therefore cannot separate ① from ②; the direct effect takes the values \\(0, 1, 1\\) and therefore cannot separate ② from ③. Only the gap, \\(CE = 0, 1, 0\\), isolates the repaired world. We use this table as the reading key for the remainder of the paper.
 
-**Quantification in language models.** McGrath et al. [1] evaluate a 7B-parameter Chinchilla model on 1209 factual-recall prompts, ablating one attention layer at a time. They obtain \\(DE\\) by unembedding the layer's own output directly, and \\(TE\\) by ablating the layer and reading the final logits. Figure 2 shows their central result: the point cloud of \\((DE, TE)\\) pairs sits predominantly *below* the diagonal \\(y = x\\), i.e., \\(TE \ll DE\\) for a large fraction of (layer, prompt) pairs. This is the decoupling that the naive ablation account does not predict, and it is the empirical signature of \\(CE > 0\\).
+**Quantification in language models.** McGrath et al. [[1](#ref-1)] evaluate a 7B-parameter Chinchilla model on 1209 factual-recall prompts, ablating one attention layer at a time. They obtain \\(DE\\) by unembedding the layer's own output directly, and \\(TE\\) by ablating the layer and reading the final logits. Figure 2 shows their central result: the point cloud of \\((DE, TE)\\) pairs sits predominantly *below* the diagonal \\(y = x\\), i.e., \\(TE \ll DE\\) for a large fraction of (layer, prompt) pairs. This is the decoupling that the naive ablation account does not predict, and it is the empirical signature of \\(CE > 0\\).
 
 ![Hydra scatter: TE versus DE](/assets/img/tfm-self-repair/hydra-ref-scatter.png)
-*Figure 2: direct effect against total effect in a language model. Mass below the diagonal is the signature of self-repair. Reproduced from McGrath et al. [1].*
+*Figure 2: direct effect against total effect in a language model. Mass below the diagonal is the signature of self-repair. Reproduced from McGrath et al. [[1](#ref-1)].*
 
 Moreover, the compensation is proportional. Regressing \\(CE\\) on \\(DE\\) across prompts, layer by layer, McGrath et al. find a tight linear relation in the middle and late layers, peaking at layer 23 with \\(R^2 = 0.92\\) and slope \\(0.69\\). The two numbers carry distinct information: the \\(R^2\\) says the compensation is systematic, i.e., how much is lost predicts how much is restored, and the slope says it is partial, i.e., about 70% of the direct contribution is restored. We adopt both as our reference, since a scattered relation would indicate coincidence rather than a mechanism.
 
 ## 3. Self-repair in TFMs: the prior claim and what it identifies
 {: #prior-claim}
 
-**What Balef et al. do.** Balef et al. [5] study six state-of-the-art TFMs with six experiments, of which two are relevant here. The *tabular logit lens* trains a separate decoder for every depth, since a TFM's native decoder expects the representation of the final layer, and reads out the model's intermediate performance. The *layer-skipping ablation* removes one layer and applies that lens at every subsequent depth, giving a trajectory of decoded performance. Their criterion is stated directly — "if the TFM can recover from dropping a layer, it has learned to self-repair, and layers overlap in functionality" — and their conclusion is that "self-repair generally occurs after layer ablations, except for the first layer". Figure 3 shows our reproduction of this experiment on the four models we study. Skipping an early layer produces a drop that persists to the output, whereas skipping a middle or late layer produces a drop that closes well before the final layer.
+**What Balef et al. do.** Balef et al. [[5](#ref-5)] study six state-of-the-art TFMs with six experiments, of which two are relevant here. The *tabular logit lens* trains a separate decoder for every depth, since a TFM's native decoder expects the representation of the final layer, and reads out the model's intermediate performance. The *layer-skipping ablation* removes one layer and applies that lens at every subsequent depth, giving a trajectory of decoded performance. Their criterion is stated directly — "if the TFM can recover from dropping a layer, it has learned to self-repair, and layers overlap in functionality" — and their conclusion is that "self-repair generally occurs after layer ablations, except for the first layer". Figure 3 shows our reproduction of this experiment on the four models we study. Skipping an early layer produces a drop that persists to the output, whereas skipping a middle or late layer produces a drop that closes well before the final layer.
 
 ![Dip and recovery across four TFMs](/assets/img/tfm-self-repair/balef-exp6-repro.png)
-*Figure 3: our reproduction of the layer-skipping experiment of Balef et al. [5] on four TFMs, 15 tasks. Black is the unablated baseline; each coloured curve skips one layer, marked by a red cross. Middle and late layers show a drop followed by recovery.*
+*Figure 3: our reproduction of the layer-skipping experiment of Balef et al. [[5](#ref-5)] on four TFMs, 15 tasks. Black is the unablated baseline; each coloured curve skips one layer, marked by a red cross. Middle and late layers show a drop followed by recovery.*
 
 **The authors pose the dichotomy themselves.** It would be a misreading to present redundancy as an alternative the prior work overlooks. Balef et al. raise it in the first sentences of the experiment: "as observed, TFMs are generally robust to ablating layers. However, it is unclear whether this robustness arises from self-repair or from layer redundancy, as we have measured performance only at the final layer." Their diagnosis is that the measurement is taken at too few depths, and the remedy they adopt is to measure at all subsequent depths instead of only at the last one. In contrast, we argue below that the number of depths is not what the dichotomy turns on.
 
@@ -124,7 +124,7 @@ Two properties matter. First, \\(DE\\) and \\(TE\\) are read on the same ruler, 
 ## 5. Experiments
 {: #experiments}
 
-**Models.** We evaluate four TFMs: LimiX-2M, Mitra, TabICL-v2, and TabFM. Mitra plays a special role, because its output head is linear, so the decomposition \\(TE = DE + IE\\) holds exactly and any observed \\(CE\\) cannot be attributed to a nonlinearity in the readout.
+**Models.** We evaluate four TFMs: [LimiX-2M](https://huggingface.co/stableai-org/LimiX-2M), [Mitra](https://huggingface.co/autogluon/mitra-classifier), [TabICL-v2](https://huggingface.co/jingang/TabICL), and [TabFM](https://huggingface.co/google/tabfm-1.0.0-pytorch). Mitra plays a special role, because its output head is linear, so the decomposition \\(TE = DE + IE\\) holds exactly and any observed \\(CE\\) cannot be attributed to a nonlinearity in the readout.
 
 **Datasets.** We use 15 binary classification tasks from TabArena, with 1000 support rows and 500 query rows per task.
 
@@ -195,7 +195,7 @@ The per-row distributions are unimodal at zero in all four models, neither bimod
 | Mitra | L10 | \\(+0.08\\) | 0.04 |
 | TabICL-v2 | L10 | \\(-0.41\\) | **0.58** |
 | TabFM | L18 | \\(-0.08\\) | 0.04 |
-| *Chinchilla 7B [1]* | *L23* | *\\(+0.69\\)* | *0.92* |
+| *Chinchilla 7B [[1](#ref-1)]* | *L23* | *\\(+0.69\\)* | *0.92* |
 
 ![Per-layer CE against DE](/assets/img/tfm-self-repair/compensation-fit.png)
 *Figure 11: per-layer regression of the compensation effect on the direct effect. No layer reproduces the language-model relation.*
@@ -211,7 +211,7 @@ No layer in any model combines a high \\(R^2\\) with a slope in \\((0, 1)\\), wh
 
 Our results say what the recovery is not; we close by describing what we believe it is, with the caveat that this section is a hypothesis rather than a result. The intuition is that active repair and passive redundancy are not equally expensive in every architecture. In a language model, the prompt is consumed once and the information a layer needs may exist nowhere else in the residual stream, so recovering it requires a dedicated mechanism, e.g., a backup head that activates only when the primary head is removed. In a TFM, the input table is in context for the entire forward pass, so any layer can recompute a lost feature from the raw values at the cost of ordinary attention. Redundancy is therefore the path of least resistance, and no reactive mechanism needs to be learned.
 
-This account is coherent with the picture of Balef et al. [5], in which depth performs iterative refinement with overlapping computations rather than a sequence of specialized stages, and it explains why "a large dip followed by full recovery" is the typical trajectory: the probe at depth \\(m+1\\) is sensitive to the missing write, while the information itself was never scarce. Testing it requires interventions we have not run, and we leave this to future work.
+This account is coherent with the picture of Balef et al. [[5](#ref-5)], in which depth performs iterative refinement with overlapping computations rather than a sequence of specialized stages, and it explains why "a large dip followed by full recovery" is the typical trajectory: the probe at depth \\(m+1\\) is sensitive to the missing write, while the information itself was never scarce. Testing it requires interventions we have not run, and we leave this to future work.
 
 ## 7. Limitations
 {: #limitations}
@@ -230,21 +230,21 @@ Our work opens interesting directions for future research. For example, (i) does
 ## 9. Reproducibility
 {: #reproducibility}
 
-All code, the ablation sweeps, and the scripts that regenerate every figure in this paper are available in the `tfmlens` repository. Model checkpoints are the public releases of LimiX-2M, Mitra, TabICL-v2 and TabFM; tasks are the binary classification subset of TabArena.
+All code, the ablation sweeps, and the scripts that regenerate every figure in this paper are available in the [`tfmlens`](https://github.com/xiaohan2012/tfmlens) repository. Model checkpoints are the public releases linked in Section 5; tasks are the binary classification subset of [TabArena](https://tabarena.ai).
 
 ---
 
 ## References
 
-[1] T. McGrath, M. Rahtz, J. Kramar, V. Mikulik, S. Legg. *The Hydra Effect: Emergent Self-repair in Language Model Computations.* arXiv:2307.15771, 2023.
+<span id="ref-1"></span>[1] T. McGrath, M. Rahtz, J. Kramar, V. Mikulik, S. Legg. *The Hydra Effect: Emergent Self-repair in Language Model Computations.* [arXiv:2307.15771](https://arxiv.org/abs/2307.15771), 2023.
 
-[2] K. Wang, A. Variengien, A. Conmy, B. Shlegeris, J. Steinhardt. *Interpretability in the Wild: a Circuit for Indirect Object Identification in GPT-2 small.* arXiv:2211.00593, 2022.
+<span id="ref-2"></span>[2] K. Wang, A. Variengien, A. Conmy, B. Shlegeris, J. Steinhardt. *Interpretability in the Wild: a Circuit for Indirect Object Identification in GPT-2 small.* [arXiv:2211.00593](https://arxiv.org/abs/2211.00593), 2022.
 
-[3] C. Rushing, N. Nanda. *Explorations of Self-Repair in Language Models.* arXiv:2402.15390, 2024.
+<span id="ref-3"></span>[3] C. Rushing, N. Nanda. *Explorations of Self-Repair in Language Models.* [arXiv:2402.15390](https://arxiv.org/abs/2402.15390), 2024.
 
-[4] J. Miller, B. Chughtai, L. Sharkey. *Transformer Circuit Faithfulness Metrics are not Robust.* arXiv:2407.08734, 2024.
+<span id="ref-4"></span>[4] J. Miller, B. Chughtai, L. Sharkey. *Transformer Circuit Faithfulness Metrics are not Robust.* [arXiv:2407.08734](https://arxiv.org/abs/2407.08734), 2024.
 
-[5] A. R. Balef, M. Koshil, K. Eggensperger. *Is One Layer Enough? Understanding Inference Dynamics in Tabular Foundation Models.* arXiv:2605.06510, 2026.
+<span id="ref-5"></span>[5] A. R. Balef, M. Koshil, K. Eggensperger. *Is One Layer Enough? Understanding Inference Dynamics in Tabular Foundation Models.* [arXiv:2605.06510](https://arxiv.org/abs/2605.06510), 2026.
 
 ---
 
