@@ -97,7 +97,7 @@ Balef et al. [[5](#ref-5)] study six state-of-the-art TFMs. Their self-repair ex
 Figure 3 shows our reproduction of this experiment. Skipping an early layer produces a drop that persists to the output, whereas skipping a middle or late layer produces a drop that closes well before the final layer.
 
 ![The layer-skipping experiment, schematic and real](/assets/img/tfm-self-repair/exp6-transition.png)
-*Figure 3: the layer-skipping experiment. **Left**: one ablated layer, for illustration — the black baseline is the unablated trajectory, the red cross marks the skipped layer, and the decoded performance drops at the next depth and then recovers. **Right**: the same experiment on LimiX-2M over 15 tasks, with every layer ablated in turn; one coloured curve is one skipped layer, i.e., one instance of the left panel. Early layers do not recover, middle and late layers do. The other three models are in Appendix B; all four agree with what the paper reports, including the two models it does not study.*
+*Figure 3: the layer-skipping experiment. **Left**: one ablated layer, for illustration — the black baseline is the unablated trajectory, the red cross marks the skipped layer, and the decoded performance drops at the next depth and then recovers. **Right**: the same experiment on LimiX-2M over 15 tasks, with every layer ablated in turn; one coloured curve is one skipped layer, i.e., one instance of the left panel. Early layers do not recover, middle and late layers do. The other three models are in Appendix A; all four agree with what the paper reports, including the two models it does not study.*
 
 **The authors pose the dichotomy themselves.** They admit, in their own words, that it is unclear whether the robustness to layer ablation comes from self-repair or from layer redundancy, since performance has been measured only at the final layer. Their diagnosis is that too few depths are measured and they remedy it by measuring all of them. In contrast, we argue below that the number of depths is not what the dichotomy turns on.
 
@@ -194,7 +194,7 @@ We require both. The first is qualitative, i.e., compensation is present at all;
 ## 5. Experiments
 {: #experiments}
 
-We proceed in five steps: (i) the setup; (ii) a comparison of ROC AUC with the logit margin; (iii) a comparison of the two ablation operators; (iv) the main result; and (v) the checks that support it.
+We proceed in four steps: (i) the setup; (ii) a comparison of ROC AUC with the logit margin; (iii) a comparison of the two ablation operators; and (iv) the main result.
 
 ### 5.1 Setup
 {: #setup}
