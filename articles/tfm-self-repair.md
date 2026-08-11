@@ -184,18 +184,18 @@ Given \\(DE\\) and \\(TE\\) we compute \\(CE = DE - TE\\) and apply the criterio
 ## 5. Experiments
 {: #experiments}
 
-**Models.** We evaluate four SOTA TFMs: [LimiX-2M](https://huggingface.co/stableai-org/LimiX-2M), [Mitra](https://huggingface.co/autogluon/mitra-classifier), [TabICL-v2](https://huggingface.co/jingang/TabICL), and [TabFM](https://huggingface.co/google/tabfm-1.0.0-pytorch). Mitra plays a special role, because its output head is linear, so the decomposition \\(TE = DE + IE\\) holds exactly and any observed \\(CE\\) cannot be attributed to a nonlinearity in the readout.
+**Models.** We evaluate four state-of-the-art TFMs: [LimiX-2M](https://huggingface.co/stableai-org/LimiX-2M), [Mitra](https://huggingface.co/autogluon/mitra-classifier), [TabICL-v2](https://huggingface.co/jingang/TabICL), and [TabFM](https://huggingface.co/google/tabfm-1.0.0-pytorch). We write TabICL for TabICL-v2 below. Mitra plays a special role, because its output head is linear, so the decomposition \\(TE = DE + IE\\) holds exactly and any observed \\(CE\\) cannot be attributed to a nonlinearity in the readout.
 
 **Datasets.** We use 15 binary classification tasks from TabArena, with 1000 support rows and 500 query rows per task.
 
-**Ablation unit and parameters.** We ablate one transformer layer at a time, over all layers of each model, using resample ablation averaged over 8 source tables. Each point in the figures below is one (layer, task) pair.
+**Ablation.** We ablate one transformer layer at a time, over all layers of each model, using resample ablation averaged over 8 source tables. Each point in the figures below is one (layer, task) pair.
 
-**Metrics.** We report the margin of Section 4 as the primary coordinate and the mean true-class logit, z-scored per task, as a secondary coordinate for robustness.
+**Metrics.** We report the margin of Section 4.2 as the primary coordinate and the mean true-class logit, z-scored per task, as a secondary coordinate for robustness.
 
 ### 5.1 ROC AUC versus the logit margin
 {: #metrics}
 
-We first isolate the effect of replacing ROC AUC by the margin, using the layer-skipping protocol of Section 3. Three regimes appear, which ROC AUC collapses into a single flat line.
+We first isolate the effect of replacing ROC AUC by the margin, using the layer-skipping protocol of Section 3. Three regimes appear, and ROC AUC collapses all three into a single flat line.
 
 ![Net-suppressive layer](/assets/img/tfm-self-repair/auc-takeaway1.png)
 *Figure 5: Mitra, skipping the final layer. ROC AUC does not move; the margin overshoots to 1.53.*
@@ -220,7 +220,7 @@ Figure 8 is our main result: the direct effect against the total effect for all 
 ![DE versus TE for four TFMs](/assets/img/tfm-self-repair/de-te-scatter.png)
 *Figure 8: direct effect against total effect, margin coordinate, four TFMs. The dashed line is \\(y = x\\), i.e., no downstream reaction. The below-diagonal cloud of Figure 2 is absent.*
 
-We read the figure against the key of Section 2, with one region added: points with \\(DE \approx 0\\) but large \\(\lvert TE \rvert\\) are *indirectly important*, i.e., they build features that later layers consume. We observe three things. First, the late layers of every model sit on the diagonal with \\(DE > 0\\): they write the decision directly and nothing compensates for them. Second, the remaining layers form a vertical band at \\(DE \approx 0\\), which means most layers do not write the decision directly. Third, and centrally, the below-diagonal repair cloud of Figure 2 does not appear. The mean compensation effect is \\(+0.09\\) for LimiX-2M, \\(+0.01\\) for Mitra, \\(-0.08\\) for TabICL and \\(+0.00\\) for TabFM, in units where the clean final margin is \\(1\\).
+We read the figure against the key of Section 2, with one region added: points with \\(DE \approx 0\\) but large \\(\lvert TE \rvert\\) are *indirectly important*, i.e., they build features that later layers consume. We observe three things. First, the late layers of every model sit on the diagonal with \\(DE > 0\\): they write the decision directly and nothing compensates for them. Second, the remaining layers form a vertical band at \\(DE \approx 0\\), which means most layers do not write the decision directly. Third, the below-diagonal repair cloud of Figure 2 does not appear. The mean compensation effect is \\(+0.09\\) for LimiX-2M, \\(+0.01\\) for Mitra, \\(-0.08\\) for TabICL and \\(+0.00\\) for TabFM, in units where the clean final margin is \\(1\\).
 
 We report the fraction of points in each region, using a threshold of \\(0.1\\) on the margin.
 
@@ -235,19 +235,19 @@ We report the fraction of points in each region, using a threshold of \\(0.1\\) 
 
 Two observations follow. First, the repaired region holds 0–11% of the points in every model, which is the quantitative form of the null. Second, the layers with \\(DE \approx 0\\) split in a model-dependent way: TabFM is dominated by genuine redundancy (78% at the origin), whereas in LimiX-2M most such layers are indirectly important (53%), i.e., replacing their write with a source write does damage the output even though they do not write the decision themselves. Note that "indirectly important" is a substantive finding and not an artifact of noise, because the substitution is another table's write for the same layer: if an arbitrary source still damages the output, the specific computation of that layer is not interchangeable.
 
-In the interest of reporting the strongest evidence against our conclusion, we note that 65% of LimiX-2M points and 64% of Mitra points lie below the diagonal. Taken alone this would suggest a weak repair tendency. However, the location of the median is not the criterion of Section 4: the associated magnitudes are \\(+0.09\\) and \\(+0.01\\) against a clean final margin of \\(1\\), and the second requirement — a proportional compensation law — fails, as we show next.
+The strongest evidence against our conclusion is that 65% of LimiX-2M points and 64% of Mitra points lie below the diagonal. Taken alone this would suggest a weak repair tendency. However, the location of the median is not the criterion of Section 4.4: the associated magnitudes are \\(+0.09\\) and \\(+0.01\\) against a clean final margin of \\(1\\), and the second requirement — a proportional compensation law — fails, as we show next.
 
 ### 5.3 Robustness
 {: #robustness}
 
-We check the null at a finer resolution, against the compensation law, and against a possible artifact of the readout.
+We check the null (i) at a finer resolution, (ii) against the compensation law, and (iii) against a possible artifact of the readout.
 
 **Per-row de-aggregation.** Each point in Figure 8 aggregates roughly 500 query rows, so a null mean is compatible with (i) cancellation between rows of opposite sign or (ii) strong repair confined to a small subpopulation. We therefore de-aggregate and inspect the distribution of \\(CE\\) over individual rows.
 
 ![Per-row compensation effect](/assets/img/tfm-self-repair/per-row-ce-hist.png)
 *Figure 9: distribution of the per-row compensation effect. All four models are unimodal at zero.*
 
-The per-row distributions are unimodal at zero in all four models, neither bimodal nor right-skewed, which rules out both alternatives. Restricting to rows with \\(\lvert DE \rvert > 0.1\sigma\\), the below-diagonal share ranges from 23% to 58% across models, i.e., close to a coin flip, and the only signal that is stable across tables is negative \\(CE\\) in TabICL — amplification, which is the opposite of repair.
+The per-row distributions are unimodal at zero in all four models, neither bimodal nor right-skewed, which rules out both alternatives. Restricting to rows whose direct effect exceeds \\(0.1\\) standard deviations, the below-diagonal share ranges from 23% to 58% across models, i.e., close to a coin flip, and the only signal that is stable across tables is negative \\(CE\\) in TabICL — amplification, which is the opposite of repair.
 
 **The compensation law.** We repeat the analysis of McGrath et al. by regressing \\(CE\\) on \\(DE\\) across the 15 tasks, separately for each layer, and reporting the layer at which \\(R^2\\) peaks. The comparison is on comparable ground: for a binary task our margin is, up to a factor of two, the centred logit they read.
 
@@ -266,21 +266,21 @@ The per-row distributions are unimodal at zero in all four models, neither bimod
 
 No layer in any model combines a high \\(R^2\\) with a slope in \\((0, 1)\\), which is the joint signature of partial, systematic compensation. The one layer with genuine structure, TabICL L10 with \\(R^2 = 0.58\\), has a *negative* slope, i.e., the larger the direct contribution, the more the downstream layers amplify its loss. This is amplification, not repair.
 
-**The test is biased in favour of repair.** Moreover, the regression is generous to the hypothesis we are rejecting. Since \\(CE = DE - TE\\), the regressand contains a \\(+DE\\) term, so any noise in \\(DE\\) propagates into a spurious positive association between \\(CE\\) and \\(DE\\). The test is therefore biased towards finding a compensation law, and it fails even so, which makes the null more robust rather than less.
+**The test is biased in favour of repair.** Since \\(CE = DE - TE\\), the regressand contains a \\(+DE\\) term, so any noise in \\(DE\\) propagates into a spurious positive association between \\(CE\\) and \\(DE\\). The test is therefore biased towards finding a compensation law, and it fails even so, which makes the null more robust rather than less.
 
 **Not an artifact of the readout.** Finally, Mitra serves as an anchor. Its head is linear, so \\(TE = DE + IE\\) holds with zero residual and the decomposition is exact. Mitra shows \\(CE = +0.01\\), i.e., the null is not produced by nonlinearity in the decoder or by LayerNorm rescaling. In addition, the null holds under the secondary coordinate: the mean \\(CE\\) in the true-class logit is \\(-0.00\\), \\(-0.04\\), \\(-0.43\\) and \\(+0.04\\) for the four models, and the one large value, TabICL, is negative and shrinks to \\(-0.08\\) under the robust margin, which identifies it as an early-layer tail effect rather than compensation.
 
 ## 6. Why redundancy is cheap in tabular models
 {: #discussion}
 
-Our results say what the recovery is not; we close by describing what we believe it is, with the caveat that this section is a hypothesis rather than a result. The intuition is that active repair and passive redundancy are not equally expensive in every architecture. In a language model, the prompt is consumed once and the information a layer needs may exist nowhere else in the residual stream, so recovering it requires a dedicated mechanism, e.g., a backup head that activates only when the primary head is removed. In a TFM, the input table is in context for the entire forward pass, so any layer can recompute a lost feature from the raw values at the cost of ordinary attention. Redundancy is therefore the path of least resistance, and no reactive mechanism needs to be learned.
+Our results say what the recovery is not; we close with what we take it to be, with the caveat that this section is a hypothesis rather than a result. The intuition is that active repair and passive redundancy are not equally expensive in every architecture. In a language model, the prompt is consumed once and the information a layer needs may exist nowhere else in the residual stream, so recovering it requires a dedicated mechanism, e.g., a backup head that activates only when the primary head is removed. In a TFM, the input table is in context for the entire forward pass, so any layer can recompute a lost feature from the raw values at the cost of ordinary attention. Redundancy is therefore the path of least resistance, and no reactive mechanism needs to be learned.
 
 This account is coherent with the picture of Balef et al. [[5](#ref-5)], in which depth performs iterative refinement with overlapping computations rather than a sequence of specialized stages, and it explains why "a large dip followed by full recovery" is the typical trajectory: the probe at depth \\(m+1\\) is sensitive to the missing write, while the information itself was never scarce. Testing it requires interventions we have not run, and we leave this to future work.
 
 ## 7. Limitations
 {: #limitations}
 
-Three limitations bound the claim. **Granularity.** We ablate whole layers, whereas the compensation reported in language models is head-level. A layer averages several heads, so repair confined to individual heads could in principle cancel within a layer. Per-head direct effects are the one finer resolution we have not measured. **Scope.** We study four models, 15 binary classification tasks, one checkpoint per model, and source tables drawn from the same benchmark; multiclass and regression tasks are not covered. Two of our models, LimiX-2M and TabICL, are also studied by Balef et al. [5], but the TabPFN family is not, and it is for TabPFN(v2) that they report the clearest self-repair. For that model our objection is therefore the identifiability argument of Section 3 alone, i.e., that the criterion does not establish the conclusion, and not the direct evidence of Section 5. **Ablation operator.** Resample ablation removes a layer's *specific* computation but not its average contribution, which is the correct operator for our question but not the only defensible one.
+Three limitations bound the claim. **Granularity.** We ablate whole layers, whereas the compensation reported in language models is head-level. A layer averages several heads, so repair confined to individual heads could in principle cancel within a layer. Per-head direct effects are the one finer resolution we have not measured. **Scope.** We study four models, 15 binary classification tasks, one checkpoint per model, and source tables drawn from the same benchmark; multiclass and regression tasks are not covered. Our LimiX-2M is one of the six models studied by Balef et al. [[5](#ref-5)] and our TabICL is from the same family as their TabICL, but the TabPFN models are not covered here, and it is for TabPFN(v2) that they report the clearest self-repair. For that model our objection is therefore the identifiability argument of Section 3 alone, i.e., that the criterion does not establish the conclusion, and not the direct evidence of Section 5. **Ablation operator.** Resample ablation removes a layer's *specific* computation but not its average contribution, which is the correct operator for our question but not the only defensible one.
 
 Against these, the three independent checks of Section 5.3 agree, and the compensation test is tilted towards the hypothesis it rejects.
 
