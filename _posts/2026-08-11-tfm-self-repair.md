@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "Do tabular foundation models repair themselves?"
-desc: "Balef et al. pose the right dichotomy — redundancy or repair — but adopt a criterion both alternatives satisfy. Measuring the direct effect resolves it."
+desc: "Ablating a layer in a tabular foundation model barely moves the output. A causal analysis of the direct and total effect says nothing was repaired — the redundancy was there all along."
 mathjax: true
 permalink: /articles/tfm-self-repair/
-date: 2026-08-10
+date: 2026-08-11
 ---
 
 **Abstract.** Ablation is the workhorse of mechanistic interpretability: we delete a component, measure the damage, and read the damage as the component's importance. 
