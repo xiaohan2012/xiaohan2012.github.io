@@ -167,14 +167,14 @@ Three things are visible here. First, `forward` appears only on the total-effect
 
 Both effects are read on the same ruler, the model's own decoder, which is what makes their difference meaningful. This rules out the per-depth decoders of the tabular logit lens [[5](#ref-5)], which give each depth its own ruler, and it differs from [[1](#ref-1)], who read \\(DE\\) by unembedding \\(a_m\\) alone rather than decoding the patched residual.
 
-### 4.2 A logit margin instead of ROC AUC
+### 4.2 Logit margin instead of ROC AUC
 {: #margin}
- For a binary task with true-class logit \\(z_{i,y_i}\\) and competitor logit \\(z_{i,1-y_i}\\) on query row \\(i\\), we define the margin \\(\gamma_i = z_{i,y_i} - z_{i,1-y_i}\\) and take its median over rows. We use the median because ablation pushes some rows off-distribution, which produces a heavy tail that a mean would follow. Normalizing by the clean final-layer margin of the same task fixes the scale: (i) \\(0\\) is the decision boundary, (ii) \\(1\\) is the model's clean final confidence, and (iii) values above \\(1\\) indicate overconfidence while negative values indicate a flipped decision. Unlike ROC AUC, the margin is a magnitude and does not saturate. Section 5.1 empirically compares these two metrics.
+ For a binary task with true-class logit \\(z_{i,y_i}\\) and competitor logit \\(z_{i,1-y_i}\\) on query row \\(i\\), we define the margin \\(\gamma_i = z_{i,y_i} - z_{i,1-y_i}\\) and take its median over rows. We use the median because ablation pushes some rows off-distribution, which produces a heavy tail that a mean would follow. Normalizing by the clean final-layer margin of the same task fixes the scale: (i) \\(0\\) is the decision boundary, (ii) \\(1\\) is the model's clean final confidence, and (iii) values above \\(1\\) indicate overconfidence while negative values indicate a flipped decision. Unlike ROC AUC, the margin is a magnitude and does not saturate. Section 5.2 empirically compares these two metrics.
 
 
 ### 4.3 Resample ablation instead of zero ablation
 {: #resample}
- We take the source write \\(\tilde{a}_m\\) from a forward pass on a different table, and we average over multiple tables. The reason is that a resampled activation stays in the range the model was trained on. The intervention then asks what the layer would have contributed on other data, rather than what happens when it produces nothing at all. This addresses the second concern of Section 3.3; Appendix A reports the quantitative comparison against zero ablation.
+ We take the source write \\(\tilde{a}_m\\) from a forward pass on a different table, and we average over multiple tables. The reason is that a resampled activation stays in the range the model was trained on. The intervention then asks what the layer would have contributed on other data, rather than what happens when it produces nothing at all. This addresses the second concern of Section 3.3; Section 5.3 reports the quantitative comparison.
 
 ### 4.4 Criterion
 {: #criterion}
@@ -184,41 +184,80 @@ Given \\(DE\\) and \\(TE\\) we compute \\(CE = DE - TE\\) and apply the criterio
 ## 5. Experiments
 {: #experiments}
 
+We proceed in five steps: (i) the setup; (ii) a comparison of ROC AUC with the logit margin; (iii) a comparison of the two ablation operators; (iv) the main result; and (v) the checks that support it.
+
+### 5.1 Setup
+{: #setup}
+
 **Models.** We evaluate four state-of-the-art TFMs: [LimiX-2M](https://huggingface.co/stableai-org/LimiX-2M), [Mitra](https://huggingface.co/autogluon/mitra-classifier), [TabICL-v2](https://huggingface.co/jingang/TabICL), and [TabFM](https://huggingface.co/google/tabfm-1.0.0-pytorch). We write TabICL for TabICL-v2 below. Mitra plays a special role, because its output head is linear, so the decomposition \\(TE = DE + IE\\) holds exactly and any observed \\(CE\\) cannot be attributed to a nonlinearity in the readout.
 
 **Datasets.** We use 15 binary classification tasks from TabArena, with 1000 support rows and 500 query rows per task.
 
 **Ablation.** We ablate one transformer layer at a time, over all layers of each model, using resample ablation averaged over 8 source tables. Each point in the figures below is one (layer, task) pair.
 
-**Metrics.** We report the margin of Section 4.2 as the primary coordinate and the mean true-class logit, z-scored per task, as a secondary coordinate for robustness.
+**Metrics.** We report the margin of Section 4.2.
 
-### 5.1 ROC AUC versus the logit margin
+### 5.2 ROC AUC versus the logit margin
 {: #metrics}
 
-We first isolate the effect of replacing ROC AUC by the margin, using the layer-skipping protocol of Section 3. Three regimes appear, and ROC AUC collapses all three into a single flat line.
+We first isolate the effect of replacing ROC AUC by the logit margin, using the layer-skipping protocol of Section 3. In the three cases below ROC AUC is flat, and yet the margin shows three different things happening.
+
+
+**Net-suppressive layers.** Skipping the last layer of Mitra leaves ROC AUC at its ceiling, which reads as "this layer does nothing", while the margin overshoots to 1.53, i.e., deleting the layer makes the model *more* confident in the true class. The layer is net-suppressive and ROC AUC is blind to it.
 
 ![Net-suppressive layer](/assets/img/tfm-self-repair/auc-takeaway1.png)
 *Figure 5: Mitra, skipping the final layer. ROC AUC does not move; the margin overshoots to 1.53.*
 
-**Net-suppressive layers.** Skipping the last layer of Mitra leaves ROC AUC at its ceiling, which reads as "this layer does nothing", while the margin overshoots to 1.53, i.e., deleting the layer makes the model *more* confident in the true class. The layer is net-suppressive and ROC AUC is blind to it.
+**Dip and recovery.** Skipping layer 6 of Mitra also leaves ROC AUC flat, while the margin collapses from 0.85 to 0.36 and climbs back to 0.87 against a baseline of 0.97 — the phenomenon of Section 3, invisible under ROC AUC. Note that the two cases have opposite signs and yet produce the same ROC AUC curve, which is the sense in which the metric hides signed work.
 
 ![Dip and recovery under the margin](/assets/img/tfm-self-repair/auc-takeaway2.png)
 *Figure 6: Mitra, skipping layer 6. ROC AUC rides the ceiling; the margin collapses to 0.36 and climbs back to 0.87.*
 
-**Dip and recovery.** Skipping layer 6 of Mitra also leaves ROC AUC flat, while the margin collapses from 0.85 to 0.36 and climbs back to 0.87 against a baseline of 0.97 — the phenomenon of Section 3, invisible under ROC AUC. Note that the two regimes have opposite signs and yet produce the same ROC AUC curve, which is the sense in which the metric hides signed work.
 
-![All late layers fold back onto the baseline](/assets/img/tfm-self-repair/auc-tabfm_triple.png)
-*Figure 7: TabFM, all three lenses. After the immediate dip, every late-layer skip folds back onto the baseline in ROC AUC, margin and true-class logit alike.*
 
-**The residual ambiguity.** However, a better metric does not resolve the question. In the late stack of TabFM every skipped layer returns to the baseline at the output, so \\(TE \approx 0\\) under the margin exactly as under ROC AUC, model-wide rather than for a hand-picked layer. Thus the sharper metric relocates the problem without solving it, which is what Section 3 predicts: the obstruction is the design, not the resolution of the measurement.
+**The residual ambiguity.** However, a better metric does not resolve the question. Figure 7 shows the late stack of TabFM, where every skipped layer returns to the baseline at the output, so \\(TE \approx 0\\) under the margin exactly as under ROC AUC, model-wide rather than for a hand-picked layer. Thus the sharper metric relocates the problem without solving it, which is what Section 3 predicts: the obstruction is the design, not the resolution of the measurement.
 
-### 5.2 The compensation effect is approximately zero
+![Late layers fold back onto the baseline](/assets/img/tfm-self-repair/auc-tabfm-two.png)
+*Figure 7: TabFM, every layer ablated in turn, under ROC AUC and under the margin. After the immediate dip, every late-layer skip folds back onto the baseline under both.*
+
+### 5.3 Zero versus resample ablation
+{: #ablation-operator}
+
+Next we provide empirical evidence on the advantages of resample ablation over zero ablation.
+
+**Magnitude.** Zero ablation deletes a layer's write, which leaves the residual stream with a norm the model never encounters.[^norm] We measure the *norm-preservation ratio*, i.e., the norm of the residual after the ablation as a fraction of its clean norm, read at the decoded position. A faithful ablation should leave it near \\(1\\).
+
+![Residual norm under the two ablations](/assets/img/tfm-self-repair/ablation-norm.png){: style="width:82%; display:block; margin:0 auto"}
+*Figure 8: residual norm after ablation as a fraction of the clean norm, by relative depth. Resample ablation tracks \\(1\\) at every depth; zero ablation sits below it throughout. TabFM is shown here; the other three models are in Appendix B.*
+
+Across the four models the smallest ratio is \\(0.96\\) to \\(1.00\\) under resample ablation, against \\(0.14\\) to \\(0.66\\) under zero ablation.
+
+[^norm]: The norm matters because every LayerNorm downstream of the ablated layer, including the one in the decoder, rescales by it, so a residual of an unfamiliar size is read in a regime the model was never trained on.
+
+**Stability.** A faithful ablation should also perturb consistently. The quantity to look at is the *immediate drop*: for an ablated layer \\(m\\), the loss of margin at the next depth,
+
+$$\text{drop}(m) = \text{margin}^{\text{clean}}[m+1] - \text{margin}^{\text{ablated}}[m+1] .$$
+
+Since each ablation removes one layer's contribution, the drop should be of a comparable size from layer to layer. A negative value means the ablation *improved* the margin, which a layer can genuinely cause if it suppresses the true class, as the last layer of Mitra does in Section 5.2. What a single layer does not explain is a negative value several times the size of the clean final margin.
+
+![Stability of the two ablations](/assets/img/tfm-self-repair/ablation-stability.png)
+*Figure 9: standard deviation of the immediate drop across the layers of each model (left) and the largest negative drop (right), margin coordinate. Per-model values are in Appendix B.*
+
+The standard deviation of the drop across layers is two to six times larger under zero ablation, which also produces negative drops of up to three times the clean final margin; under resample ablation the largest negative drop is \\(0.17\\).
+
+**The phenomenon survives the change.** We observe the same dip and recovery under both ablations. 
+The dip is present under both operators; under resample ablation it is easier to see, because the trajectories are tighter and none of them crosses the clean baseline. 
+
+![Trajectories under both ablations](/assets/img/tfm-self-repair/ablation-pair.png)
+*Figure 10: Mitra, every layer ablated in turn, under zero ablation (left) and resample ablation (right). Under zero the trajectories scatter and several cross the unablated baseline; under resample each ablated layer still dips at the next depth and then climbs back.*
+
+### 5.4 The compensation effect is approximately zero
 {: #main-result}
 
-Figure 8 is our main result: the direct effect against the total effect for all four models, one point per (layer, task) pair.
+Figure 11 is our main result: the direct effect against the total effect for all four models, one point per (layer, task) pair.
 
 ![DE versus TE for four TFMs](/assets/img/tfm-self-repair/de-te-scatter.png)
-*Figure 8: direct effect against total effect, margin coordinate, four TFMs. The dashed line is \\(y = x\\), i.e., no downstream reaction. The below-diagonal cloud of Figure 2 is absent.*
+*Figure 11: direct effect against total effect, margin coordinate, four TFMs. The dashed line is \\(y = x\\), i.e., no downstream reaction. The below-diagonal cloud of Figure 2 is absent.*
 
 We read the figure against the key of Section 2, with one region added: points with \\(DE \approx 0\\) but large \\(\lvert TE \rvert\\) are *indirectly important*, i.e., they build features that later layers consume. We observe three things. First, the late layers of every model sit on the diagonal with \\(DE > 0\\): they write the decision directly and nothing compensates for them. Second, the remaining layers form a vertical band at \\(DE \approx 0\\), which means most layers do not write the decision directly. Third, the below-diagonal repair cloud of Figure 2 does not appear. The mean compensation effect is \\(+0.09\\) for LimiX-2M, \\(+0.01\\) for Mitra, \\(-0.08\\) for TabICL and \\(+0.00\\) for TabFM, in units where the clean final margin is \\(1\\).
 
@@ -231,21 +270,21 @@ We report the fraction of points in each region, using a threshold of \\(0.1\\) 
 | TabICL-v2 | 41% | 40% | 13% | 0% | 5% |
 | TabFM | 78% | 10% | 7% | 1% | 1% |
 
-*Table 2: share of (layer, task) pairs in each region of Figure 8, margin coordinate, threshold \\(0.1\\). The repaired region holds 0–11% in every model.*
+*Table 2: share of (layer, task) pairs in each region of Figure 11, margin coordinate, threshold \\(0.1\\). The repaired region holds 0–11% in every model.*
 
 Two observations follow. First, the repaired region holds 0–11% of the points in every model, which is the quantitative form of the null. Second, the layers with \\(DE \approx 0\\) split in a model-dependent way: TabFM is dominated by genuine redundancy (78% at the origin), whereas in LimiX-2M most such layers are indirectly important (53%), i.e., replacing their write with a source write does damage the output even though they do not write the decision themselves. Note that "indirectly important" is a substantive finding and not an artifact of noise, because the substitution is another table's write for the same layer: if an arbitrary source still damages the output, the specific computation of that layer is not interchangeable.
 
 The strongest evidence against our conclusion is that 65% of LimiX-2M points and 64% of Mitra points lie below the diagonal. Taken alone this would suggest a weak repair tendency. However, the location of the median is not the criterion of Section 4.4: the associated magnitudes are \\(+0.09\\) and \\(+0.01\\) against a clean final margin of \\(1\\), and the second requirement — a proportional compensation law — fails, as we show next.
 
-### 5.3 Robustness
+### 5.5 Robustness
 {: #robustness}
 
 We check the null (i) at a finer resolution, (ii) against the compensation law, and (iii) against a possible artifact of the readout.
 
-**Per-row de-aggregation.** Each point in Figure 8 aggregates roughly 500 query rows, so a null mean is compatible with (i) cancellation between rows of opposite sign or (ii) strong repair confined to a small subpopulation. We therefore de-aggregate and inspect the distribution of \\(CE\\) over individual rows.
+**Per-row de-aggregation.** Each point in Figure 11 aggregates roughly 500 query rows, so a null mean is compatible with (i) cancellation between rows of opposite sign or (ii) strong repair confined to a small subpopulation. We therefore de-aggregate and inspect the distribution of \\(CE\\) over individual rows.
 
 ![Per-row compensation effect](/assets/img/tfm-self-repair/per-row-ce-hist.png)
-*Figure 9: distribution of the per-row compensation effect. All four models are unimodal at zero.*
+*Figure 12: distribution of the per-row compensation effect. All four models are unimodal at zero.*
 
 The per-row distributions are unimodal at zero in all four models, neither bimodal nor right-skewed, which rules out both alternatives. Restricting to rows whose direct effect exceeds \\(0.1\\) standard deviations, the below-diagonal share ranges from 23% to 58% across models, i.e., close to a coin flip, and the only signal that is stable across tables is negative \\(CE\\) in TabICL — amplification, which is the opposite of repair.
 
@@ -262,13 +301,13 @@ The per-row distributions are unimodal at zero in all four models, neither bimod
 *Table 3: per-layer regression of \\(CE\\) on \\(DE\\) across the 15 tasks, reported at the layer where \\(R^2\\) peaks. The last row is the language-model reference. No TFM layer combines a high \\(R^2\\) with a slope in \\((0, 1)\\).*
 
 ![Per-layer CE against DE](/assets/img/tfm-self-repair/compensation-fit.png)
-*Figure 10: per-layer regression of the compensation effect on the direct effect. No layer reproduces the language-model relation.*
+*Figure 13: per-layer regression of the compensation effect on the direct effect. No layer reproduces the language-model relation.*
 
 No layer in any model combines a high \\(R^2\\) with a slope in \\((0, 1)\\), which is the joint signature of partial, systematic compensation. The one layer with genuine structure, TabICL L10 with \\(R^2 = 0.58\\), has a *negative* slope, i.e., the larger the direct contribution, the more the downstream layers amplify its loss. This is amplification, not repair.
 
 **The test is biased in favour of repair.** Since \\(CE = DE - TE\\), the regressand contains a \\(+DE\\) term, so any noise in \\(DE\\) propagates into a spurious positive association between \\(CE\\) and \\(DE\\). The test is therefore biased towards finding a compensation law, and it fails even so, which makes the null more robust rather than less.
 
-**Not an artifact of the readout.** Finally, Mitra serves as an anchor. Its head is linear, so \\(TE = DE + IE\\) holds with zero residual and the decomposition is exact. Mitra shows \\(CE = +0.01\\), i.e., the null is not produced by nonlinearity in the decoder or by LayerNorm rescaling. In addition, the null holds under the secondary coordinate: the mean \\(CE\\) in the true-class logit is \\(-0.00\\), \\(-0.04\\), \\(-0.43\\) and \\(+0.04\\) for the four models, and the one large value, TabICL, is negative and shrinks to \\(-0.08\\) under the robust margin, which identifies it as an early-layer tail effect rather than compensation.
+**Not an artifact of the readout.** Finally, Mitra serves as an anchor. Its head is linear, so \\(TE = DE + IE\\) holds with zero residual and the decomposition is exact. Mitra shows \\(CE = +0.01\\), i.e., the null is not produced by nonlinearity in the decoder or by LayerNorm rescaling.
 
 ## 6. Why redundancy is cheap in tabular models
 {: #discussion}
@@ -282,7 +321,7 @@ This account is coherent with the picture of Balef et al. [[5](#ref-5)], in whic
 
 Three limitations bound the claim. **Granularity.** We ablate whole layers, whereas the compensation reported in language models is head-level. A layer averages several heads, so repair confined to individual heads could in principle cancel within a layer. Per-head direct effects are the one finer resolution we have not measured. **Scope.** We study four models, 15 binary classification tasks, one checkpoint per model, and source tables drawn from the same benchmark; multiclass and regression tasks are not covered. Our LimiX-2M is one of the six models studied by Balef et al. [[5](#ref-5)] and our TabICL is from the same family as their TabICL, but the TabPFN models are not covered here, and it is for TabPFN(v2) that they report the clearest self-repair. For that model our objection is therefore the identifiability argument of Section 3 alone, i.e., that the criterion does not establish the conclusion, and not the direct evidence of Section 5. **Ablation operator.** Resample ablation removes a layer's *specific* computation but not its average contribution, which is the correct operator for our question but not the only defensible one.
 
-Against these, the three independent checks of Section 5.3 agree, and the compensation test is tilted towards the hypothesis it rejects.
+Against these, the three independent checks of Section 5.5 agree, and the compensation test is tilted towards the hypothesis it rejects.
 
 ## 8. Conclusion
 {: #conclusion}
@@ -314,13 +353,50 @@ All code, the ablation sweeps, and the scripts that regenerate every figure in t
 
 ---
 
-## Appendix A: resample versus zero ablation
+## Appendix A: the layer-skipping experiment on all four models
 {: #appendix-a}
 
-*To be filled from the existing comparison: zero ablation produces larger swings and overshoots, i.e., the immediate margin change becomes negative, meaning the ablation improves the margin — a signature of an off-distribution perturbation rather than of removed computation.*
+![Dip and recovery across four TFMs](/assets/img/tfm-self-repair/balef-exp6-repro.png)
+*Figure 14: our reproduction of the layer-skipping experiment of Balef et al. [[5](#ref-5)] on four TFMs, 15 tasks each. Black is the unablated baseline; each coloured curve skips one layer, marked by a red cross. The right panel of Figure 3 is the LimiX-2M panel of this figure.*
 
-## Appendix B: the layer-skipping experiment on all four models
+---
+
+## Appendix B: ablation diagnostics on all four models
 {: #appendix-b}
 
-![Dip and recovery across four TFMs](/assets/img/tfm-self-repair/balef-exp6-repro.png)
-*Figure 11: our reproduction of the layer-skipping experiment of Balef et al. [[5](#ref-5)] on four TFMs, 15 tasks each. Black is the unablated baseline; each coloured curve skips one layer, marked by a red cross. The right panel of Figure 3 is the LimiX-2M panel of this figure.*
+| model | min norm ratio, zero / resample | std of the immediate drop | largest negative drop |
+|---|---|---|---|
+| LimiX-2M | 0.14 / **1.00** | 0.32 / **0.11** | 0.52 / **0.06** |
+| Mitra | 0.52 / **1.00** | 0.30 / **0.11** | 0.49 / **0.01** |
+| TabICL | 0.64 / **0.96** | 0.24 / **0.17** | 0.24 / **0.17** |
+| TabFM | 0.66 / **0.99** | 0.62 / **0.11** | 3.03 / **0.01** |
+
+*Table 4: the two ablation operators compared, zero / resample in each cell. TabFM is the extreme case: under zero ablation one layer's removal improves the margin by three times its clean final value.*
+
+![Residual norm, all four models](/assets/img/tfm-self-repair/ablation-norm-all.png)
+*Figure 15: residual norm after ablation as a fraction of the clean norm, all four models, by relative depth. Lines are the median over the 15 tasks; bands are the interquartile range and the range across tasks. Figure 8 is the TabFM panel.*
+
+Matched magnitude is not on its own enough: a substitute of the right size pointing in a direction the model never uses is still a shock. We therefore also compare directions. Let \\(c_{\text{cross}}\\) be the cosine between the source write and the native write it replaces, and \\(c_{\text{within}}\\) the cosine between two native writes from different rows of the same table, which is the yardstick for how aligned genuine writes already are.
+
+![Direction of the substituted write](/assets/img/tfm-self-repair/ablation-direction.png)
+*Figure 16: cosine between the source write and the write it replaces (cross), against the cosine between two native writes (within), all four models.*
+
+| model | \\(c_{\text{within}}\\) | \\(c_{\text{cross}}\\) |
+|---|---|---|
+| LimiX-2M | 0.85 | 0.77 |
+| Mitra | 0.93 | 0.83 |
+| TabICL | 0.71 | 0.58 |
+| TabFM | 0.87 | 0.80 |
+
+*Table 5: direction of the substituted write. In every model \\(c_{\text{cross}}\\) tracks \\(c_{\text{within}}\\) and stays well above zero, i.e., the source write points where native writes point. TabICL's writes are less aligned to begin with, and its \\(c_{\text{cross}}\\) is lower in proportion.*
+
+![Trajectories under both ablations, remaining models](/assets/img/tfm-self-repair/ablation-pair-rest.png)
+*Figure 17: LimiX-2M, TabICL and TabFM, every layer ablated in turn, under zero ablation (left column) and resample ablation (right column). Figure 10 is the Mitra case. TabFM under zero ablation is the extreme: one ablated layer sends the margin to almost four times its clean final value.*
+
+## TODO
+{: #todo}
+
+*Draft notes, to be removed before publication.*
+
+- **Appendix C** — repeat the main result under a third readout, the mean true-class logit z-scored per task, as a further robustness check. Section 5.4 previously carried this in one sentence: the mean \\(CE\\) is \\(-0.00\\), \\(-0.04\\), \\(-0.43\\) and \\(+0.04\\) for LimiX-2M, Mitra, TabICL and TabFM; the one large value, TabICL, is negative and shrinks to \\(-0.08\\) under the robust margin, which identifies it as an early-layer tail effect rather than compensation.
+- **Section 9** — add the command that regenerates each figure.
