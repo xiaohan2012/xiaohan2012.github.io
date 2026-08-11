@@ -66,7 +66,7 @@ and we say that a component *self-repairs* if \\(CE > 0\\), i.e., if the damage 
 
 The total effect is \\(0\\) in both ① and ②, and therefore cannot separate them; the direct effect is \\(1\\) in both ② and ③, and therefore cannot separate those. Only the gap separates all three, since \\(CE\\) is non-zero in ② and zero in ① and ③. We use this table as the reading key for the remainder of the paper.
 
-**Quantification in language models.** McGrath et al. [[1](#ref-1)] evaluate a 7B-parameter Chinchilla model on 1209 factual-recall prompts, ablating one attention layer at a time. They obtain \\(DE\\) by unembedding the layer's own output directly, and \\(TE\\) by ablating the layer and reading the final logits. Figure 2 shows their central result: the point cloud of \\((DE, TE)\\) pairs sits predominantly *below* the diagonal \\(y = x\\), i.e., \\(TE < DE\\) for a large fraction of (layer, prompt) pairs. This is the decoupling that the naive ablation account does not predict, and it is the empirical signature of \\(CE > 0\\).
+**Quantification in language models.** [[1](#ref-1)] evaluate a 7B-parameter Chinchilla model on 1209 factual-recall prompts, ablating one attention layer at a time. They obtain \\(DE\\) by unembedding the layer's own output directly, and \\(TE\\) by ablating the layer and reading the final logits. Figure 2 shows their central result: the point cloud of \\((DE, TE)\\) pairs sits predominantly *below* the diagonal \\(y = x\\), i.e., \\(TE < DE\\) for a large fraction of (layer, prompt) pairs. This is the decoupling that the naive ablation account does not predict, and it is the empirical signature of \\(CE > 0\\).
 
 ![Hydra scatter: TE versus DE](/assets/img/tfm-self-repair/hydra-ref-scatter.png){: style="width:80%; display:block; margin:0 auto"}
 *Figure 2: direct effect against total effect in a language model. One point is one (layer, prompt) pair, coloured by layer depth. Mass below the diagonal is the signature of self-repair. Taken from Figure 2c of [[1](#ref-1)].*
@@ -288,7 +288,14 @@ Two observations follow.
 
 LimiX-2M is the least favourable case for our conclusion: it has both the largest repaired share, 11%, and the largest mean compensation effect, \\(+0.09\\). A compensation effect of \\(+0.09\\) is nine per cent of the model's own clean confidence. The second requirement of Section 4.4 fails as well, as we show next.
 
-**Quantitatively.** We repeat the analysis of McGrath et al. by regressing \\(CE\\) on \\(DE\\) across the 15 tasks, separately for each layer, and reporting the layer at which \\(R^2\\) peaks. The comparison is on comparable ground: for a binary task our margin is, up to a factor of two, the centred logit they read.
+**Quantitatively.** Points below the diagonal say only that compensation sometimes happens. If it is a mechanism, it should also be regular: a layer that writes more of the decision should have more of it restored. That is what the language model shows, and it is the second thing we test, following [[1](#ref-1)].
+
+- **Fit.** For a layer \\(m\\), the 15 tasks give 15 pairs \\((DE, CE)\\), one per task; we fit the line \\(CE = a + b \cdot DE\\) to them.
+- **Read.** The slope \\(b\\) is the share of the direct contribution that comes back. The \\(R^2\\) of the fit, i.e., the share of the variation in \\(CE\\) that the line accounts for, says how reliably that share holds across tasks.
+- **Criterion.** Compensation that is a mechanism rather than an accident shows a high \\(R^2\\) with a slope in \\((0, 1)\\), i.e., a fixed share of what a layer writes comes back, on every task. In the language model the relation is tightest at layer 23, with \\(R^2 = 0.92\\) and slope \\(0.69\\) (comment: add citation).
+
+
+We fit every layer of every model and report the one where \\(R^2\\) peaks, i.e., the tightest relation each model has to offer. For a binary task our margin is, up to a factor of two, the centred logit read in [[1](#ref-1)], so the comparison is on comparable ground.
 
 | model | apex layer | slope | \\(R^2\\) |
 |---|---|---|---|
@@ -301,11 +308,11 @@ LimiX-2M is the least favourable case for our conclusion: it has both the larges
 *Table 3: per-layer regression of \\(CE\\) on \\(DE\\) across the 15 tasks, reported at the layer where \\(R^2\\) peaks. The last row is the language-model reference. No TFM layer combines a high \\(R^2\\) with a slope in \\((0, 1)\\).*
 
 ![Per-layer CE against DE](/assets/img/tfm-self-repair/compensation-fit.png)
-*Figure 12: per-layer regression of the compensation effect on the direct effect. No layer reproduces the language-model relation.*
+*Figure 12: one point per layer, at the slope and \\(R^2\\) of that layer's fit; 56 layers in all. The shaded band is a slope in \\((0, 1)\\), i.e., part of the direct contribution comes back. A compensation law would put a layer inside the band and high up, where the language-model reference sits. Note that a low \\(R^2\\) already fails the criterion, whatever the slope.
 
-No layer in any model combines a high \\(R^2\\) with a slope in \\((0, 1)\\), which is the joint signature of partial, systematic compensation. The one layer with genuine structure, TabICL L10 with \\(R^2 = 0.58\\), has a *negative* slope, i.e., the larger the direct contribution, the more the downstream layers amplify its loss. This is amplification, not repair.
+No layer lands where a compensation law would put it, i.e., inside the band with a high \\(R^2\\). The closest any layer comes is TabICL L10, at \\(R^2 = 0.58\\) — and its slope is *negative*, \\(-0.41\\), so the larger the direct contribution, the more the downstream layers enlarge its loss. That is amplification, not repair.
 
-**The test is biased in favour of repair.** Since \\(CE = DE - TE\\), the regressand contains a \\(+DE\\) term, so any noise in \\(DE\\) propagates into a spurious positive association between \\(CE\\) and \\(DE\\). The test is therefore biased towards finding a compensation law, and it fails even so, which makes the null more robust rather than less.
+**The test favours the hypothesis it rejects.** A natural worry about a null result is that the test was tilted against the effect. Here it is tilted towards it. Since \\(CE = DE - TE\\), the regressand contains the regressor, so any error in \\(DE\\) enters both variables at once and pushes the slope and the \\(R^2\\) up, even where nothing is compensated. The law fails anyway.
 
 ### 5.5 Robustness
 {: #robustness}
