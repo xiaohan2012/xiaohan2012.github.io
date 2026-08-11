@@ -7,7 +7,11 @@ permalink: /articles/tfm-self-repair/
 date: 2026-08-10
 ---
 
-**Abstract.** Ablation is the workhorse of mechanistic interpretability: we delete a component, measure the damage, and read the damage as the component's importance. Self-repair breaks this inference, because downstream components can compensate for the deleted one. Self-repair has been quantified in language models. A recent study of tabular foundation models (TFMs) reports that it is present there as well. However, the criterion it adopts does not separate self-repair from mere redundancy. In this paper we measure the quantity that does, i.e., the direct effect of a layer, using a causal intervention known as path patching. We evaluate four state-of-the-art TFMs on 15 binary classification tasks and find that the compensation effect is approximately zero throughout, so the recovery is passive redundancy rather than active repair. Our experiments on real-world tabular benchmarks validate the null across three independent robustness checks.
+**Abstract.** Ablation is the workhorse of mechanistic interpretability: we delete a component, measure the damage, and read the damage as the component's importance. 
+Self-repair breaks this inference: the downstream components compensate for the deleted one and the output recovers, so the damage understates what the component does. 
+Self-repair has been quantified in language models [[1](#ref-1)]. A recent study of tabular foundation models (TFMs) [[5](#ref-5)] reports that they self-repair as well. However, the criterion it adopts does not separate self-repair from mere redundancy. 
+In this paper we measure the quantity that does, i.e., the direct effect of a layer, using a causal intervention known as path patching. 
+We evaluate four state-of-the-art TFMs on 15 binary classification tasks and find that the recovery is passive redundancy rather than active repair. 
 
 ---
 
@@ -24,7 +28,7 @@ date: 2026-08-10
 
 Mechanistic interpretability rests on a simple inference. We ablate a component, we observe how much the output degrades, and we attribute the degradation to the component's function. The inference is only valid if the rest of the network is a passive spectator. Self-repair is the phenomenon that breaks this assumption: after a component is removed, downstream components change what they compute and restore part of the lost output. The consequence is that ablation-based importance systematically underestimates the components that matter most. This has been documented repeatedly in language models [[1](#ref-1), [2](#ref-2), [3](#ref-3), [4](#ref-4)].
 
-**Tabular foundation models.** Tabular foundation models are transformers that solve a supervised tabular task by in-context learning: a single forward pass consumes the entire data table — the labelled support rows together with the unlabelled query rows — and emits predictions for the queries, with no gradient step and no task-specific fitting. One property matters for everything that follows: the input table remains in context for the whole forward pass.
+Tabular foundation models are transformers that solve a supervised tabular task by in-context learning: a single forward pass consumes the entire data table — the labelled support rows together with the unlabelled query rows — and emits predictions for the queries, with no gradient step and no task-specific fitting. One property matters for everything that follows: the input table remains in context for the whole forward pass.
 
 **The gap.** Self-repair has been quantified only in language models. Balef et al. [[5](#ref-5)] give the first mechanistic study of layerwise dynamics in TFMs and report that it occurs in the middle and late layers of most of them. However, their criterion is the shape of a trajectory: after skipping a layer they decode at every subsequent depth and read a drop followed by a recovery of ROC AUC as evidence of repair. That reading presupposes a mechanism we call *active repair*, in which the downstream layers respond to the missing write. A second mechanism, *passive redundancy*, produces the same trajectory: if the information written by the skipped layer is *duplicated* elsewhere, the downstream layers recover the output without changing what they write.
 
@@ -80,10 +84,10 @@ Moreover, the compensation is proportional. Regressing \\(CE\\) on \\(DE\\) acro
 
 We proceed in three steps: (i) what Balef et al. do and what they conclude; (ii) the main argument, that their criterion cannot identify self-repair, which is a matter of logic and not of measurement; and (iii) two measurement choices that make the phenomenon harder to see.
 
-### 3.1 What Balef et al. [[5](#ref-5)] do
+### 3.1 What Balef et al. do
 {: #prior-experiment}
 
-They study six state-of-the-art TFMs. Their self-repair experiment has four parts.
+Balef et al. [[5](#ref-5)] study six state-of-the-art TFMs. Their self-repair experiment has four parts.
 
 - **Instrument** — the *tabular logit lens*. A TFM's native decoder expects the representation of the final layer, so they train a separate decoder for every depth and use it to read out intermediate performance.
 - **Intervention** — *layer skipping*. They remove one layer and apply the lens at every subsequent depth, which gives a trajectory of decoded performance.
@@ -125,9 +129,10 @@ Two further choices make the phenomenon harder to see, independently of the argu
 
 Our measurement has three ingredients. The first supplies the missing counterfactual; the other two make the resulting quantities readable. Section 4.4 states the criterion they serve.
 
-### 4.1 The direct effect via path patching [[2](#ref-2)]
+### 4.1 The direct effect via path patching
 {: #path-patching}
- The main idea is to change what layer \\(m\\) writes and let no other layer notice. Formally, let \\(r_\ell\\) denote the residual stream after layer \\(\ell\\) and \\(a_m = r_m - r_{m-1}\\) the write of layer \\(m\\). We refer to a value substituted for \\(a_m\\) as a *source* write, denoted $$\tilde{a}_m$$ (Section 4.3 says where it comes from).
+
+We follow the path-patching construction of [[2](#ref-2)]. The main idea is to change what layer \\(m\\) writes and let no other layer notice. Formally, let \\(r_\ell\\) denote the residual stream after layer \\(\ell\\) and \\(a_m = r_m - r_{m-1}\\) the write of layer \\(m\\). We refer to a value substituted for \\(a_m\\) as a *source* write, denoted $$\tilde{a}_m$$ (Section 4.3 says where it comes from).
 Substituting it while reusing every downstream write $$a_\ell$$, $$\ell > m$$, at its clean value — that is, not recomputing it on the perturbed residual — gives
 
 $$r_L^{DE}(m) = r_L^{\text{clean}} - a_m + \tilde{a}_m ,$$
@@ -283,7 +288,7 @@ Figure 11 shows where the mass lies; to put a number on it we assign every point
 
 Two observations follow.
 
-- **Repair is never the dominant region.** It holds 0–11% of the points in every model, which is the quantitative form of the null.
+- **Repair is never the dominant region.** It holds 0–11% of the points in every model. This is the quantitative form of the *null*, i.e., the hypothesis we are testing against: that the downstream layers do not compensate.
 - **Redundant and indirectly important carry the mass**, 69–88% of the points taken together. TabFM is almost all redundancy (78%), whereas in LimiX-2M most such layers are indirectly important (53%).
 
 LimiX-2M is the least favourable case for our conclusion: it has both the largest repaired share, 11%, and the largest mean compensation effect, \\(+0.09\\). A compensation effect of \\(+0.09\\) is nine per cent of the model's own clean confidence. The second requirement of Section 4.4 fails as well, as we show next.
@@ -308,48 +313,26 @@ We fit every layer of every model and report the one where \\(R^2\\) peaks, i.e.
 *Table 3: per-layer regression of \\(CE\\) on \\(DE\\) across the 15 tasks, reported at the layer where \\(R^2\\) peaks. The last row is the language-model reference. No TFM layer combines a high \\(R^2\\) with a slope in \\((0, 1)\\).*
 
 ![Per-layer CE against DE](/assets/img/tfm-self-repair/compensation-fit.png)
-*Figure 12: one point per layer, at the slope and \\(R^2\\) of that layer's fit; 56 layers in all. The shaded band is a slope in \\((0, 1)\\), i.e., part of the direct contribution comes back. A compensation law would put a layer inside the band and high up, where the language-model reference sits. Note that a low \\(R^2\\) already fails the criterion, whatever the slope.
+*Figure 12: one point per layer, at the slope and \\(R^2\\) of that layer's fit; 56 layers in all, each model's last layer excluded because it has no downstream and therefore \\(CE \equiv 0\\). The shaded band is a slope in \\((0, 1)\\), i.e., part of the direct contribution comes back. A compensation law would put a layer inside the band and high up, where the language-model reference sits. Note that a low \\(R^2\\) already fails the criterion whatever the slope; the slope is only interpretable where \\(DE\\) varies across tasks, which in each model is the layer of Table 3.*
 
 No layer lands where a compensation law would put it, i.e., inside the band with a high \\(R^2\\). The closest any layer comes is TabICL L10, at \\(R^2 = 0.58\\) — and its slope is *negative*, \\(-0.41\\), so the larger the direct contribution, the more the downstream layers enlarge its loss. That is amplification, not repair.
 
 **The test favours the hypothesis it rejects.** A natural worry about a null result is that the test was tilted against the effect. Here it is tilted towards it. Since \\(CE = DE - TE\\), the regressand contains the regressor, so any error in \\(DE\\) enters both variables at once and pushes the slope and the \\(R^2\\) up, even where nothing is compensated. The law fails anyway.
 
-### 5.5 Robustness
-{: #robustness}
+Two objections remain: that a mean of zero could hide cancellation between rows of opposite sign, and that it could be an artifact of the readout. Appendix C answers both. The per-row distribution of \\(CE\\) is unimodal at zero in all four models, and Mitra, whose linear head makes the decomposition exact, shows \\(CE = +0.01\\).
 
-We check the null (i) at a finer resolution, (ii) against the compensation law, and (iii) against a possible artifact of the readout.
-
-**Per-row de-aggregation.** Each point in Figure 11 aggregates roughly 500 query rows, so a null mean is compatible with (i) cancellation between rows of opposite sign or (ii) strong repair confined to a small subpopulation. We therefore de-aggregate and inspect the distribution of \\(CE\\) over individual rows.
-
-![Per-row compensation effect](/assets/img/tfm-self-repair/per-row-ce-hist.png)
-*Figure 13: distribution of the per-row compensation effect. All four models are unimodal at zero.*
-
-The per-row distributions are unimodal at zero in all four models, neither bimodal nor right-skewed, which rules out both alternatives. Restricting to rows whose direct effect exceeds \\(0.1\\) standard deviations, the below-diagonal share ranges from 23% to 58% across models, i.e., close to a coin flip, and the only signal that is stable across tables is negative \\(CE\\) in TabICL — amplification, which is the opposite of repair.
-
-**Not an artifact of the readout.** Finally, Mitra serves as an anchor. Its head is linear, so \\(TE = DE + IE\\) holds with zero residual and the decomposition is exact. Mitra shows \\(CE = +0.01\\), i.e., the null is not produced by nonlinearity in the decoder or by LayerNorm rescaling.
-
-## 6. Why redundancy is cheap in tabular models
-{: #discussion}
-
-Our results say what the recovery is not; we close with what we take it to be, with the caveat that this section is a hypothesis rather than a result. The intuition is that active repair and passive redundancy are not equally expensive in every architecture. In a language model, the prompt is consumed once and the information a layer needs may exist nowhere else in the residual stream, so recovering it requires a dedicated mechanism, e.g., a backup head that activates only when the primary head is removed. In a TFM, the input table is in context for the entire forward pass, so any layer can recompute a lost feature from the raw values at the cost of ordinary attention. Redundancy is therefore the path of least resistance, and no reactive mechanism needs to be learned.
-
-This account is coherent with the picture of Balef et al. [[5](#ref-5)], in which depth performs iterative refinement with overlapping computations rather than a sequence of specialized stages, and it explains why "a large dip followed by full recovery" is the typical trajectory: the probe at depth \\(m+1\\) is sensitive to the missing write, while the information itself was never scarce. Testing it requires interventions we have not run, and we leave this to future work.
-
-## 7. Limitations
-{: #limitations}
-
-Three limitations bound the claim. **Granularity.** We ablate whole layers, whereas the compensation reported in language models is head-level. A layer averages several heads, so repair confined to individual heads could in principle cancel within a layer. Per-head direct effects are the one finer resolution we have not measured. **Scope.** We study four models, 15 binary classification tasks, one checkpoint per model, and source tables drawn from the same benchmark; multiclass and regression tasks are not covered. Our LimiX-2M is one of the six models studied by Balef et al. [[5](#ref-5)] and our TabICL is from the same family as their TabICL, but the TabPFN models are not covered here, and it is for TabPFN(v2) that they report the clearest self-repair. For that model our objection is therefore the identifiability argument of Section 3 alone, i.e., that the criterion does not establish the conclusion, and not the direct evidence of Section 5. **Ablation operator.** Resample ablation removes a layer's *specific* computation but not its average contribution, which is the correct operator for our question but not the only defensible one.
-
-Against these, the three independent checks of Section 5.5 agree, and the compensation test is tilted towards the hypothesis it rejects.
-
-## 8. Conclusion
+## 6. Conclusion
 {: #conclusion}
 
-We measure self-repair in TFMs as the gap between the direct and the total effect of a component. Across four models and 15 tasks the compensation effect is approximately zero, at layer and at row resolution, and the proportional compensation law observed in language models does not hold at any layer. The drop-and-recovery phenomenon reported for TFMs is therefore passive redundancy rather than active compensation. To our knowledge, this is the first measurement of the direct effect in tabular foundation models, and it is the quantity that makes the redundancy-or-repair question decidable.
+We measure self-repair as the gap between a component's direct and total effect. Across four TFMs and 15 tasks that gap is approximately zero, and the compensation law of language models holds at no layer. The recovery reported for TFMs is passive redundancy, not active compensation. To our knowledge this is the first measurement of the direct effect in TFMs, the quantity that makes the question decidable.
 
-Our work opens interesting directions for future research. For example, (i) does per-head resolution reveal compensation that layer-level ablation averages away? (ii) where does the duplicated information live — is it copied along the residual stream, or recomputed from the input table on demand? (iii) how does the redundancy degrade under joint ablation of \\(k\\) layers, and is the degradation threshold-like or linear in \\(k\\)? and (iv) can the direct effect serve as a routine diagnostic for attribution in TFMs, given that ablation alone systematically misreads component importance?
+Our work opens interesting directions for future research:
 
-## 9. Reproducibility
+- **Finer resolution.** Ablating a whole layer may hide individual heads that do compensate. Can we find a head that self-repairs?
+- **Other models.** LimiX-16M and the TabPFN family, for which Balef et al. [[5](#ref-5)] report the clearest self-repair, are not covered here.
+- **The mechanism of redundancy.** We conjecture that redundancy is cheap in a TFM because the input table stays in context, so a lost feature can be recomputed. Is it recomputed on demand, or already copied along the residual stream?
+
+## 7. Reproducibility
 {: #reproducibility}
 
 All code, the ablation sweeps, and the scripts that regenerate every figure in this paper are available in the [`tfmlens`](https://github.com/xiaohan2012/tfmlens) repository. Model checkpoints are the public releases linked in Section 5; tasks are the binary classification subset of [TabArena](https://tabarena.ai).
@@ -412,10 +395,17 @@ Matched magnitude is not on its own enough: a substitute of the right size point
 ![Trajectories under both ablations, remaining models](/assets/img/tfm-self-repair/ablation-pair-rest.png)
 *Figure 17: LimiX-2M, TabICL and TabFM, every layer ablated in turn, under zero ablation (left column) and resample ablation (right column). Figure 9 is the Mitra case. TabFM under zero ablation is the extreme: one ablated layer sends the margin to almost four times its clean final value.*
 
-## TODO
-{: #todo}
 
-*Draft notes, to be removed before publication.*
+## Appendix C: two further checks on the compensation effect
+{: #appendix-c}
 
-- **Appendix C** — repeat the main result under a third readout, the mean true-class logit z-scored per task, as a further robustness check. Section 5.4 previously carried this in one sentence: the mean \\(CE\\) is \\(-0.00\\), \\(-0.04\\), \\(-0.43\\) and \\(+0.04\\) for LimiX-2M, Mitra, TabICL and TabFM; the one large value, TabICL, is negative and shrinks to \\(-0.08\\) under the robust margin, which identifies it as an early-layer tail effect rather than compensation.
-- **Section 9** — add the command that regenerates each figure.
+Two checks beyond the compensation law of Section 5.4: one at a finer resolution, one against a possible artifact of the readout.
+
+**Per-row de-aggregation.** Each point in Figure 11 aggregates roughly 500 query rows, so a mean of zero is compatible with cancellation between rows of opposite sign, or with strong repair confined to a small subpopulation. We therefore de-aggregate and inspect the distribution of \\(CE\\) over individual rows.
+
+![Per-row compensation effect](/assets/img/tfm-self-repair/per-row-ce-hist.png)
+*Figure 13: distribution of the per-row compensation effect. All four models are unimodal at zero.*
+
+The per-row distributions are unimodal at zero in all four models, neither bimodal nor right-skewed, which rules out both alternatives. Restricting to rows whose direct effect exceeds \\(0.1\\) standard deviations, the share of rows with \\(CE > 0\\) ranges from 23% to 58% across models, so no model sits systematically on the repair side. The only signal stable across tasks is negative \\(CE\\) in TabICL — amplification, which is the opposite of repair.
+
+**Not an artifact of the readout.** Mitra serves as an anchor. Its head is linear, so \\(TE = DE + IE\\) holds with zero residual and the decomposition is exact. Mitra shows \\(CE = +0.01\\), i.e., the null is not produced by nonlinearity in the decoder or by LayerNorm rescaling.
