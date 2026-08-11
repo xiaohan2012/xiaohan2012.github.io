@@ -24,7 +24,7 @@ date: 2026-08-10
 
 Mechanistic interpretability rests on a simple inference. We ablate a component, we observe how much the output degrades, and we attribute the degradation to the component's function. The inference is only valid if the rest of the network is a passive spectator. Self-repair is the phenomenon that breaks this assumption: after a component is removed, downstream components change what they compute and restore part of the lost output. The consequence is that ablation-based importance systematically underestimates the components that matter most. This has been documented repeatedly in language models [[1](#ref-1), [2](#ref-2), [3](#ref-3), [4](#ref-4)].
 
-**Tabular foundation models.** Tabular foundation models are transformers that solve a supervised tabular task by in-context learning: a single forward pass consumes the entire table — the labelled support rows together with the unlabelled query rows — and emits predictions for the queries, with no gradient step and no task-specific fitting. One property matters for everything that follows: the input table remains in context for the whole forward pass.
+**Tabular foundation models.** Tabular foundation models are transformers that solve a supervised tabular task by in-context learning: a single forward pass consumes the entire data table — the labelled support rows together with the unlabelled query rows — and emits predictions for the queries, with no gradient step and no task-specific fitting. One property matters for everything that follows: the input table remains in context for the whole forward pass.
 
 **The gap.** Self-repair has been quantified only in language models. Balef et al. [[5](#ref-5)] give the first mechanistic study of layerwise dynamics in TFMs and report that it occurs in the middle and late layers of most of them. However, their criterion is the shape of a trajectory: after skipping a layer they decode at every subsequent depth and read a drop followed by a recovery of ROC AUC as evidence of repair. That reading presupposes a mechanism we call *active repair*, in which the downstream layers respond to the missing write. A second mechanism, *passive redundancy*, produces the same trajectory: if the information written by the skipped layer is *duplicated* elsewhere, the downstream layers recover the output without changing what they write.
 
@@ -68,7 +68,7 @@ The total effect is \\(0\\) in both ① and ②, and therefore cannot separate t
 
 **Quantification in language models.** McGrath et al. [[1](#ref-1)] evaluate a 7B-parameter Chinchilla model on 1209 factual-recall prompts, ablating one attention layer at a time. They obtain \\(DE\\) by unembedding the layer's own output directly, and \\(TE\\) by ablating the layer and reading the final logits. Figure 2 shows their central result: the point cloud of \\((DE, TE)\\) pairs sits predominantly *below* the diagonal \\(y = x\\), i.e., \\(TE < DE\\) for a large fraction of (layer, prompt) pairs. This is the decoupling that the naive ablation account does not predict, and it is the empirical signature of \\(CE > 0\\).
 
-![Hydra scatter: TE versus DE](/assets/img/tfm-self-repair/hydra-ref-scatter.png)
+![Hydra scatter: TE versus DE](/assets/img/tfm-self-repair/hydra-ref-scatter.png){: style="width:80%; display:block; margin:0 auto"}
 *Figure 2: direct effect against total effect in a language model. One point is one (layer, prompt) pair, coloured by layer depth. Mass below the diagonal is the signature of self-repair. Taken from Figure 2c of [[1](#ref-1)].*
 
 Moreover, the compensation is proportional. Regressing \\(CE\\) on \\(DE\\) across prompts, layer by layer, they find a tight linear relation in the middle and late layers, peaking at layer 23 with \\(R^2 = 0.92\\) and slope \\(0.69\\) (Figures 4b and 4d of [[1](#ref-1)]).[^hydrafit] We adopt both as our reference, since a scattered relation would indicate coincidence rather than a mechanism.
@@ -123,37 +123,76 @@ Two further choices make the phenomenon harder to see, independently of the argu
 ## 4. Measuring the direct effect in TFMs
 {: #method}
 
-Our measurement has three ingredients. The first supplies the missing counterfactual; the other two make the resulting quantities readable.
+Our measurement has three ingredients. The first supplies the missing counterfactual; the other two make the resulting quantities readable. Section 4.4 states the criterion they serve.
 
-**Ingredient 1: the direct effect via path patching.** The main idea is as follows. To learn what layer \\(m\\) contributes on its own, we run the model once on the clean table, record every layer's write, and then construct the output the model *would* have produced if layer \\(m\\) had written something else and no other layer had noticed. Formally, let \\(r_\ell\\) denote the residual stream after layer \\(\ell\\) and \\(a_m = r_m - r_{m-1}\\) the write of layer \\(m\\). Substituting a donor write \\(\tilde{a}_m\\) while reusing every downstream write \\(a_\ell\\), \\(\ell > m\\), at its clean value — that is, not recomputing it on the perturbed residual — gives
+### 4.1 The direct effect via path patching [[2](#ref-2)]
+{: #path-patching}
+ The main idea is to change what layer \\(m\\) writes and let no other layer notice. Formally, let \\(r_\ell\\) denote the residual stream after layer \\(\ell\\) and \\(a_m = r_m - r_{m-1}\\) the write of layer \\(m\\). We refer to a value substituted for \\(a_m\\) as a *source* write, denoted $$\tilde{a}_m$$ (Section 4.3 says where it comes from).
+Substituting it while reusing every downstream write $$a_\ell$$, $$\ell > m$$, at its clean value — that is, not recomputing it on the perturbed residual — gives
 
 $$r_L^{DE}(m) = r_L^{\text{clean}} - a_m + \tilde{a}_m ,$$
 
-which we then push through the model's **native** decoder, recomputing the final LayerNorm statistics on the patched residual. The total effect is obtained from the same substitution with the downstream layers free to react, i.e., by re-running the forward pass, and read through the same native decoder. Figure 4 contrasts the two.
+which we then push through the model's **native** decoder. The total effect is obtained from the same substitution with the downstream layers free to react, i.e., by re-running the forward pass, and read through the same native decoder. Figure 4 contrasts the two.
+
+<details>
+<style>summary p { display: inline; margin: 0; }</style>
+<summary style="display: list-item; cursor: pointer;">
+<strong>The two effects in code</strong>
+</summary>
+<div markdown="1">
+
+```python
+a       = forward(table).writes            # a[0..L-1], the clean pass
+r_clean = residual_after(a)                # the final residual
+a_tilde = forward(other_table).writes[m]   # the source write
+
+# total effect — rerun the forward pass, downstream reacts
+r_te = forward(table, patch={m: a_tilde}).residual
+te   = decode(r_te) - decode(r_clean)
+
+# direct effect — no rerun, every downstream write reused
+r_de = r_clean - a[m] + a_tilde
+de   = decode(r_de) - decode(r_clean)
+
+ce = de - te
+```
+
+Three things are visible here. First, `forward` appears only on the total-effect branch, so the direct effect is arithmetic on the recorded residual. Second, both branches call the same `decode`, which is the model's native decoder. Third, the two branches differ in one place only, namely whether the downstream writes are recomputed.
+
+</div>
+</details>
 
 ![Clean, TE and DE](/assets/img/tfm-self-repair/path-patching.png)
 *Figure 4: the clean pass, the total effect, and the direct effect. The direct effect requires no second forward pass, since reusing the recorded downstream writes reduces to arithmetic on the clean residual.*
 
-Two properties matter. First, \\(DE\\) and \\(TE\\) are read on the same ruler, the model's own decoder, which is what makes their difference interpretable. Second, we deliberately do not use a logit lens as a stand-in for \\(DE\\): reading a fixed direction \\(\hat{u}^\top a_m\\) out of the write gives a belief trajectory rather than a contribution meter, and it is not faithful under the final LayerNorm, whose scale depends on the norm of the residual it receives.
+Both effects are read on the same ruler, the model's own decoder, which is what makes their difference meaningful. This rules out the per-depth decoders of the tabular logit lens [[5](#ref-5)], which give each depth its own ruler, and it differs from [[1](#ref-1)], who read \\(DE\\) by unembedding \\(a_m\\) alone rather than decoding the patched residual.
 
-**Ingredient 2: a logit margin instead of ROC AUC.** For a binary task with true-class logit \\(z_{i,y_i}\\) and competitor logit \\(z_{i,1-y_i}\\) on query row \\(i\\), we define the margin \\(\gamma_i = z_{i,y_i} - z_{i,1-y_i}\\) and take its median over rows. We use the median because ablation pushes some rows off-distribution and the resulting LayerNorm extrapolation produces a heavy tail that hijacks a mean. Normalizing by the clean final-layer margin of the same task makes \\(0\\) the decision boundary, \\(1\\) the model's clean final confidence, and negative values a flipped decision. Unlike ROC AUC, the margin is a magnitude and does not saturate.
+### 4.2 A logit margin instead of ROC AUC
+{: #margin}
+ For a binary task with true-class logit \\(z_{i,y_i}\\) and competitor logit \\(z_{i,1-y_i}\\) on query row \\(i\\), we define the margin \\(\gamma_i = z_{i,y_i} - z_{i,1-y_i}\\) and take its median over rows. We use the median because ablation pushes some rows off-distribution, which produces a heavy tail that a mean would follow. Normalizing by the clean final-layer margin of the same task fixes the scale: (i) \\(0\\) is the decision boundary, (ii) \\(1\\) is the model's clean final confidence, and (iii) values above \\(1\\) indicate overconfidence while negative values indicate a flipped decision. Unlike ROC AUC, the margin is a magnitude and does not saturate. Section 5.1 empirically compares these two metrics.
 
-**Ingredient 3: resample ablation instead of zero ablation.** We take the donor write \\(\tilde{a}_m\\) from a forward pass on a *different* table, matched by role, i.e., the same layer and the same position along both attention axes, across rows and across features, and we average the result over 8 donors. The reason is that resampling keeps the substituted activation on the manifold the model was trained on and approximately preserves its norm, so the intervention asks what the layer would have contributed on other data rather than what happens when it ceases to exist. This addresses the second concern of Section 3. We report the quantitative comparison against zero ablation in Appendix A.
 
-**Criterion.** Given \\(DE\\) and \\(TE\\) we compute \\(CE = DE - TE\\) and apply the criterion of Section 2. We say that a model exhibits self-repair if (i) the \\((DE, TE)\\) cloud has mass below the diagonal with \\(CE > 0\\) of a magnitude comparable to \\(DE\\), and (ii) \\(CE\\) grows with \\(DE\\) in a tight per-layer regression, as in language models. We require both because the first alone is a statement about location and the second is what distinguishes a mechanism from noise.
+### 4.3 Resample ablation instead of zero ablation
+{: #resample}
+ We take the source write \\(\tilde{a}_m\\) from a forward pass on a different table, and we average over multiple tables. The reason is that a resampled activation stays in the range the model was trained on. The intervention then asks what the layer would have contributed on other data, rather than what happens when it produces nothing at all. This addresses the second concern of Section 3.3; Appendix A reports the quantitative comparison against zero ablation.
+
+### 4.4 Criterion
+{: #criterion}
+
+Given \\(DE\\) and \\(TE\\) we compute \\(CE = DE - TE\\) and apply the criterion of Section 2. We say that a model exhibits self-repair if (i) the \\((DE, TE)\\) cloud has mass below the diagonal with \\(CE > 0\\) of a magnitude comparable to \\(DE\\), and (ii) \\(CE\\) grows with \\(DE\\) in a tight per-layer regression, as in language models. We require both. The first is qualitative, i.e., compensation is present at all; the second is quantitative, i.e., it is systematic rather than incidental.
 
 ## 5. Experiments
 {: #experiments}
 
-**Models.** We evaluate four TFMs: [LimiX-2M](https://huggingface.co/stableai-org/LimiX-2M), [Mitra](https://huggingface.co/autogluon/mitra-classifier), [TabICL-v2](https://huggingface.co/jingang/TabICL), and [TabFM](https://huggingface.co/google/tabfm-1.0.0-pytorch). Mitra plays a special role, because its output head is linear, so the decomposition \\(TE = DE + IE\\) holds exactly and any observed \\(CE\\) cannot be attributed to a nonlinearity in the readout.
+**Models.** We evaluate four SOTA TFMs: [LimiX-2M](https://huggingface.co/stableai-org/LimiX-2M), [Mitra](https://huggingface.co/autogluon/mitra-classifier), [TabICL-v2](https://huggingface.co/jingang/TabICL), and [TabFM](https://huggingface.co/google/tabfm-1.0.0-pytorch). Mitra plays a special role, because its output head is linear, so the decomposition \\(TE = DE + IE\\) holds exactly and any observed \\(CE\\) cannot be attributed to a nonlinearity in the readout.
 
 **Datasets.** We use 15 binary classification tasks from TabArena, with 1000 support rows and 500 query rows per task.
 
-**Ablation unit and parameters.** We ablate one transformer layer at a time, over all layers of each model, using resample ablation averaged over 8 donor tables. Each point in the figures below is one (layer, task) pair.
+**Ablation unit and parameters.** We ablate one transformer layer at a time, over all layers of each model, using resample ablation averaged over 8 source tables. Each point in the figures below is one (layer, task) pair.
 
 **Metrics.** We report the margin of Section 4 as the primary coordinate and the mean true-class logit, z-scored per task, as a secondary coordinate for robustness.
 
-### 5.1 What a better metric buys, and what it does not
+### 5.1 ROC AUC versus the logit margin
 {: #metrics}
 
 We first isolate the effect of replacing ROC AUC by the margin, using the layer-skipping protocol of Section 3. Three regimes appear, which ROC AUC collapses into a single flat line.
@@ -194,7 +233,7 @@ We report the fraction of points in each region, using a threshold of \\(0.1\\) 
 
 *Table 2: share of (layer, task) pairs in each region of Figure 8, margin coordinate, threshold \\(0.1\\). The repaired region holds 0–11% in every model.*
 
-Two observations follow. First, the repaired region holds 0–11% of the points in every model, which is the quantitative form of the null. Second, the layers with \\(DE \approx 0\\) split in a model-dependent way: TabFM is dominated by genuine redundancy (78% at the origin), whereas in LimiX-2M most such layers are indirectly important (53%), i.e., replacing their write with a donor's does damage the output even though they do not write the decision themselves. Note that "indirectly important" is a substantive finding and not an artifact of noise, because the substitution is a role-matched donor write: if an arbitrary donor still damages the output, the specific computation of that layer is not interchangeable.
+Two observations follow. First, the repaired region holds 0–11% of the points in every model, which is the quantitative form of the null. Second, the layers with \\(DE \approx 0\\) split in a model-dependent way: TabFM is dominated by genuine redundancy (78% at the origin), whereas in LimiX-2M most such layers are indirectly important (53%), i.e., replacing their write with a source write does damage the output even though they do not write the decision themselves. Note that "indirectly important" is a substantive finding and not an artifact of noise, because the substitution is another table's write for the same layer: if an arbitrary source still damages the output, the specific computation of that layer is not interchangeable.
 
 In the interest of reporting the strongest evidence against our conclusion, we note that 65% of LimiX-2M points and 64% of Mitra points lie below the diagonal. Taken alone this would suggest a weak repair tendency. However, the location of the median is not the criterion of Section 4: the associated magnitudes are \\(+0.09\\) and \\(+0.01\\) against a clean final margin of \\(1\\), and the second requirement — a proportional compensation law — fails, as we show next.
 
@@ -210,7 +249,7 @@ We check the null at a finer resolution, against the compensation law, and again
 
 The per-row distributions are unimodal at zero in all four models, neither bimodal nor right-skewed, which rules out both alternatives. Restricting to rows with \\(\lvert DE \rvert > 0.1\sigma\\), the below-diagonal share ranges from 23% to 58% across models, i.e., close to a coin flip, and the only signal that is stable across tables is negative \\(CE\\) in TabICL — amplification, which is the opposite of repair.
 
-**The compensation law.** We repeat the analysis of McGrath et al. by regressing \\(CE\\) on \\(DE\\) across the 15 tasks, separately for each layer, and reporting the layer at which \\(R^2\\) peaks.
+**The compensation law.** We repeat the analysis of McGrath et al. by regressing \\(CE\\) on \\(DE\\) across the 15 tasks, separately for each layer, and reporting the layer at which \\(R^2\\) peaks. The comparison is on comparable ground: for a binary task our margin is, up to a factor of two, the centred logit they read.
 
 | model | apex layer | slope | \\(R^2\\) |
 |---|---|---|---|
@@ -241,7 +280,7 @@ This account is coherent with the picture of Balef et al. [[5](#ref-5)], in whic
 ## 7. Limitations
 {: #limitations}
 
-Three limitations bound the claim. **Granularity.** We ablate whole layers, whereas the compensation reported in language models is head-level. A layer averages several heads, so repair confined to individual heads could in principle cancel within a layer. Per-head direct effects are the one finer resolution we have not measured. **Scope.** We study four models, 15 binary classification tasks, one checkpoint per model, and donor tables drawn from the same benchmark; multiclass and regression tasks are not covered. Two of our models, LimiX-2M and TabICL, are also studied by Balef et al. [5], but the TabPFN family is not, and it is for TabPFN(v2) that they report the clearest self-repair. For that model our objection is therefore the identifiability argument of Section 3 alone, i.e., that the criterion does not establish the conclusion, and not the direct evidence of Section 5. **Ablation operator.** Resample ablation removes a layer's *specific* computation but not its average contribution, which is the correct operator for our question but not the only defensible one.
+Three limitations bound the claim. **Granularity.** We ablate whole layers, whereas the compensation reported in language models is head-level. A layer averages several heads, so repair confined to individual heads could in principle cancel within a layer. Per-head direct effects are the one finer resolution we have not measured. **Scope.** We study four models, 15 binary classification tasks, one checkpoint per model, and source tables drawn from the same benchmark; multiclass and regression tasks are not covered. Two of our models, LimiX-2M and TabICL, are also studied by Balef et al. [5], but the TabPFN family is not, and it is for TabPFN(v2) that they report the clearest self-repair. For that model our objection is therefore the identifiability argument of Section 3 alone, i.e., that the criterion does not establish the conclusion, and not the direct evidence of Section 5. **Ablation operator.** Resample ablation removes a layer's *specific* computation but not its average contribution, which is the correct operator for our question but not the only defensible one.
 
 Against these, the three independent checks of Section 5.3 agree, and the compensation test is tilted towards the hypothesis it rejects.
 
