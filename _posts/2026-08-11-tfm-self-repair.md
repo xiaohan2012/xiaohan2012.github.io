@@ -356,7 +356,7 @@ All code, the ablation sweeps, and the scripts that regenerate every figure in t
 {: #appendix-a}
 
 ![Dip and recovery across four TFMs](/assets/img/tfm-self-repair/balef-exp6-repro.png)
-*Figure 14: our reproduction of the layer-skipping experiment of Balef et al. [[5](#ref-5)] on four TFMs, 15 tasks each. Black is the unablated baseline; each coloured curve skips one layer, marked by a red cross. The right panel of Figure 3 is the LimiX-2M panel of this figure.*
+*Figure 13: our reproduction of the layer-skipping experiment of Balef et al. [[5](#ref-5)] on four TFMs, 15 tasks each. Black is the unablated baseline; each coloured curve skips one layer, marked by a red cross. The right panel of Figure 3 is the LimiX-2M panel of this figure.*
 
 ---
 
@@ -373,12 +373,12 @@ All code, the ablation sweeps, and the scripts that regenerate every figure in t
 *Table 4: the two ablation operators compared, zero / resample in each cell. TabFM is the extreme case: under zero ablation one layer's removal improves the margin by three times its clean final value.*
 
 ![Residual norm, all four models](/assets/img/tfm-self-repair/ablation-norm-all.png)
-*Figure 15: residual norm after ablation as a fraction of the clean norm, all four models, by relative depth. Lines are the median over the 15 tasks; bands are the interquartile range and the range across tasks. Figure 7 is the TabFM panel.*
+*Figure 14: residual norm after ablation as a fraction of the clean norm, all four models, by relative depth. Lines are the median over the 15 tasks; bands are the interquartile range and the range across tasks. Figure 7 is the TabFM panel.*
 
 Matched magnitude is not on its own enough: a substitute of the right size pointing in a direction the model never uses is still a shock. We therefore also compare directions. Let \\(c_{\text{cross}}\\) be the cosine between the source write and the native write it replaces, and \\(c_{\text{within}}\\) the cosine between two native writes from different rows of the same table, which is the yardstick for how aligned genuine writes already are.
 
 ![Direction of the substituted write](/assets/img/tfm-self-repair/ablation-direction.png)
-*Figure 16: cosine between the source write and the write it replaces (cross), against the cosine between two native writes (within), all four models.*
+*Figure 15: cosine between the source write and the write it replaces (cross), against the cosine between two native writes (within), all four models.*
 
 | model | \\(c_{\text{within}}\\) | \\(c_{\text{cross}}\\) |
 |---|---|---|
@@ -390,7 +390,7 @@ Matched magnitude is not on its own enough: a substitute of the right size point
 *Table 5: direction of the substituted write. In every model \\(c_{\text{cross}}\\) tracks \\(c_{\text{within}}\\) and stays well above zero, i.e., the source write points where native writes point. TabICL's writes are less aligned to begin with, and its \\(c_{\text{cross}}\\) is lower in proportion.*
 
 ![Trajectories under both ablations, remaining models](/assets/img/tfm-self-repair/ablation-pair-rest.png)
-*Figure 17: LimiX-2M, TabICL and TabFM, every layer ablated in turn, under zero ablation (left column) and resample ablation (right column). Figure 9 is the Mitra case. TabFM under zero ablation is the extreme: one ablated layer sends the margin to almost four times its clean final value.*
+*Figure 16: LimiX-2M, TabICL and TabFM, every layer ablated in turn, under zero ablation (left column) and resample ablation (right column). Figure 9 is the Mitra case. TabFM under zero ablation is the extreme: one ablated layer sends the margin to almost four times its clean final value.*
 
 ## Appendix C: two further checks on the compensation effect
 {: #appendix-c}
@@ -400,7 +400,7 @@ Two checks beyond the compensation law of Section 5.4: one at a finer resolution
 **Per-row de-aggregation.** Each point in Figure 11 aggregates roughly 500 query rows, so a mean of zero is compatible with cancellation between rows of opposite sign, or with strong repair confined to a small subpopulation. We therefore de-aggregate and inspect the distribution of \\(CE\\) over individual rows.
 
 ![Per-row compensation effect](/assets/img/tfm-self-repair/per-row-ce-hist.png)
-*Figure 13: distribution of the per-row compensation effect. All four models are unimodal at zero.*
+*Figure 17: distribution of the per-row compensation effect. All four models are unimodal at zero.*
 
 The per-row distributions are unimodal at zero in all four models, neither bimodal nor right-skewed, which rules out both alternatives. Restricting to rows whose direct effect exceeds \\(0.1\\) standard deviations, the share of rows with \\(CE > 0\\) ranges from 23% to 58% across models, so no model sits systematically on the repair side. The only signal stable across tasks is negative \\(CE\\) in TabICL — amplification, which is the opposite of repair.
 
