@@ -26,22 +26,23 @@ We evaluate four state-of-the-art TFMs on 15 binary classification tasks and fin
 ## 1. Introduction
 {: #introduction}
 
-Mechanistic interpretability rests on a simple inference. We ablate a component, we observe how much the output degrades, and we attribute the degradation to the component's function. The inference is only valid if the rest of the network is a passive spectator. Self-repair is the phenomenon that breaks this assumption: after a component is removed, downstream components change what they compute and restore part of the lost output. The consequence is that ablation-based importance systematically underestimates the components that matter most. This has been documented repeatedly in language models [[1](#ref-1), [2](#ref-2), [3](#ref-3), [4](#ref-4)].
+Mechanistic interpretability rests on a simple inference. We ablate a component (e.g., a layer or an attention head), observe how much the output degrades, and attribute the degradation to the component's function. The inference is only valid if the rest of the network does not react to the ablation. Self-repair is the phenomenon that breaks this assumption: after a component is removed, downstream components change what they compute and restore part of the lost output. The consequence is that ablation-based importance systematically underestimates the components that matter most. This has been documented repeatedly in language models [[1](#ref-1), [2](#ref-2), [3](#ref-3), [4](#ref-4)].
 
-Tabular foundation models are transformers that solve a supervised tabular task by in-context learning: a single forward pass consumes the entire data table — the labelled support rows together with the unlabelled query rows — and emits predictions for the queries, with no gradient step and no task-specific fitting. One property matters for everything that follows: the input table remains in context for the whole forward pass.
+Tabular foundation models are transformers that solve a supervised tabular task by in-context learning. A single forward pass consumes the entire data table, i.e., the labelled support rows together with the unlabelled query rows, and emits predictions for the query rows, with no gradient step and no task-specific fitting. The property that matters below is that the input table remains in context for the whole forward pass.
 
 Self-repair has been quantified only in language models. Balef et al. [[5](#ref-5)] give the first mechanistic study of layerwise dynamics in TFMs and report that self-repair occurs in the middle and late layers of most of them. However, their criterion is the shape of a trajectory: after skipping a layer they decode at every subsequent depth and read a drop followed by a recovery of ROC AUC as evidence of repair. That reading presupposes a mechanism we call *active repair*, in which the downstream layers respond to the missing write. A second mechanism, *passive redundancy*, produces the same trajectory: if the information written by the skipped layer is *duplicated* elsewhere, the downstream layers recover the output without changing what they write.
 
-**Our goal.** We study whether TFMs exhibit self-repair in the causal sense in which it is defined for language models, i.e., as a change in what the downstream layers compute. Balef et al. define it by its outcome, i.e., the decoded performance recovers after an ablation. They pose the right dichotomy — redundancy or repair — but that definition is satisfied by both alternatives. We resolve the dichotomy with a quantity their design does not contain: *the direct effect* [[1](#ref-1)], measured via path patching [[2](#ref-2)]. In summary, we make the following contributions relative to [[5](#ref-5)].
+**Our goal.** We study whether TFMs exhibit self-repair in the causal sense in which it is defined for language models, i.e., as a change in what the downstream layers compute. Balef et al. define it by its outcome, i.e., the decoded performance recovers after an ablation. They pose the right dichotomy (redundancy or repair), but that definition is satisfied by both alternatives. We resolve the dichotomy with a quantity their design does not contain: *the direct effect* [[1](#ref-1)], measured via path patching [[2](#ref-2)]. In summary, we make the following contributions relative to [[5](#ref-5)].
 
-- We show that the trajectory criterion cannot establish self-repair: no measurement taken on the ablated forward pass alone separates active repair from passive redundancy.
-- We propose a measurement for TFMs built from three ingredients: (i) the direct effect via path patching; (ii) a logit margin in place of ROC AUC; and (iii) resample ablation in place of zero ablation.
-- Based on the proposed measurement and on results for four TFMs and 15 tasks, we draw a different conclusion from that of [[5](#ref-5)]: the performance recovery reported for TFMs is passive redundancy.
+- We show that the criterion of [[5](#ref-5)] cannot establish self-repair, because it does not separate repair from redundancy.
+- To separate self-repair from redundancy, we propose an additional measurement of the direct effect of layers, obtained by path patching [[2](#ref-2)].
+- Compared to [[5](#ref-5)], we make two further measurement choices, using logit margin in place of ROC AUC and resample ablation in place of zero ablation. Both make the experimental results easier to read.
+- Based on the proposed measurement and on results for 4 TFMs and 15 tasks, we draw a different conclusion from that of [[5](#ref-5)]: the performance recovery reported for TFMs is passive redundancy.
 
 ## 2. Self-repair: definition and prior quantification
 {: #definition}
 
-**Intuition.** The intuition behind self-repair is that a network is not a fixed pipeline but a system that reacts to its own damage. When a component is removed, the components downstream of it see a different residual stream, and they may respond by writing something different from what they would have written otherwise. Self-repair is the case in which that response pushes the output back towards its undamaged value. Note that the definition is a statement about the downstream *reaction*, not about the output: an output that barely moves is compatible with a strong reaction (e.g., active repair) and with no reaction at all (e.g., passive redundancy).
+**Intuition.** The intuition behind self-repair is that a network reacts to its own damage. When a component is removed, the components downstream of it see a different residual stream, and they may respond by writing something different from what they would have written otherwise. Self-repair is the case in which that response pushes the output back towards its undamaged value. Note that the definition is a statement about the downstream *reaction*, not about the output: an output that barely moves is compatible with a strong reaction (e.g., active repair) and with no reaction at all (e.g., passive redundancy).
 
 **Formalism.** The network can be viewed as a causal model [[6](#ref-6)] in which \\(A\\) denotes the component under study (e.g., a layer or an attention head), \\(B\\) denotes everything downstream of it, and \\(y\\) denotes a scalar read off the final decoder that measures how strongly the model favours the correct class; we fix the choice in Section 4. We refer to the unablated forward pass as the *clean* pass — the **Original** panel of Figure 1 — and to the value a component takes in it as its *clean* value. Let \\(\tilde{a}\\) be the value we substitute for \\(A\\)'s output, written \\(a'\\) in the figure. We define three effects, illustrated in the remaining three panels, which differ only in what we allow to react.
 
@@ -70,7 +71,7 @@ and we say that a component *self-repairs* if \\(CE > 0\\), i.e., if the damage 
 
 The total effect is \\(0\\) in both ① and ②, and therefore cannot separate them; the direct effect is \\(1\\) in both ② and ③, and therefore cannot separate those. Only the gap singles out ②, since \\(CE\\) is non-zero there and zero in ① and ③. We use this table as the reading key for the remainder of the paper.
 
-**Quantification in language models.** The authors of [[1](#ref-1)] evaluate a 7B-parameter Chinchilla model on 1209 factual-recall prompts, ablating one attention layer at a time. They obtain \\(DE\\) by unembedding the layer's own output directly, and \\(TE\\) by ablating the layer and reading the final logits. Figure 2 shows their central result: the point cloud of \\((DE, TE)\\) pairs sits predominantly *below* the diagonal \\(y = x\\), i.e., \\(TE < DE\\) for a large fraction of (layer, prompt) pairs. This is the decoupling that the naive ablation account does not predict, and it is the empirical signature of \\(CE > 0\\).
+**Quantification in language models.** The authors of [[1](#ref-1)] evaluate a 7B-parameter Chinchilla model on 1209 factual-recall prompts, ablating one attention layer at a time. They obtain \\(DE\\) by unembedding the layer's own output directly, and \\(TE\\) by ablating the layer and reading the final logits. Figure 2 shows their central result: the point cloud of \\((DE, TE)\\) pairs sits predominantly *below* the diagonal \\(y = x\\), i.e., \\(TE < DE\\) for a large fraction of (layer, prompt) pairs. Ablation on its own yields only \\(TE\\), so it cannot produce this picture at all. The direct effect has to be measured separately, and the mass below the diagonal is the empirical signature of \\(CE > 0\\).
 
 ![Hydra scatter: TE versus DE](/assets/img/tfm-self-repair/hydra-ref-scatter.png){: style="width:80%; display:block; margin:0 auto"}
 *Figure 2: direct effect against total effect in a language model. One point is one (layer, prompt) pair, coloured by layer depth. Mass below the diagonal is the signature of self-repair. Taken from Figure 2c of [[1](#ref-1)].*
@@ -89,15 +90,15 @@ We proceed in three steps: (i) what Balef et al. do and what they conclude; (ii)
 
 Balef et al. [[5](#ref-5)] study six state-of-the-art TFMs. Their self-repair experiment has four parts.
 
-- **Instrument** — the *tabular logit lens*. A TFM's native decoder expects the representation of the final layer, so they train a separate decoder for every depth and use it to read out intermediate performance.
-- **Intervention** — *layer skipping*. They remove one layer and apply the lens at every subsequent depth, which gives a trajectory of decoded performance.
-- **Criterion** — "if the TFM can recover from dropping a layer, it has learned to self-repair, and layers overlap in functionality".
-- **Conclusion** — "self-repair generally occurs after layer ablations, except for the first layer".
+- **Instrument**: the *tabular logit lens*. A TFM's native decoder expects the representation of the final layer, so they train a separate decoder for every depth and use it to read out intermediate performance.
+- **Intervention**: *layer skipping*. They remove one layer and apply the lens at every subsequent depth, which gives a trajectory of decoded performance.
+- **Criterion**: "if the TFM can recover from dropping a layer, it has learned to self-repair, and layers overlap in functionality".
+- **Conclusion**: "self-repair generally occurs after layer ablations, except for the first layer".
 
 Figure 3 shows our reproduction of this experiment. Skipping an early layer produces a drop that persists to the output, whereas skipping a middle or late layer produces a drop that closes well before the final layer.
 
 ![The layer-skipping experiment, schematic and real](/assets/img/tfm-self-repair/exp6-transition.png)
-*Figure 3: the layer-skipping experiment. **Left**: one ablated layer, for illustration — the black baseline is the unablated trajectory, the red cross marks the skipped layer, and the decoded performance drops at the next depth and then recovers. **Right**: the same experiment on LimiX-2M over 15 tasks, with every layer ablated in turn; one coloured curve is one skipped layer, i.e., one instance of the left panel. Early layers do not recover, middle and late layers do. The other three models are in Appendix A; all four agree with what the paper reports, including the two models it does not study.*
+*Figure 3: the layer-skipping experiment. **Left**: one ablated layer, for illustration: the black baseline is the unablated trajectory, the red cross marks the skipped layer, and the decoded performance drops at the next depth and then recovers. **Right**: the same experiment on LimiX-2M over 15 tasks, with every layer ablated in turn; one coloured curve is one skipped layer, i.e., one instance of the left panel. Early layers do not recover, middle and late layers do. The other three models are in Appendix A; all four agree with what the paper reports, including the two models it does not study.*
 
 **The authors pose the dichotomy themselves.** They admit, in their own words, that it is unclear whether the robustness to layer ablation comes from self-repair or from layer redundancy, since performance has been measured only at the final layer. Their diagnosis is that too few depths are measured and they remedy it by measuring all of them. In contrast, we argue below that the number of depths is not what the dichotomy turns on.
 
@@ -112,8 +113,7 @@ Their criterion defines self-repair by its outcome; ours is about the mechanism.
 Both produce a drop at depth \\(m+1\\), where \\(a_m\\) is simply absent from the residual stream, and both produce a recovery by depth \\(L\\). The two mechanisms draw the same curve, and every curve in Figure 3 admits both readings.
 
 Therefore the trajectory criterion cannot decide between them. The reason is structural: repair is by definition a claim about the downstream *reaction*, and to establish a reaction one needs a counterfactual in which the reaction is prevented (corresponding to the direct effect in Figure 1). 
-Measuring at more depths never constructs a pass in which the downstream writes are pinned to their clean values. 
-The design contains no such term, and a measurement without it cannot identify the reaction's contribution, no matter how many models or datasets it is run on.  Note that this leaves the main result of Balef et al. intact: their looped single-layer model, which matches full depth with 20% of the parameters, rests on the layers performing overlapping computations, not on repair.
+Measuring at more depths never constructs a pass in which the downstream writes are pinned to their clean values, and no amount of models or datasets substitutes for it. Note that this leaves the main result of Balef et al. intact: their looped single-layer model, which matches full depth with 20% of the parameters, rests on the layers performing overlapping computations, not on repair.
 
 ### 3.3 Two measurement choices
 {: #measurement}
@@ -150,18 +150,22 @@ a       = forward(table).writes            # a[0..L-1], the clean pass
 r_clean = residual_after(a)                # the final residual
 a_tilde = forward(other_table).writes[m]   # the source write
 
-# total effect — rerun the forward pass, downstream reacts
+# total effect: rerun the forward pass, downstream reacts
 r_te = forward(table, patch={m: a_tilde}).residual
 te   = decode(r_te) - decode(r_clean)
 
-# direct effect — no rerun, every downstream write reused
+# direct effect: no rerun, every downstream write reused
 r_de = r_clean - a[m] + a_tilde
 de   = decode(r_de) - decode(r_clean)
 
 ce = de - te
 ```
 
-Three things are visible here. First, `forward` appears only on the total-effect branch, so the direct effect is arithmetic on the recorded residual. Second, both branches call the same `decode`, which is the model's native decoder. Third, the two branches differ in one place only, namely whether the downstream writes are recomputed.
+Three things are visible here.
+
+- `forward` appears only on the total-effect branch, so the direct effect is arithmetic on the recorded residual.
+- Both branches call the same `decode`, which is the model's native decoder.
+- The two branches differ in one place only, namely whether the downstream writes are recomputed.
 
 </div>
 </details>
@@ -210,14 +214,14 @@ We proceed in four steps: (i) the setup; (ii) a comparison of ROC AUC with the l
 ### 5.2 ROC AUC versus the logit margin
 {: #metrics}
 
-We first isolate the effect of replacing ROC AUC by the logit margin, using the layer-skipping protocol of Section 3. In both cases below ROC AUC is flat, and yet the margin shows something different happening in each.
+We first isolate the effect of replacing ROC AUC by the logit margin, using the layer-skipping protocol of Section 3. In both cases below ROC AUC is flat while the margin moves, and it moves in opposite directions.
 
 **Net-suppressive layers.** Skipping the last layer of Mitra leaves ROC AUC at its ceiling, which reads as "this layer does nothing", while the margin overshoots to 1.53, i.e., deleting the layer makes the model *more* confident in the true class. The layer is net-suppressive and ROC AUC is blind to it.
 
 ![Net-suppressive layer](/assets/img/tfm-self-repair/auc-takeaway1.png)
 *Figure 5: Mitra, skipping the final layer. ROC AUC does not move; the margin overshoots to 1.53.*
 
-**Dip and recovery.** Skipping layer 6 of Mitra also leaves ROC AUC flat, while the margin collapses from 0.85 to 0.36 and climbs back to 0.87 against a baseline of 0.97 — the phenomenon of Section 3, invisible under ROC AUC. Note that the two cases have opposite signs and yet produce the same ROC AUC curve, which is the sense in which the metric hides signed work.
+**Dip and recovery.** Skipping layer 6 of Mitra also leaves ROC AUC flat, while the margin collapses from 0.85 to 0.36 and climbs back to 0.87 against a baseline of 0.97. This is the phenomenon of Section 3, invisible under ROC AUC. Note that the two cases have opposite signs and yet produce the same ROC AUC curve, which is the sense in which the metric hides signed work.
 
 ![Dip and recovery under the margin](/assets/img/tfm-self-repair/auc-takeaway2.png)
 *Figure 6: Mitra, skipping layer 6. ROC AUC rides the ceiling; the margin collapses to 0.36 and climbs back to 0.87.*
@@ -293,11 +297,11 @@ LimiX-2M is the least favourable case for our conclusion: it has both the larges
 
 **Quantitatively.** Points below the diagonal say only that compensation sometimes happens. If it is a mechanism, it should also be regular: a layer that writes more of the decision should have more of it restored. That is what the language model shows, and it is the second thing we test, following [[1](#ref-1)].
 
-- **Fit.** For a layer \\(m\\), the 15 tasks give 15 pairs \\((DE, CE)\\), one per task; we fit the line \\(CE = a + b \cdot DE\\) to them.
-- **Read.** The slope \\(b\\) is the share of the direct contribution that comes back. The \\(R^2\\) of the fit, i.e., the share of the variation in \\(CE\\) that the line accounts for, says how reliably that share holds across tasks.
-- **Criterion.** Compensation that is a mechanism rather than an accident shows a high \\(R^2\\) with a slope in \\((0, 1)\\), i.e., a fixed share of what a layer writes comes back, on every task. In the language model the relation is tightest at layer 23, with \\(R^2 = 0.92\\) and slope \\(0.69\\) (Figures 4b and 4d of [[1](#ref-1)]).
+- **Fit**: For a layer \\(m\\), the 15 tasks give 15 pairs \\((DE, CE)\\), one per task; we fit the line \\(CE = a + b \cdot DE\\) to them.
+- **Read**: The slope \\(b\\) is the share of the direct contribution that comes back. The \\(R^2\\) of the fit, i.e., the share of the variation in \\(CE\\) that the line accounts for, says how reliably that share holds across tasks.
+- **Criterion**: Compensation that is a mechanism rather than an accident shows a high \\(R^2\\) with a slope in \\((0, 1)\\), i.e., a fixed share of what a layer writes comes back, on every task. In the language model the relation is tightest at layer 23, with \\(R^2 = 0.92\\) and slope \\(0.69\\) (Figures 4b and 4d of [[1](#ref-1)]).
 
-We fit every layer of every model and report the one where \\(R^2\\) peaks, i.e., the tightest relation each model has to offer. For a binary task our margin is, up to a factor of two, the centred logit read in [[1](#ref-1)], so the comparison is on comparable ground.
+We fit every layer of every model and report the one where \\(R^2\\) peaks, i.e., the tightest relation in each model. For a binary task our margin is, up to a factor of two, the centred logit read in [[1](#ref-1)], so the comparison is on comparable ground.
 
 | model | apex layer | slope | \\(R^2\\) |
 |---|---|---|---|
@@ -312,9 +316,9 @@ We fit every layer of every model and report the one where \\(R^2\\) peaks, i.e.
 ![Per-layer CE against DE](/assets/img/tfm-self-repair/compensation-fit.png)
 *Figure 12: one point per layer, at the slope and \\(R^2\\) of that layer's fit; 56 layers in all, each model's last layer excluded because it has no downstream and therefore \\(CE \equiv 0\\). The shaded band is a slope in \\((0, 1)\\), i.e., part of the direct contribution comes back. A compensation law would put a layer inside the band and high up, where the language-model reference sits. Note that a low \\(R^2\\) already fails the criterion whatever the slope; the slope is only interpretable where \\(DE\\) varies across tasks, which in each model is the layer of Table 3.*
 
-No layer lands where a compensation law would put it, i.e., inside the band with a high \\(R^2\\). The closest any layer comes is TabICL L10, at \\(R^2 = 0.58\\) — and its slope is *negative*, \\(-0.41\\), so the larger the direct contribution, the more the downstream layers enlarge its loss. That is amplification, not repair.
+No layer lands where a compensation law would put it, i.e., inside the band with a high \\(R^2\\). The closest any layer comes is TabICL L10, at \\(R^2 = 0.58\\), but its slope is *negative*, \\(-0.41\\), so the larger the direct contribution, the more the downstream layers enlarge its loss.
 
-**The test favours the hypothesis it rejects.** A natural worry about a null result is that the test was tilted against the effect. Here it is tilted towards it. Since \\(CE = DE - TE\\), the regressand contains the regressor, so any error in \\(DE\\) enters both variables at once and pushes the slope and the \\(R^2\\) up, even where nothing is compensated. The law fails anyway.
+**The test favours the hypothesis it rejects.** A natural worry about a null result is that the test was tilted against the effect. Here it is tilted towards it. Since \\(CE = DE - TE\\), the regressand contains the regressor, so any error in \\(DE\\) enters both variables at once and pushes the slope and the \\(R^2\\) up, even where nothing is compensated, and the law still fails.
 
 Two objections remain: that a mean of zero could hide cancellation between rows of opposite sign, and that it could be an artifact of the readout. Appendix C answers both. The per-row distribution of \\(CE\\) is unimodal at zero in all four models, and Mitra, whose linear head makes the decomposition exact, shows \\(CE = +0.01\\).
 
@@ -402,6 +406,6 @@ Two checks beyond the compensation law of Section 5.4: one at a finer resolution
 ![Per-row compensation effect](/assets/img/tfm-self-repair/per-row-ce-hist.png)
 *Figure 17: distribution of the per-row compensation effect. All four models are unimodal at zero.*
 
-The per-row distributions are unimodal at zero in all four models, neither bimodal nor right-skewed, which rules out both alternatives. Restricting to rows whose direct effect exceeds \\(0.1\\) standard deviations, the share of rows with \\(CE > 0\\) ranges from 23% to 58% across models, so no model sits systematically on the repair side. The only signal stable across tasks is negative \\(CE\\) in TabICL — amplification, which is the opposite of repair.
+The per-row distributions are unimodal at zero in all four models, neither bimodal nor right-skewed, which rules out both alternatives. Restricting to rows whose direct effect exceeds \\(0.1\\) standard deviations, the share of rows with \\(CE > 0\\) ranges from 23% to 58% across models, so no model sits systematically on the repair side. The only signal stable across tasks is negative \\(CE\\) in TabICL, i.e., amplification, which is the opposite of repair.
 
 **Not an artifact of the readout.** Mitra serves as an anchor. Its head is linear, so \\(TE = DE + IE\\) holds with zero residual and the decomposition is exact. Mitra shows \\(CE = +0.01\\), i.e., the null is not produced by nonlinearity in the decoder or by LayerNorm rescaling.
