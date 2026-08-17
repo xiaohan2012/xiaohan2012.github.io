@@ -60,6 +60,12 @@ In summary, we make the following contributions:
 - Based on the proposed measurement and on results for 4 SOTA TFMs and 15 tasks, we draw a different conclusion from that of [[5](#ref-5)]: the performance recovery reported for TFMs is passive redundancy.
 - In addition, we make two further measurement choices, using logit margin in place of ROC AUC and resample ablation in place of zero ablation. Both make the experimental results easier to read.
 
+**Why this matters for safety.** TFMs are deployed on high-stakes tabular decisions, e.g., lending and clinical prediction, so models need to be trustworthy. Mechanistic interpretability bridges the gap by identifying the components responsible for a behaviour, and ablation is the cheapest and most widely used technique. Self-repair is the failure mode that invalidates it. As noted above, an audit built on ablation may return false assurance. 
+Our contribution to AI safety is twofold: 
+(i) we point out the criterion previously used to claim self-repair in TFMs cannot establish it, so the direct effect is required instead; 
+and (ii) we measure the direct effect and find no compensation, i.e., for these models ablation-based attribution is not corrupted in this way. 
+We stress that the second statement is based on a limited set of models and tasks, and does not carry over to the general case.
+
 ## 2. Self-repair: definition and how prior work quantifies it
 {: #definition}
 
