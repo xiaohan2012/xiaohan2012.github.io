@@ -330,7 +330,7 @@ In both cases below ROC AUC is flat while the margin shows the difference.
 The layer is net-suppressive and ROC AUC fails to reveal it.
 
 ![Net-suppressive layer](/assets/img/tfm-self-repair/auc-takeaway1.png)
-*Figure 5: Mitra, skipping the final layer. ROC AUC does not move, whereas the logit margin indicates over-confidence.
+*Figure 5: Mitra, skipping the final layer. ROC AUC does not move, whereas the logit margin indicates over-confidence.*
 
 **Dip and recovery.** Skipping layer 6 of Mitra also leaves ROC AUC flat, while the margin collapses from 0.85 to 0.36 and climbs back to 0.87 against a baseline of 0.97.
 This is the phenomenon of Section 3, invisible under ROC AUC.
@@ -344,7 +344,7 @@ This is the phenomenon of Section 3, invisible under ROC AUC.
 Next we provide empirical evidence for the advantages of resample ablation over zero ablation.
 
 **Magnitude.** Zero ablation deletes a layer's write, which leaves the residual stream with a norm the model never encounters.[^norm] We measure the *norm-preservation ratio*, i.e., the norm of the residual after the ablation as a fraction of its clean norm, read at the decoded position.
-A faithful ablation should leave it near \\(1\\).
+A faithful ablation should maintain it near \\(1\\).
 
 ![Residual norm under the two ablations](/assets/img/tfm-self-repair/ablation-norm.png){: style="width:82%; display:block; margin:0 auto"}
 *Figure 7: residual norm after ablation as a fraction of the clean norm, by relative depth. Resample ablation tracks \\(1\\) at every depth; zero ablation sits below it throughout. TabFM is shown here; the other three models are in Appendix B.*
@@ -359,16 +359,24 @@ The quantity to look at is the *immediate drop*: for an ablated layer \\(m\\), t
 $$\text{drop}(m) = \text{margin}^{\text{clean}}[m+1] - \text{margin}^{\text{ablated}}[m+1] .$$
 
 Since each ablation removes one layer's contribution, the drop should be of a comparable size from layer to layer.
-A negative value means the ablation *improved* the margin, which a layer can genuinely cause if it suppresses the true class, as the last layer of Mitra does in Section 5.2.
-What a single layer does not explain is a negative value several times the size of the clean final margin.
+A negative value means the ablation *improved* the margin, which a layer can genuinely cause if it suppresses the true class 
+(e.g., the last layer of Mitra in Figure 5).
+
+We measure two quantities: the standard deviation of the drop across layers, and the largest negative drop.
+A faithful ablation should keep both small.
+For the latter, a drop several times the clean final margin is not what one layer's own contribution looks like: 
+under zero ablation the residual norm has collapsed, and the LayerNorms downstream rescale by it, which amplifies whatever signal remains.
+
+In Figure 8, we see that 
+the standard deviation of the drop across layers is two to six times larger under zero ablation.
+Moreover, zero ablation produces negative drops of up to three times the clean final margin. 
+Under resample ablation the largest negative drop is \\(0.17\\).
 
 ![Stability of the two ablations](/assets/img/tfm-self-repair/ablation-stability.png)
 *Figure 8: standard deviation of the immediate drop across the layers of each model (left) and the largest negative drop (right), margin coordinate. Per-model values are in Appendix B.*
 
-The standard deviation of the drop across layers is two to six times larger under zero ablation, which also produces negative drops of up to three times the clean final margin; under resample ablation the largest negative drop is \\(0.17\\).
 
-**The phenomenon survives the change.** The dip and recovery is present under both operators.
-Under resample ablation it is easier to see, because the trajectories are tighter and none of them crosses the clean baseline.
+**The phenomenon survives the change.** The dip and recovery is present under both improvement and is easier to see (the trajectories are tighter and none of them crosses the clean baseline remarkably). An example is given in Figure 9 below.
 
 ![Trajectories under both ablations](/assets/img/tfm-self-repair/ablation-pair.png)
 *Figure 9: Mitra, every layer ablated in turn, under zero ablation (left) and resample ablation (right). Under zero the trajectories scatter and several cross the unablated baseline; under resample each ablated layer still dips at the next depth and then climbs back.*
@@ -376,16 +384,20 @@ Under resample ablation it is easier to see, because the trajectories are tighte
 ### 5.4 The compensation effect is approximately zero
 {: #main-result}
 
-Section 4.2 asks for two things: (i) *qualitatively*, that compensation is present at all, and (ii) *quantitatively*, that it is systematic rather than incidental.
-We take them in turn.
+We next answer the key question: whether self-repair is present in TFMs.
+We approach it via the two criterion (in Section 4.2): 
+(i) *qualitatively*, that compensation is present at all, 
+and (ii) *quantitatively*, that it is systematic rather than incidental.
 
 **Qualitatively.** We plot the direct effect against the total effect, one point per (layer, task) pair.
 Figure 10 names the five regions of that plane.
-Three of them are the worlds of Table 1; the plane adds two more, since a layer that writes no decision may still be needed by later layers, and a downstream reaction may enlarge the loss instead of absorbing it.
-The region we are looking for is *repaired*, below the diagonal, where a layer writes the decision and the downstream layers take the loss back.
+Three of them are the worlds of Table 1. 
+The plane adds two more: (i) *indirectly important*, where a layer writes no decision itself but is still needed by later layers, 
+and (ii) *amplified*, where the downstream reaction enlarges the loss instead of absorbing it.
+The region we are looking for is *repaired*, below the diagonal.
 
 ![The five regions of the DE-TE plane](/assets/img/tfm-self-repair/de-te-regions.png){: style="width:92%; display:block; margin:0 auto"}
-*Figure 10: how to read Figure 11. The grey stripe is the band in which we treat the direct effect as zero; the dashed line is \\(TE = DE\\), i.e., no downstream reaction; the vertical gap between a point and that line is the compensation effect.*
+*Figure 10: how to read Figure 11. The grey stripe is the band in which we treat the direct effect as zero, the dashed line is \\(TE = DE\\), i.e., no downstream reaction, and the vertical gap between a point and that line is the compensation effect.*
 
 Figure 11 is our main result.
 
@@ -398,20 +410,20 @@ We observe three things.
 - The remaining layers form a vertical band at \\(DE \approx 0\\), which means most layers do not write the decision directly.
 - The below-diagonal repair cloud of Figure 2 does not appear.
 
-Figure 11 shows where the mass lies; to put a number on it we assign every point to one of the five regions of Figure 10, treating a direct effect within \\(0.1\\) of zero as zero.
+Figure 11 shows where the mass lies. We assign every point to one of the five regions of Figure 10, treating a direct effect within \\(0.1\\) of zero as zero.
 
-| model     | redundant | indirectly important | load-bearing | repaired | amplified  | mean \\(CE\\) |
-|-----------|-----------|----------------------|--------------|----------|-----------|---|
-| LimiX-2M | 16% | **53%** | 15% | 11% | 3%  | \\(+0.09\\) |
-| Mitra | **44%** | **40%** | 10% | 2% | 2%  | \\(+0.01\\) |
-| TabICL | **41%** | **40%** | 13% | 0% | 5%  | \\(-0.08\\) |
-| TabFM | **78%** | 10% | 7% | 1% | 1%  | \\(+0.00\\) |
+| model    | redundant | indirectly important | load-bearing | repaired | amplified | mean \\(CE\\) |
+|----------|-----------|----------------------|--------------|----------|-----------|---------------|
+| LimiX-2M | 16%       | **53%**              | 15%          | 11%      | 3%        | \\(+0.09\\)   |
+| Mitra    | **44%**   | **40%**              | 10%          | 2%       | 2%        | \\(+0.01\\)   |
+| TabICL   | **41%**   | **40%**              | 13%          | 0%       | 5%        | \\(-0.08\\)   |
+| TabFM    | **78%**   | 10%                  | 7%           | 1%       | 1%        | \\(+0.00\\)   |
 
 *Table 2: share of (layer, task) pairs in each region of Figure 11. The largest region of each model is in bold, together with any region within five points of it. The repaired region holds 0–11% in every model, and the mean compensation effect is within \\(0.09\\) of zero in all four.*
 
 Two observations follow.
 
-- **Repair is never the dominant region.** It holds 0–11% of the points in every model. This is the quantitative form of the *null*, i.e., the hypothesis we are testing against: that the downstream layers do not compensate.
+- **Repair is never the dominant region.** It holds 0–11% of the points in every model. This is the quantitative form of the *null*, i.e., the hypothesis we are testing against, that the downstream layers do not compensate.
 - **Redundant and indirectly important carry the mass**, 69–88% of the points taken together. TabFM is almost all redundancy (78%), whereas in LimiX-2M most such layers are indirectly important (53%).
 
 LimiX-2M is the least favourable case for our conclusion: it has both the largest repaired share, 11%, and the largest mean compensation effect, \\(+0.09\\).
@@ -419,15 +431,16 @@ A compensation effect of \\(+0.09\\) is 9% of the model's own clean confidence.
 The second requirement of Section 4.2 fails as well, as we show next.
 
 **Quantitatively.** Points below the diagonal say only that compensation sometimes happens.
-If it is a mechanism, it should also be regular: a layer that writes more of the decision should have more of it restored.
-That is what the language model shows, and it is the second thing we test, following [[1](#ref-1)].
+If it is a mechanism, it should also be *regular*: a layer that writes more of the decision should have more of it restored.
+This is the second thing we test, following the approach of [[1](#ref-1)].
 
-- **Fit**: For a layer \\(m\\), the 15 tasks give 15 pairs \\((DE, CE)\\), one per task; we fit the line \\(CE = a + b \cdot DE\\) to them.
+- **Fit**: For a layer \\(m\\), the 15 tasks give 15 pairs \\((DE, CE)\\), one per task. And we fit a line \\(CE = a + b \cdot DE\\) to them.
 - **Read**: The slope \\(b\\) is the share of the direct contribution that comes back. The \\(R^2\\) of the fit, i.e., the share of the variation in \\(CE\\) that the line accounts for, says how reliably that share holds across tasks.
-- **Criterion**: Compensation that is a mechanism rather than an accident shows a high \\(R^2\\) with a slope in \\((0, 1)\\), i.e., a fixed share of what a layer writes comes back, on every task. In the language model the relation is tightest at layer 23, with \\(R^2 = 0.92\\) and slope \\(0.69\\) (Figures 4b and 4d of [[1](#ref-1)]).
+- **Criterion**: if layers truly compensate, we should observe a high \\(R^2\\) with a slope in \\((0, 1)\\) at some layers. For example, in the language model studied in [[1](#ref-1)], we get \\(R^2 = 0.92\\) and slope \\(0.69\\) at layer 23 (Figures 4b and 4d of [[1](#ref-1)]).
 
 We fit every layer of every model and report the one where \\(R^2\\) peaks, i.e., the tightest relation in each model.
 For a binary task our margin is, up to a factor of two, the centred logit read in [[1](#ref-1)], so the comparison is on comparable ground.
+Table 3 and Figure 12 summarize our findings. 
 
 | model | apex layer | slope | \\(R^2\\) |
 |---|---|---|---|
