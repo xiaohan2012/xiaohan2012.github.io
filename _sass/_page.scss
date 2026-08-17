@@ -199,3 +199,20 @@ p.post-desc {
     margin: -1.2rem 1rem 0 2rem;
   }
 }
+
+// FOOTNOTES =====================================
+
+.footnotes {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, .15);
+  font-size: .9em;
+
+  &::before {
+    content: "Notes";
+    display: block;
+    margin-bottom: .75rem;
+    font-weight: bold;
+    font-size: 1.1em;
+  }
+}
