@@ -385,7 +385,7 @@ Under resample ablation the largest negative drop is \\(0.17\\).
 {: #main-result}
 
 We next answer the key question: whether self-repair is present in TFMs.
-We approach it via the two criterion (in Section 4.2): 
+We approach it via the two criteria (in Section 4.2): 
 (i) *qualitatively*, that compensation is present at all, 
 and (ii) *quantitatively*, that it is systematic rather than incidental.
 
@@ -435,36 +435,32 @@ If it is a mechanism, it should also be *regular*: a layer that writes more of t
 This is the second thing we test, following the approach of [[1](#ref-1)].
 
 - **Fit**: For a layer \\(m\\), the 15 tasks give 15 pairs \\((DE, CE)\\), one per task. And we fit a line \\(CE = a + b \cdot DE\\) to them.
-- **Read**: The slope \\(b\\) is the share of the direct contribution that comes back. The \\(R^2\\) of the fit, i.e., the share of the variation in \\(CE\\) that the line accounts for, says how reliably that share holds across tasks.
+- **Read**: The slope \\(b\\) is the share of the direct contribution that the downstream layers restore and the remaining \\(1-b\\) survives to the output as damage. The \\(R^2\\) of the fit, i.e., the share of the variation in \\(CE\\) that the line accounts for, says how reliably that share holds across tasks.
 - **Criterion**: if layers truly compensate, we should observe a high \\(R^2\\) with a slope in \\((0, 1)\\) at some layers. For example, in the language model studied in [[1](#ref-1)], we get \\(R^2 = 0.92\\) and slope \\(0.69\\) at layer 23 (Figures 4b and 4d of [[1](#ref-1)]).
 
 We fit every layer of every model and report the one where \\(R^2\\) peaks, i.e., the tightest relation in each model.
 For a binary task our margin is, up to a factor of two, the centred logit read in [[1](#ref-1)], so the comparison is on comparable ground.
 Table 3 and Figure 12 summarize our findings. 
 
-| model | apex layer | slope | \\(R^2\\) |
-|---|---|---|---|
-| LimiX-2M | L10 | \\(-0.03\\) | 0.00 |
-| Mitra | L10 | \\(+0.08\\) | 0.04 |
-| TabICL | L10 | \\(-0.41\\) | **0.58** |
-| TabFM | L18 | \\(-0.08\\) | 0.04 |
-| *Chinchilla 7B [[1](#ref-1)]* | *L23* | *\\(+0.69\\)* | *0.92* |
+| model                         | apex layer | slope         | \\(R^2\\) |
+|-------------------------------|------------|---------------|-----------|
+| LimiX-2M                      | L10        | \\(-0.03\\)   | 0.00      |
+| Mitra                         | L10        | \\(+0.08\\)   | 0.04      |
+| TabICL                        | L10        | \\(-0.41\\)   | **0.58**  |
+| TabFM                         | L18        | \\(-0.08\\)   | 0.04      |
+| *Chinchilla 7B [[1](#ref-1)]* | *L23*      | *\\(+0.69\\)* | *0.92*    |
 
 *Table 3: per-layer regression of \\(CE\\) on \\(DE\\) across the 15 tasks, reported at the layer where \\(R^2\\) peaks. The last row is the language-model reference. No TFM layer combines a high \\(R^2\\) with a slope in \\((0, 1)\\).*
 
 ![Per-layer CE against DE](/assets/img/tfm-self-repair/compensation-fit.png)
-*Figure 12: one point per layer, at the slope and \\(R^2\\) of that layer's fit; 56 layers in all, each model's last layer excluded because it has no downstream and therefore \\(CE \equiv 0\\). The shaded band is a slope in \\((0, 1)\\), i.e., part of the direct contribution comes back. A compensation law would put a layer inside the band and high up, where the language-model reference sits. Note that a low \\(R^2\\) already fails the criterion whatever the slope; the slope is only interpretable where \\(DE\\) varies across tasks, which in each model is the layer of Table 3.*
+*Figure 12: one point per layer per model (excluding last layer because \\(CE = 0\\)). The shaded band corresponds to a slope in \\((0, 1)\\), i.e., the downstream layers restore part of what the layer writes. A compensation law would put a layer inside the band and high u, i.e., \\(R^2\\) is large. The language-model reference point is shown as a red star.*
 
-No layer lands where a compensation law would put it, i.e., inside the band with a high \\(R^2\\).
+No layer falls inside the band with a high \\(R^2\\).
 The closest any layer comes is TabICL L10, at \\(R^2 = 0.58\\), but its slope is *negative*, \\(-0.41\\), so the larger the direct contribution, the more the downstream layers enlarge its loss.
+We therefore find no sign of a compensation law in any of the four models.
 
-**The test favours the hypothesis it rejects.** A natural worry about a null result is that the test was tilted against the effect.
-Here it is tilted towards it.
-Since \\(CE = DE - TE\\), the regressand contains the regressor, so any error in \\(DE\\) enters both variables at once and pushes the slope and the \\(R^2\\) up, even where nothing is compensated, and the law still fails.
-
-Two objections remain: that a mean of zero could hide cancellation between rows of opposite sign, and that it could be an artifact of the readout.
-Appendix C answers both.
-The per-row distribution of \\(CE\\) is unimodal at zero in all four models, and Mitra, whose linear head makes the decomposition exact, shows \\(CE = +0.01\\).
+In Appendix C we redo the analysis row by row, and on a model with a linear output head.
+The answer does not change.
 
 ## 6. Conclusion
 {: #conclusion}
@@ -472,19 +468,17 @@ The per-row distribution of \\(CE\\) is unimodal at zero in all four models, and
 We measure self-repair as the gap between a component's direct and total effect.
 Across four TFMs and 15 tasks that gap is approximately zero, and the compensation law of language models holds at no layer.
 The recovery reported for TFMs is passive redundancy, not active compensation.
-To our knowledge this is the first measurement of the direct effect in TFMs, the quantity that makes the question decidable.
 
-Our work opens interesting directions for future research:
+Our work opens interesting future directions:
 
 - **Finer resolution.** Ablating a whole layer may hide individual heads that do compensate. Can we find a head that self-repairs?
 - **Other models.** LimiX-16M and the TabPFN family, for which Balef et al. [[5](#ref-5)] report the clearest self-repair, are not covered here.
-- **The mechanism of redundancy.** We conjecture that redundancy is cheap in a TFM because the input table stays in context, so a lost feature can be recomputed. Is it recomputed on demand, or already copied along the residual stream?
+- **The mechanism of redundancy.** Is a lost feature recomputed on demand from the input table, which stays in context, or is it already copied along the residual stream?
 
 ## 7. Reproducibility
 {: #reproducibility}
 
-All code, the ablation sweeps, and the scripts that regenerate every figure in this paper are available in the [`tfmlens`](https://github.com/xiaohan2012/tfmlens) repository.
-Model checkpoints are the public releases linked in Section 5; tasks are the binary classification subset of [TabArena](https://tabarena.ai).
+All code used in this paper are available in the [`tfmlens`](https://github.com/xiaohan2012/tfmlens) repository.
 
 ---
 
