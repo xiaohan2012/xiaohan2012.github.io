@@ -99,16 +99,21 @@ and we say that a component *self-repairs* if \\(CE > 0\\), i.e., if the damage 
 Note that \\(CE < 0\\) means the downstream reaction amplifies the loss and \\(CE = 0\\) means the downstream layers are passive.
 
 **Why both \\(TE\\) and \\(DE\\) are needed.** It is easy to see that neither effect alone identifies self-repair.
-Consider a toy network with two components, \\(A\\) and \\(B\\), writing values \\(a\\) and \\(b\\) into a shared stream read at the output as \\(y = a + b\\), and consider three worlds.
-All three produce the same clean output, \\(y = 1\\), so nothing distinguishes them until we intervene; the intervention is \\(do(A = 0)\\).
+Consider a toy network with two components, \\(A\\) and \\(B\\), writing values \\(a\\) and \\(b\\) into a shared stream.
+Component \\(A\\) constantly writes \\(a = 1\\), and the output is read as
 
-| world          | \\(A\\) writes | \\(B\\)'s rule     | \\(DE\\) | \\(TE\\) | \\(CE\\) |
-|----------------|----------------|--------------------|----------|----------|----------|
-| ① redundant    | \\(0\\)        | \\(b = 1\\) always | \\(0\\)  | \\(0\\)  | \\(0\\)  |
-| ② repaired     | \\(1\\)        | \\(b = 1 - a\\)    | \\(1\\)  | \\(0\\)  | \\(1\\)  |
-| ③ load-bearing | \\(1\\)        | \\(b = 0\\) always | \\(1\\)  | \\(1\\)  | \\(0\\)  |
+$$y = \begin{cases} 1 & \text{if } a + b > 0 \\ 0 & \text{otherwise.}\end{cases}$$
 
-*Table 1: three worlds that are indistinguishable at the clean output. Only \\(CE\\) singles out ②.*
+The intervention is \\(do(A = 0)\\).
+We consider three scenarios, which differ only in the rule \\(B\\) follows.
+
+| scenario       | \\(B\\)'s rule     | \\(a + b\\) | \\(y\\) | \\(TE\\) | \\(DE\\) |
+|----------------|--------------------|-------------|---------|----------|----------|
+| ① redundant    | \\(b = 1\\) always | \\(2\\)     | \\(1\\) | \\(0\\)  | \\(0\\)  |
+| ② repaired     | \\(b = 1 - a\\)    | \\(1\\)     | \\(1\\) | \\(0\\)  | \\(1\\)  |
+| ③ load-bearing | \\(b = 0\\) always | \\(1\\)     | \\(1\\) | \\(1\\)  | \\(1\\)  |
+
+*Table 1: three scenarios that are indistinguishable at the clean output, all producing \\(y = 1\\). The last two columns are the effects of \\(do(A = 0)\\).*
 
 The total effect is \\(0\\) in both ① and ②, and therefore cannot separate them. 
 The direct effect is \\(1\\) in both ② and ③, and therefore cannot separate them either.
@@ -397,7 +402,7 @@ and (ii) *quantitatively*, that it is systematic rather than incidental.
 
 **Qualitatively.** We plot the direct effect against the total effect, one point per (layer, task) pair.
 Figure 10 names the five regions of that plane.
-Three of them are the worlds of Table 1. 
+Three of them are the scenarios of Table 1. 
 The plane adds two more: (i) *indirectly important*, where a layer writes no decision itself but is still needed by later layers, 
 and (ii) *amplified*, where the downstream reaction enlarges the loss instead of absorbing it.
 The region we are looking for is *repaired*, below the diagonal.
@@ -485,6 +490,13 @@ Our work opens interesting future directions:
 {: #reproducibility}
 
 All code used in this paper are available in the [`tfmlens`](https://github.com/xiaohan2012/tfmlens) repository.
+
+
+
+
+**Acknowledgement.** We thank Martin Veron for the discussion and feedback on the write-up.
+The experiments and the write-up were carried out with the assistance of Claude Code.
+
 
 ---
 
