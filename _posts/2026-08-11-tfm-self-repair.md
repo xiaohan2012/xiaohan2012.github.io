@@ -16,6 +16,8 @@ However, the criterion that study adopts does not separate self-repair from mere
 In this paper we measure the quantity that does, i.e., the direct effect of a layer, using a causal intervention known as path patching. 
 We evaluate four state-of-the-art TFMs on 15 binary classification tasks and find that the recovery is passive redundancy rather than active repair. 
 
+*A [5-minute video overview](https://www.youtube.com/watch?v=2eV-px6EWXQ) of this work is also available.*
+
 ---
 
 ## Table of contents
